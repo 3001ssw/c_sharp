@@ -39,6 +39,11 @@
             lbToLower = new Label();
             lbToUpper = new Label();
             lbTrim = new Label();
+            lbCompare = new Label();
+            lbCompareTo = new Label();
+            lbConcat = new Label();
+            lbIndexOf = new Label();
+            lbInsert = new Label();
             SuspendLayout();
             // 
             // tbText
@@ -97,7 +102,7 @@
             // lbSplit
             // 
             lbSplit.BorderStyle = BorderStyle.FixedSingle;
-            lbSplit.Location = new Point(17, 193);
+            lbSplit.Location = new Point(15, 191);
             lbSplit.Name = "lbSplit";
             lbSplit.Size = new Size(413, 80);
             lbSplit.TabIndex = 6;
@@ -139,11 +144,61 @@
             lbTrim.TabIndex = 10;
             lbTrim.Text = "Trim: ";
             // 
+            // lbCompare
+            // 
+            lbCompare.BorderStyle = BorderStyle.FixedSingle;
+            lbCompare.Location = new Point(15, 424);
+            lbCompare.Name = "lbCompare";
+            lbCompare.Size = new Size(413, 23);
+            lbCompare.TabIndex = 10;
+            lbCompare.Text = "compare \"abc\": ";
+            // 
+            // lbCompareTo
+            // 
+            lbCompareTo.BorderStyle = BorderStyle.FixedSingle;
+            lbCompareTo.Location = new Point(15, 457);
+            lbCompareTo.Name = "lbCompareTo";
+            lbCompareTo.Size = new Size(413, 23);
+            lbCompareTo.TabIndex = 10;
+            lbCompareTo.Text = "CompareTo \"abc\": ";
+            // 
+            // lbConcat
+            // 
+            lbConcat.BorderStyle = BorderStyle.FixedSingle;
+            lbConcat.Location = new Point(15, 490);
+            lbConcat.Name = "lbConcat";
+            lbConcat.Size = new Size(413, 23);
+            lbConcat.TabIndex = 10;
+            lbConcat.Text = "concat \"123\": ";
+            // 
+            // lbIndexOf
+            // 
+            lbIndexOf.BorderStyle = BorderStyle.FixedSingle;
+            lbIndexOf.Location = new Point(15, 522);
+            lbIndexOf.Name = "lbIndexOf";
+            lbIndexOf.Size = new Size(413, 23);
+            lbIndexOf.TabIndex = 10;
+            lbIndexOf.Text = "IndexOf 'c': ";
+            // 
+            // lbInsert
+            // 
+            lbInsert.BorderStyle = BorderStyle.FixedSingle;
+            lbInsert.Location = new Point(15, 554);
+            lbInsert.Name = "lbInsert";
+            lbInsert.Size = new Size(413, 23);
+            lbInsert.TabIndex = 10;
+            lbInsert.Text = "Insert \"def\" index 1: ";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(543, 465);
+            ClientSize = new Size(543, 607);
+            Controls.Add(lbInsert);
+            Controls.Add(lbIndexOf);
+            Controls.Add(lbConcat);
+            Controls.Add(lbCompareTo);
+            Controls.Add(lbCompare);
             Controls.Add(lbTrim);
             Controls.Add(lbToUpper);
             Controls.Add(lbToLower);
@@ -175,5 +230,10 @@
         private Label lbToLower;
         private Label lbToUpper;
         private Label lbTrim;
+        private Label lbCompare;
+        private Label lbCompareTo;
+        private Label lbConcat;
+        private Label lbIndexOf;
+        private Label lbInsert;
     }
 }
