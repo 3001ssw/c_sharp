@@ -24,14 +24,15 @@ namespace Enum_basic
         private void Form1_Load(object sender, EventArgs e)
         {
             lbWeek.Items.Add(new ListWeekItem(EN_WEEK.SUN));
+            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.FRI));
             lbWeek.Items.Add(new ListWeekItem(EN_WEEK.MON));
-            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.MON));
-            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.MON));
+            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.THUR));
+            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.TUE));
             lbWeek.Items.Add(new ListWeekItem(EN_WEEK.SUN));
             lbWeek.Items.Add(new ListWeekItem(EN_WEEK.THUR));
-            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.SUN));
+            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.WED));
             lbWeek.Items.Add(new ListWeekItem(EN_WEEK.FRI));
-            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.SUN));
+            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.UNKNOWN));
         }
 
         private void lbWeek_SelectedValueChanged(object sender, EventArgs e)
@@ -99,7 +100,7 @@ namespace Enum_basic
 
         public override string ToString()
         {
-            string strToString = string.Format("{0}: {1}", Week, Disp);
+            string strToString = string.Format("enum: {0}, Disp: {1}", Week, Disp);
             return strToString;
         }
     }
