@@ -1,3 +1,5 @@
+using System;
+
 namespace Enum_basic
 {
     public enum EN_WEEK
@@ -24,6 +26,7 @@ namespace Enum_basic
             {
                 lbWeek.Items.Add(new ListWeekItem(enWeek));
             }
+            EN_WEEK eN_WEEK = Enum.Parse<EN_WEEK>("FRI");
         }
 
         private void lbWeek_SelectedValueChanged(object sender, EventArgs e)
