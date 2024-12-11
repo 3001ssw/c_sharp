@@ -1,17 +1,16 @@
+using System;
+
 namespace Enum_basic
 {
     public enum EN_WEEK
     {
-        UNKNOWN = -1,
-        MON = 0,
+        MON,
         TUE,
         WED,
         THUR,
         FRI,
         SAT,
         SUN,
-
-        COUNT,
     }
 
     public partial class Form1 : Form
@@ -23,16 +22,11 @@ namespace Enum_basic
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.SUN));
-            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.FRI));
-            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.MON));
-            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.THUR));
-            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.TUE));
-            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.SUN));
-            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.THUR));
-            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.WED));
-            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.FRI));
-            lbWeek.Items.Add(new ListWeekItem(EN_WEEK.UNKNOWN));
+            for (EN_WEEK enWeek = EN_WEEK.MON; enWeek <= EN_WEEK.SUN; enWeek++)
+            {
+                lbWeek.Items.Add(new ListWeekItem(enWeek));
+            }
+            EN_WEEK eN_WEEK = Enum.Parse<EN_WEEK>("FRI");
         }
 
         private void lbWeek_SelectedValueChanged(object sender, EventArgs e)
@@ -46,7 +40,7 @@ namespace Enum_basic
 
     public class ListWeekItem : ListViewItem
     {
-        public ListWeekItem(EN_WEEK enWeek = EN_WEEK.UNKNOWN)
+        public ListWeekItem(EN_WEEK enWeek)
         {
             Week = enWeek;
         }
