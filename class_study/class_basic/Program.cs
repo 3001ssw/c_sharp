@@ -36,8 +36,6 @@ class Program
     static void Main(string[] args)
     {
         CStudent student1 = new CStudent("홍길동", 10);
-        Console.WriteLine(student1.Name); // 속성으로 필드 Name 값 출력
-        Console.WriteLine(student1.Age); // 속성으로 필드 Age 값 출력
         student1.WriteStudentInfo(); // 메소드 호출
 
         CStudent student2 = new CStudent("김철수", 12);
