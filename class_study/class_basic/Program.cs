@@ -1,17 +1,44 @@
-namespace class_basic
+﻿public class CStudent
 {
-    internal static class Program
+    // 필드
+    private string strName;
+    private int iAge;
+
+    // 프로퍼티
+    public string Name
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
-            ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
-        }
+        get { return this.strName; }
+        set { this.strName = value; }
+    }
+    public int Age
+    {
+        get { return this.iAge; }
+        set { this.iAge = value; }
+    }
+
+    // 생성자
+    public CStudent(string strName, int iAge)
+    {
+        this.strName = strName;
+        this.iAge = iAge;
+    }
+
+    // 메소드
+    public void WriteStudentInfo()
+    {
+        string str = string.Format($"이름: {Name}, 나이: {Age}");
+        Console.WriteLine(str);
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        CStudent student1 = new CStudent("홍길동", 10);
+        student1.WriteStudentInfo(); // 메소드 호출
+
+        CStudent student2 = new CStudent("김철수", 12);
+        student1.WriteStudentInfo(); // 메소드 호출
     }
 }
