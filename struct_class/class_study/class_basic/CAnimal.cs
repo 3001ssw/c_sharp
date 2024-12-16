@@ -9,9 +9,11 @@ namespace animals
 {
     public class CAnimal
     {
+        protected string strName;
+
         public CAnimal()
         {
-            Console.WriteLine("생성");
+            strName = "동물";
         }
 
         public virtual string Sound()
@@ -31,7 +33,7 @@ namespace animals
 
         public virtual string Info()
         {
-            return "동물";
+            return strName;
         }
     }
     public class CPerson : CAnimal
@@ -39,6 +41,7 @@ namespace animals
 
         public CPerson()
         {
+            strName = "사람";
         }
 
         public override string Sound()
@@ -58,7 +61,7 @@ namespace animals
 
         public override string Info()
         {
-            return "사람";
+            return strName;
         }
     }
     public class CDog : CAnimal
@@ -66,6 +69,7 @@ namespace animals
 
         public CDog()
         {
+            strName = "강아지";
         }
 
         public override string Sound()
@@ -85,7 +89,7 @@ namespace animals
 
         public override string Info()
         {
-            return "개";
+            return strName;
         }
     }
     public class CBird : CAnimal
@@ -93,6 +97,7 @@ namespace animals
 
         public CBird()
         {
+            strName = "새";
         }
 
         public override string Sound()
@@ -112,7 +117,7 @@ namespace animals
 
         public override string Info()
         {
-            return "새";
+            return strName;
         }
     }
 }
