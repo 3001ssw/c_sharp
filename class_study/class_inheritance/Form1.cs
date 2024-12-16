@@ -27,7 +27,7 @@ namespace class_basic
                 CAnimal anim = item.Animal;
                 selectedAnimal = anim;
 
-                string str = "selected: " + anim.Info() + Environment.NewLine;
+                string str = "선택: " + anim.Info() + Environment.NewLine;
                 txtShow.AppendText(str);
             }
         }
@@ -36,7 +36,7 @@ namespace class_basic
         {
             if (selectedAnimal != null)
             {
-                string str = selectedAnimal.Sound() + Environment.NewLine;
+                string str = "소리: " + selectedAnimal.Sound() + Environment.NewLine;
                 txtShow.AppendText(str);
             }
         }
@@ -45,7 +45,7 @@ namespace class_basic
         {
             if (selectedAnimal != null)
             {
-                string str = selectedAnimal.Move() + Environment.NewLine;
+                string str = "이동: " + selectedAnimal.Move() + Environment.NewLine;
                 txtShow.AppendText(str);
             }
         }
@@ -54,7 +54,7 @@ namespace class_basic
         {
             if (selectedAnimal != null)
             {
-                string str = selectedAnimal.Eat() + Environment.NewLine;
+                string str = "먹기: " + selectedAnimal.Eat() + Environment.NewLine;
                 txtShow.AppendText(str);
             }
         }
@@ -63,7 +63,7 @@ namespace class_basic
         {
             if (selectedAnimal != null)
             {
-                string str = selectedAnimal.Info() + Environment.NewLine;
+                string str = "정보: " + selectedAnimal.Info() + Environment.NewLine;
                 txtShow.AppendText(str);
             }
         }
