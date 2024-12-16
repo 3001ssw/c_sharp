@@ -31,7 +31,7 @@ namespace animals
             return "먹기";
         }
 
-        public virtual string Info()
+        public string Info()
         {
             return strName;
         }
@@ -58,11 +58,6 @@ namespace animals
         {
             return "고기를 구워서 먹기";
         }
-
-        public override string Info()
-        {
-            return strName;
-        }
     }
     public class CDog : CAnimal
     {
@@ -86,11 +81,6 @@ namespace animals
         {
             return "사료 먹기";
         }
-
-        public override string Info()
-        {
-            return strName;
-        }
     }
     public class CBird : CAnimal
     {
@@ -113,11 +103,6 @@ namespace animals
         public override string Eat()
         {
             return "벌레 먹기";
-        }
-
-        public override string Info()
-        {
-            return strName;
         }
     }
 }
