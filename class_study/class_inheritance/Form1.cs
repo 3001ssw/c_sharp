@@ -27,7 +27,7 @@ namespace class_basic
                 CAnimal anim = item.Animal;
                 selectedAnimal = anim;
 
-                string str = "선택: " + anim.Info() + Environment.NewLine;
+                string str = "선택: " + anim.Name + Environment.NewLine;
                 txtShow.AppendText(str);
             }
         }

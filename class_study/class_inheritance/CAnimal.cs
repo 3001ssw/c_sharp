@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -10,6 +11,12 @@ namespace animals
     public class CAnimal
     {
         protected string strName;
+
+        public string Name
+        {
+            get { return strName; }
+            set { strName = value; }
+        }
 
         public CAnimal()
         {
