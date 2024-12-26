@@ -4,7 +4,7 @@
     {
         public CTestMath() { }
 
-        private string _last_calc_en= "";
+        private string _last_calc_en= ""; // 마지막 계산 영어로 저장
         public string LastCalcEn
         {
             get { return _last_calc_en; }
@@ -15,7 +15,7 @@
         }
 
 
-        private string _last_calc_kor = "";
+        private string _last_calc_kor = ""; // 마지막 계산 한국어로 저장
         public string LastCalcKor
         {
             get { return _last_calc_kor; }
@@ -25,5 +25,6 @@
             _last_calc_kor = string.Format($"{x} 더하기 {y} 는 {x+y} 입니다.");
         }
 
+        
     }
 }
