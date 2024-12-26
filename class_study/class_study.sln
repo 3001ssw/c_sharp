@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "class_basic", "class_basic\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "overloading_override", "overloading_override\overloading_override.csproj", "{A0ED5358-F40D-4A82-947C-128EC5913F41}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "partial_class", "partial_class\partial_class.csproj", "{C35D7D0D-8E9F-402C-B10C-E5714C9FC199}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A0ED5358-F40D-4A82-947C-128EC5913F41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0ED5358-F40D-4A82-947C-128EC5913F41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0ED5358-F40D-4A82-947C-128EC5913F41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C35D7D0D-8E9F-402C-B10C-E5714C9FC199}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C35D7D0D-8E9F-402C-B10C-E5714C9FC199}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C35D7D0D-8E9F-402C-B10C-E5714C9FC199}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C35D7D0D-8E9F-402C-B10C-E5714C9FC199}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
