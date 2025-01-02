@@ -164,7 +164,7 @@
             numYear.Name = "numYear";
             numYear.Size = new Size(97, 23);
             numYear.TabIndex = 1;
-            numYear.ValueChanged += numAge_ValueChanged;
+            numYear.ValueChanged += numYearMonthDay_ValueChanged;
             // 
             // lbNumeric
             // 
@@ -180,7 +180,7 @@
             numMonth.Name = "numMonth";
             numMonth.Size = new Size(97, 23);
             numMonth.TabIndex = 2;
-            numMonth.ValueChanged += numAge_ValueChanged;
+            numMonth.ValueChanged += numYearMonthDay_ValueChanged;
             // 
             // numDay
             // 
@@ -188,7 +188,7 @@
             numDay.Name = "numDay";
             numDay.Size = new Size(97, 23);
             numDay.TabIndex = 3;
-            numDay.ValueChanged += numAge_ValueChanged;
+            numDay.ValueChanged += numYearMonthDay_ValueChanged;
             // 
             // Form1
             // 

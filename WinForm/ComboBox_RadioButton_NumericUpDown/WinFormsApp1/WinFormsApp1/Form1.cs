@@ -32,6 +32,7 @@ namespace WinFormsApp1
             numYear.Minimum = 1900; // 최소값
             numYear.Maximum = 2199; // 최대값
             numYear.Increment = 5; // 증/감버튼 클릭 시, 상/하 방향키 클릭 시, 또는 마우스 휠 변경 되는 delta 값
+            //numYear.DecimalPlaces = 2; // 소수점 이하 몇 자리 까지 표시할지
             numYear.Value = 1900; // 값 설정
 
             numMonth.Minimum = 1;
@@ -54,7 +55,7 @@ namespace WinFormsApp1
             lbRadio.Text = "select radio text: " + rdSelect.Text;
         }
 
-        private void numAge_ValueChanged(object sender, EventArgs e)
+        private void numYearMonthDay_ValueChanged(object sender, EventArgs e)
         {
             string txt = string.Format($"{numYear.Value}-{numMonth.Value}-{numDay.Value}");
             lbNumeric.Text = txt;
