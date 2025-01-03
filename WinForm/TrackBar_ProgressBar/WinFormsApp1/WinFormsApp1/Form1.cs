@@ -13,6 +13,7 @@ namespace WinFormsApp1
             trbTest.Maximum = 100; // 최대값
             trbTest.SmallChange = 1; // 키보드 이동 시 증감값
             trbTest.LargeChange = 10; // Page Up/Down 시 증감값
+            //trbTest.Orientation = Orientation.Horizontal; // 수평
             trbTest.Value = 0; // 값 설정
 
             numTrackBar.Minimum = 0; // 최소값

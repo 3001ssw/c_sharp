@@ -87,9 +87,9 @@
             // 
             // btnMarquee
             // 
-            btnMarquee.Location = new Point(176, 72);
+            btnMarquee.Location = new Point(206, 72);
             btnMarquee.Name = "btnMarquee";
-            btnMarquee.Size = new Size(75, 23);
+            btnMarquee.Size = new Size(84, 23);
             btnMarquee.TabIndex = 2;
             btnMarquee.Text = "Marquee";
             btnMarquee.UseVisualStyleBackColor = true;
@@ -97,9 +97,9 @@
             // 
             // btnContinuous
             // 
-            btnContinuous.Location = new Point(95, 72);
+            btnContinuous.Location = new Point(110, 72);
             btnContinuous.Name = "btnContinuous";
-            btnContinuous.Size = new Size(75, 23);
+            btnContinuous.Size = new Size(84, 23);
             btnContinuous.TabIndex = 2;
             btnContinuous.Text = "Continuous";
             btnContinuous.UseVisualStyleBackColor = true;
@@ -109,7 +109,7 @@
             // 
             btnBlocks.Location = new Point(14, 72);
             btnBlocks.Name = "btnBlocks";
-            btnBlocks.Size = new Size(75, 23);
+            btnBlocks.Size = new Size(84, 23);
             btnBlocks.TabIndex = 2;
             btnBlocks.Text = "Blocks";
             btnBlocks.UseVisualStyleBackColor = true;
