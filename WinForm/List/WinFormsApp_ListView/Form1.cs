@@ -1,4 +1,5 @@
 using System.Data;
+using System.Runtime.InteropServices.JavaScript;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -21,11 +22,17 @@ namespace WinFormsApp_ListView
                 "View.Tile" });
             cbViewMode.SelectedIndex = 1;
 
-            listView1.Scrollable = true;
+            //listView1.View = View.LargeIcon; // 큰 아이콘 형태
+            listView1.View = View.Details; // 세부사항(기본값)
+            //listView1.View = View.SmallIcon; // 작은 아이콘 형태
+            //listView1.View = View.List; // 간단한 하나의 행
+            //listView1.View = View.Tile; // 타일형태
+            listView1.Scrollable = true; // 스크롤 표시
+            listView1.MultiSelect = true; // 멀티 선택
+            listView1.FullRowSelect = true; // 한줄 전체 선택
 
-            listView1.Columns.Add("칼럼1");
-            listView1.Columns.Add("설명");
-            listView1.Columns.Add("설명");
+            listView1.Columns.Add("칼럼1", 100);
+            listView1.Columns.Add("칼럼2", 200);
         }
 
         private void cbViewMode_SelectedIndexChanged(object sender, EventArgs e)
@@ -59,12 +66,19 @@ namespace WinFormsApp_ListView
             for (int i = 0; i < 3000; i++)
             {
                 ListViewItem listViewItem = new ListViewItem();
-                listViewItem.Text = $"item{i}";
-                listViewItem.SubItems.Add($"SubItems1 {i}");
-                listViewItem.SubItems.Add($"SubItems2 {i}");
+                listViewItem.Text = $"아이템 {i}";
+                listViewItem.SubItems.Add($"서브아이템1 {i}");
+                listViewItem.SubItems.Add($"서브아이템2 {i}");
+
                 listView1.Items.Add(listViewItem);
             }
             listView1.EndUpdate();
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems == null)
+                return;
         }
     }
 }
