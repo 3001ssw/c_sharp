@@ -9,6 +9,7 @@ namespace ConsoleApp1
             Console.WriteLine("Start Main");
             Thread thread1 = new Thread(new ThreadStart(RunThread));
             thread1.Start();
+            thread1.Join();
 
             Console.WriteLine("Close Main");
         }
