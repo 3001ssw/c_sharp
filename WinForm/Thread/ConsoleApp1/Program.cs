@@ -15,10 +15,10 @@ namespace ConsoleApp1
 
         static void RunThread()
         {
-            Console.WriteLine("Start Thread" + Thread.CurrentThread.Name);
+            Console.WriteLine("Start Thread");
             for (int i = 0; i < 10; i++)
             {
-                Console.WriteLine("Hello, World!");
+                Console.WriteLine(i);
                 Thread.Sleep(100);
             }
             Console.WriteLine("Close Thread");
