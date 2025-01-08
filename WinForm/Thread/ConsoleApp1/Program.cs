@@ -11,6 +11,10 @@ namespace ConsoleApp1
             thread1.Start();
             thread1.Join();
 
+            Thread thread2 = new Thread(new ParameterizedThreadStart(RunThreadParamInt));
+            thread2.Start(5);
+            thread2.Join();
+
             Console.WriteLine("Close Main");
         }
 
@@ -23,6 +27,22 @@ namespace ConsoleApp1
                 Thread.Sleep(100);
             }
             Console.WriteLine("Close Thread");
+        }
+
+        static void RunThreadParamInt(object? objParam)
+        {
+            if (objParam != null)
+            {
+                int iCount = (int)objParam;
+                Console.WriteLine("Start Thread param: " + iCount);
+
+                for (int i = 0; i < iCount; i++)
+                {
+                    Console.WriteLine(i);
+                    Thread.Sleep(100);
+                }
+                Console.WriteLine("Close Thread");
+            }
         }
     }
 }
