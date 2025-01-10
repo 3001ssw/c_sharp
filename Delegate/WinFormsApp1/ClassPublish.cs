@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WinFormsApp1
 {
-    public class ClassPublish
+    public class ClassPublish : object
     {
         public delegate void DelegatePublish(string strName, string strContext);
         public event DelegatePublish? eventPublish = null;
@@ -17,17 +17,29 @@ namespace WinFormsApp1
             get { return this._name; }
         }
 
+        private string _lastPublish;
+        public string LastPublish
+        {
+            get { return this._lastPublish; }
+        }
+
         public ClassPublish(string name)
         {
             _name = name;
+            _lastPublish = "";
         }
 
         public void Publish()
         {
             DateTime now = DateTime.Now;
-            string strNow = now.ToString("[yyyy-MM-dd HH:mm:ss:fff]에 발행하였습니다.");
+            string strNow = now.ToString("[yyyy-MM-dd HH:mm:ss]에 발행.");
             if (eventPublish != null)
                 eventPublish(Name, strNow);
+            _lastPublish = strNow;
+        }
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }
