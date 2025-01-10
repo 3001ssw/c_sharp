@@ -28,37 +28,38 @@
         /// </summary>
         private void InitializeComponent()
         {
-            listView1 = new ListView();
+            listView = new ListView();
             cbViewMode = new ComboBox();
             btnAdd = new Button();
             label1 = new Label();
+            tbSelectInfo = new TextBox();
             SuspendLayout();
             // 
-            // listView1
+            // listView
             // 
-            listView1.Location = new Point(12, 21);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(411, 208);
-            listView1.TabIndex = 0;
-            listView1.UseCompatibleStateImageBehavior = false;
-            listView1.SelectedIndexChanged += listView1_SelectedIndexChanged;
+            listView.Location = new Point(12, 21);
+            listView.Name = "listView";
+            listView.Size = new Size(411, 208);
+            listView.TabIndex = 0;
+            listView.UseCompatibleStateImageBehavior = false;
+            listView.SelectedIndexChanged += listView_SelectedIndexChanged;
             // 
             // cbViewMode
             // 
             cbViewMode.DropDownStyle = ComboBoxStyle.DropDownList;
             cbViewMode.FormattingEnabled = true;
-            cbViewMode.Location = new Point(532, 21);
+            cbViewMode.Location = new Point(289, 233);
             cbViewMode.Name = "cbViewMode";
             cbViewMode.Size = new Size(136, 23);
-            cbViewMode.TabIndex = 1;
+            cbViewMode.TabIndex = 3;
             cbViewMode.SelectedIndexChanged += cbViewMode_SelectedIndexChanged;
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(450, 206);
+            btnAdd.Location = new Point(12, 236);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(136, 23);
-            btnAdd.TabIndex = 2;
+            btnAdd.TabIndex = 1;
             btnAdd.Text = "추가";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
@@ -66,21 +67,33 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(467, 24);
+            label1.Location = new Point(194, 236);
             label1.Name = "label1";
-            label1.Size = new Size(59, 15);
-            label1.TabIndex = 3;
-            label1.Text = "모드 변경";
+            label1.Size = new Size(89, 15);
+            label1.TabIndex = 2;
+            label1.Text = "View 보기 모드";
+            // 
+            // tbSelectInfo
+            // 
+            tbSelectInfo.BorderStyle = BorderStyle.FixedSingle;
+            tbSelectInfo.Location = new Point(429, 21);
+            tbSelectInfo.Multiline = true;
+            tbSelectInfo.Name = "tbSelectInfo";
+            tbSelectInfo.ReadOnly = true;
+            tbSelectInfo.ScrollBars = ScrollBars.Vertical;
+            tbSelectInfo.Size = new Size(254, 233);
+            tbSelectInfo.TabIndex = 4;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(695, 244);
+            ClientSize = new Size(695, 279);
+            Controls.Add(tbSelectInfo);
             Controls.Add(label1);
             Controls.Add(btnAdd);
             Controls.Add(cbViewMode);
-            Controls.Add(listView1);
+            Controls.Add(listView);
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
@@ -90,9 +103,10 @@
 
         #endregion
 
-        private ListView listView1;
+        private ListView listView;
         private ComboBox cbViewMode;
         private Button btnAdd;
         private Label label1;
+        private TextBox tbSelectInfo;
     }
 }
