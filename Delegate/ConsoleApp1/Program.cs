@@ -8,7 +8,7 @@ namespace ConsoleApp1
 
         public delegate void PrintStringDelegate(string str);
 
-        public delegate void PrintTypeDelegate<T>(T type);
+        public delegate void GenericDelegate<T>(T type);
 
         static void Main(string[] ars)
         {
@@ -33,15 +33,32 @@ namespace ConsoleApp1
                 del2("hi");
             Console.WriteLine("======================");
 
-            // delegate에 일반화 Type
-            PrintTypeDelegate<int>? del3 = null;
-            del3 += PrintNo;
-            del3(100);
-            PrintTypeDelegate<string>? del4 = null;
-            del4 += PrintStr1;
+            // delegate callback
+            PrintStringDelegate? del3 = null;
+            del3 += PrintStr1;
+            del3 += PrintStr2;
+            DelegateCallback("콜백1", del3);
+            Console.WriteLine("======================");
+            PrintStringDelegate? del4 = null;
             del4 += PrintStr2;
             del4 += PrintStr3;
-            del4("hellow");
+            DelegateCallback("콜백2", del3);
+            Console.WriteLine("======================");
+
+
+            // delegate에 일반화 Type
+            GenericDelegate<int>? del5 = null;
+            del5 += GenericFunction1;
+            del5 += GenericFunction2;
+            del5 += GenericFunction3;
+            del5(100);
+            Console.WriteLine("======================");
+
+            GenericDelegate<string>? del6 = null;
+            del6 += GenericFunction1;
+            del6 += GenericFunction2;
+            del6 += GenericFunction3;
+            del6("abcdefg");
             Console.WriteLine("======================");
         }
 
@@ -63,6 +80,26 @@ namespace ConsoleApp1
         public static void PrintStr3(string str)
         {
             Console.WriteLine(str + " - PrintStr3");
+        }
+
+        public static void DelegateCallback(string str, PrintStringDelegate del)
+        {
+            del(str);
+        }
+
+        public static void GenericFunction1<T>(T type)
+        {
+            Console.WriteLine($"Generic Function1: parameter({type}), parameter type(${type.GetType()})");
+        }
+
+        public static void GenericFunction2<T>(T type)
+        {
+            Console.WriteLine($"Generic Function2 - parameter: {type}, type: ${type.GetType()}");
+        }
+
+        public static void GenericFunction3<T>(T type)
+        {
+            Console.WriteLine($"Generic Function3: parameter, type({type}, ${type.GetType()})");
         }
     }
 }
