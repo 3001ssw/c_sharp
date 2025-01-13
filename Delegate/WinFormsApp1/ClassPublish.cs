@@ -33,8 +33,8 @@ namespace WinFormsApp1
         {
             DateTime now = DateTime.Now;
             string strNow = now.ToString("[yyyy-MM-dd HH:mm:ss]에 발행.");
-            if (eventPublish != null)
-                eventPublish(Name, strNow);
+            eventPublish?.Invoke(Name, strNow);
+
             _lastPublish = strNow;
         }
         public override string ToString()
