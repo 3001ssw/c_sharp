@@ -70,7 +70,6 @@ namespace WinFormsApp1
             lvSubscribe.Items.Add(new ListViewItemObject(new ClassSubscribe("구독자 3")));
             lvSubscribe.Items.Add(new ListViewItemObject(new ClassSubscribe("구독자 4")));
             lvSubscribe.Items.Add(new ListViewItemObject(new ClassSubscribe("구독자 5")));
-
         }
 
         private void btnPublish_Click(object sender, EventArgs e)
@@ -140,8 +139,11 @@ namespace WinFormsApp1
     }
     public class ListViewItemObject : ListViewItem
     {
-        private object _obj;
-        public object Obj { get => _obj; }
+        private object _obj; // ClassPublish, ClassSubscribe 저장
+        public object Obj
+        {
+            get { return _obj; }
+        }
 
         public ListViewItemObject(Object obj)
         {
