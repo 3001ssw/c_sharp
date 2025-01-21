@@ -7,8 +7,7 @@ namespace WinFormsApp1
 {
     public partial class Form1 : Form
     {
-        List<CTest> listThread = new List<CTest>();
-        StringBuilder sb = new StringBuilder();
+        List<CTest> listThread = new List<CTest>(); // 쓰레드 리스트
 
         public Form1()
         {
@@ -21,6 +20,13 @@ namespace WinFormsApp1
             {
                 thread.StopThread();
             }
+            //Task.Run(() =>
+            //{
+            //    foreach (CTest thread in listThread)
+            //    {
+            //        thread.StopThread();
+            //    }
+            //});
         }
 
         private void btnThreadStart_Click(object sender, EventArgs e)
@@ -34,7 +40,7 @@ namespace WinFormsApp1
                 listThread.Add(test);
             }
         }
-
+         
         private void OnThreadMessage(object sender, string message)
         {
             CTest? cTest = sender as CTest;

@@ -1,6 +1,8 @@
-﻿using System.Threading;
+﻿using System;
+using System.Diagnostics;
+using System.Threading;
 
-class CTest : Object
+class CTest
 {
     // 쓰레드의 메시지를 표시하기 위한 delegate
     public delegate void ThreadMessage(object sender, string strMsg);
@@ -10,6 +12,19 @@ class CTest : Object
     private bool m_bFlag = false; // 쓰레드 종료 플래그
 
     private int m_iNo;
+
+    public bool FLAG
+    {
+        get
+        {
+            return m_bFlag;
+        }
+        set
+        {
+            m_bFlag = value;
+        }
+    }
+
     public CTest(int iNo)
     {
         m_iNo = iNo;
@@ -28,10 +43,11 @@ class CTest : Object
 
     public void StopThread()
     {
-         m_bFlag = false;
+        m_bFlag = false;
+
         if (m_Thread.IsAlive == true)
         {
-            m_Thread.Join();
+            m_Thread.Join();  // UI와 별도로 백그라운드에서 대기
         }
 
     }
@@ -43,19 +59,25 @@ class CTest : Object
 
     private void Run()
     {
-        //if (this.in != null)
+        try
         {
-            OnThreadMessage?.Invoke(this, "Start Thread");
+            //OnThreadMessage?.Invoke(this, "Start Thread");
 
             for (int i = 0; i < 10; i++)
             {
-                OnThreadMessage?.Invoke(this, $"index: {i}");
-                Thread.Sleep(1000);
                 if (m_bFlag == false)
                     break;
+                OnThreadMessage?.Invoke(this, $"index: {i}");
+                Random random = new Random();
+                int iSleep = random.Next(100, 999);
+                Thread.Sleep(iSleep);
             }
-            
-            OnThreadMessage?.Invoke(this, "End Thread");
+
+            //OnThreadMessage?.Invoke(this, "End Thread");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.ToString());
         }
     }
 }
