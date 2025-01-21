@@ -1,4 +1,6 @@
-﻿class CTest : Object
+﻿using System.Threading;
+
+class CTest : Object
 {
     // 쓰레드의 메시지를 표시하기 위한 delegate
     public delegate void ThreadMessage(object sender, string strMsg);
@@ -50,10 +52,7 @@
                 OnThreadMessage?.Invoke(this, $"index: {i}");
                 Thread.Sleep(1000);
                 if (m_bFlag == false)
-                {
-                    OnThreadMessage?.Invoke(this, $"m_bFlag is {m_bFlag}");
                     break;
-                }
             }
             
             OnThreadMessage?.Invoke(this, "End Thread");

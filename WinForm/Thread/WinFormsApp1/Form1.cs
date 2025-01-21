@@ -1,6 +1,7 @@
 
 using System.Text;
 using System.Threading;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WinFormsApp1
 {
@@ -39,14 +40,14 @@ namespace WinFormsApp1
             CTest? cTest = sender as CTest;
             if (cTest != null)
             {
-                string strMessage = string.Format($"{cTest.ToString()} : {message}");
-                sb.AppendLine(strMessage);
                 if (this.InvokeRequired)
                 {
+                    string strMessage = string.Format($"{cTest.ToString()} : {message}");
+                    //sb.AppendLine(strMessage);
                     this.Invoke(new Action(delegate ()
                     {
-                        tbOutput.Text = sb.ToString();
-
+                        string strAppend = string.Format($"{strMessage}" + Environment.NewLine);
+                        tbOutput.AppendText(strAppend);
                     }));
                 }
             }
