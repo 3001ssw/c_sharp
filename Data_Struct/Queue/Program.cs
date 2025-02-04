@@ -7,7 +7,7 @@ namespace Queue
     {
         static void Main(string[] args)
         {
-            Queue<CPrintJob> queuePrint = new Queue<CPrintJob>(); // Queue 생성
+            Queue<CPrintDocument> queuePrint = new Queue<CPrintDocument>(); // Queue 생성
             //ConcurrentQueue<CPerson> queue = new ConcurrentQueue<CPerson>(); // Queue 생성
 
             // 요소 추가
@@ -15,16 +15,16 @@ namespace Queue
             Console.WriteLine();
 
             Console.WriteLine("프린터 대기열에 문서 입력 중");
-            queuePrint.Enqueue(new CPrintJob("보고서.pdf"));
-            queuePrint.Enqueue(new CPrintJob("사진.jpg"));
-            queuePrint.Enqueue(new CPrintJob("계약서.docx"));
-            queuePrint.Enqueue(new CPrintJob("정리.xlsx"));
+            queuePrint.Enqueue(new CPrintDocument("보고서.pdf"));
+            queuePrint.Enqueue(new CPrintDocument("사진.jpg"));
+            queuePrint.Enqueue(new CPrintDocument("계약서.docx"));
+            queuePrint.Enqueue(new CPrintDocument("정리.xlsx"));
             Console.WriteLine("대기열에 입력이 완료되었습니다.");
             Console.WriteLine();
 
             // 조회
             Console.WriteLine("프린터 전체 문서 조회");
-            foreach (CPrintJob person in queuePrint)
+            foreach (CPrintDocument person in queuePrint)
             {
                 Console.WriteLine(person.ToString());
             }
@@ -47,14 +47,14 @@ namespace Queue
             Console.WriteLine();
 
             // 요소 있는지 여부 확인
-            CPrintJob clsContain = queuePrint.Peek();
+            CPrintDocument clsContain = queuePrint.Peek();
             bool bContain = queuePrint.Contains(clsContain);
             Console.WriteLine($"{clsContain} 문서 존재 유무 : {bContain}");
             Console.WriteLine();
 
             // 큐의 요소를 새 배열에 복사
-            CPrintJob[] arr = queuePrint.ToArray();
-            foreach (CPrintJob person in arr)
+            CPrintDocument[] arr = queuePrint.ToArray();
+            foreach (CPrintDocument person in arr)
             {
                 Console.WriteLine(person.ToString());
             }
@@ -66,7 +66,7 @@ namespace Queue
         }
     }
 
-    class CPrintJob
+    class CPrintDocument
     {
         string m_strDocument; // 이름
         public string DOCUMENT
@@ -77,7 +77,7 @@ namespace Queue
             }
         }
 
-        public CPrintJob(string strName)
+        public CPrintDocument(string strName)
         {
             m_strDocument = strName;
         }
