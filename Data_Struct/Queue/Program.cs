@@ -10,10 +10,10 @@ namespace Queue
             Queue<CPrintDocument> queuePrint = new Queue<CPrintDocument>(); // Queue 생성
             //ConcurrentQueue<CPerson> queue = new ConcurrentQueue<CPerson>(); // Queue 생성
 
-            // 요소 추가
             Console.WriteLine("프린터 시작");
             Console.WriteLine();
 
+            // 요소 추가
             Console.WriteLine("프린터 대기열에 문서 입력 중");
             queuePrint.Enqueue(new CPrintDocument("보고서.pdf"));
             queuePrint.Enqueue(new CPrintDocument("사진.jpg"));
@@ -31,7 +31,7 @@ namespace Queue
             Console.WriteLine("문서 조회가 완료되었습니다.");
             Console.WriteLine();
 
-            // 제거 없이 첫 번째 요소 확인
+            // 제거 없이 요소 반환
             Console.WriteLine($"첫 번째 문서 확인: {queuePrint.Peek()}");
             Console.WriteLine();
 
@@ -46,7 +46,7 @@ namespace Queue
             Console.WriteLine($"남은 문서 수: {queuePrint.Count}");
             Console.WriteLine();
 
-            // 요소 있는지 여부 확인
+            // 요소 존재 유무 확인
             CPrintDocument clsContain = queuePrint.Peek();
             bool bContain = queuePrint.Contains(clsContain);
             Console.WriteLine($"{clsContain} 문서 존재 유무 : {bContain}");
@@ -68,7 +68,7 @@ namespace Queue
 
     class CPrintDocument
     {
-        string m_strDocument; // 이름
+        private string m_strDocument;
         public string DOCUMENT
         {
             get
