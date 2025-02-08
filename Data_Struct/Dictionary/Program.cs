@@ -35,33 +35,40 @@
             else
                 Console.WriteLine($"수박은 사전에 없는 단어입니다.");
 
-            // 6. TryGetValue 사용
+            // 6. ContainsValue 확인
+            Console.WriteLine("==================================");
+            if (dict.ContainsValue("Apple"))
+                Console.WriteLine($"Apple 사전에 있는 단어입니다.");
+            else
+                Console.WriteLine($"Apple 사전에 없는 단어입니다.");
+
+            // 7. TryGetValue 사용
             Console.WriteLine("==================================");
             if (dict.TryGetValue("수박", out string? value))
                 Console.WriteLine($"수박은 영어로? : {value}");
             else
                 Console.WriteLine($"수박은 사전에 없는 단어입니다.");
 
-            // 7. 모든 키 출력
+            // 8. 모든 키 출력
             Console.WriteLine("============== Keys ==============");
             foreach (var key in dict.Keys)
             {
                 Console.WriteLine(key);
             }
 
-            // 8. 모든 값 출력
+            // 9. 모든 값 출력
             Console.WriteLine("============== Values ==============");
             foreach (var val in dict.Values)
             {
                 Console.WriteLine(val);
             }
 
-            // 9. 데이터 삭제
+            // 10. 데이터 삭제
             dict.Remove("딸기");
             Console.WriteLine("==================================");
             Console.WriteLine($"딸기 삭제한 후 Count: {dict.Count}");
 
-            // 10. Clear로 모든 데이터 제거
+            // 11. Clear로 모든 데이터 제거
             dict.Clear();
             Console.WriteLine("==================================");
             Console.WriteLine($"Clear 이후 Count: {dict.Count}");
