@@ -5,11 +5,13 @@ VisualStudioVersion = 17.12.35521.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "List", "List\List.csproj", "{77F1A051-5D3B-4413-A18F-DBF474DAAB89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Queue", "Queue\Queue.csproj", "{1619B599-EA7B-4766-89B5-0F0A2BA4151C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Queue", "Queue\Queue.csproj", "{1619B599-EA7B-4766-89B5-0F0A2BA4151C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stack", "Stack\Stack.csproj", "{F81B05F7-B86B-4240-8AB8-53EF9AE3CD5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stack", "Stack\Stack.csproj", "{F81B05F7-B86B-4240-8AB8-53EF9AE3CD5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dictionary", "Dictionary\Dictionary.csproj", "{73319CD4-1482-44C1-AA93-FF6B8FB803F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dictionary", "Dictionary\Dictionary.csproj", "{73319CD4-1482-44C1-AA93-FF6B8FB803F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{D3595456-DE71-4AFD-986F-5BFECAF3B0A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{73319CD4-1482-44C1-AA93-FF6B8FB803F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73319CD4-1482-44C1-AA93-FF6B8FB803F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73319CD4-1482-44C1-AA93-FF6B8FB803F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3595456-DE71-4AFD-986F-5BFECAF3B0A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3595456-DE71-4AFD-986F-5BFECAF3B0A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3595456-DE71-4AFD-986F-5BFECAF3B0A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3595456-DE71-4AFD-986F-5BFECAF3B0A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
