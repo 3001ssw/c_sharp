@@ -10,36 +10,43 @@ namespace Data
             ///DataRow, DataTable
             // DataTable 생성
             DataTable dtFruit = new DataTable("Fruit");
-
+            
             // 컬럼 추가
             dtFruit.Columns.Add("Name", typeof(string));
-            dtFruit.Columns.Add("Price", typeof(int));
-
+            
+            DataColumn colPrice = new DataColumn ();
+            colPrice.DataType = typeof(int);// 데이터 타입
+            colPrice.AllowDBNull = false; // Null 허용 여부
+            colPrice.Caption = "가격"; // 설명
+            colPrice.ColumnName = "Price"; // 컬럼명
+            colPrice.DefaultValue = int.Parse("0"); // 기본값	
+            dtFruit.Columns.Add(colPrice);
+            
             // DataRow 추가
             // 방법 1
             dtFruit.Rows.Add("Apple", 1200);
             dtFruit.Rows.Add("Banana", 1000);
             dtFruit.Rows.Add("Blueberry", 1700);
-
+            
             // 방법 2
             DataRow rowCherry = dtFruit.NewRow();
             rowCherry["Name"] = "Cherry";
             rowCherry["Price"] = 2500;
             dtFruit.Rows.Add(rowCherry);
-
+            
             DataRow rowMelon = dtFruit.NewRow();
             rowMelon["Name"] = "Melon";
             rowMelon["Price"] = 3000;
             dtFruit.Rows.Add(rowMelon);
-
-
+            
+            
             // 데이터 출력
             foreach (DataRow row in dtFruit.Rows)
             {
                 Console.WriteLine($"{row["Name"]}, {row["Price"]}");
             }
             Console.WriteLine("============================");
-
+            
             // 행 삭제
             // 방법 1
             dtFruit.Rows.RemoveAt(4); // 인덱스로 삭제
@@ -50,7 +57,7 @@ namespace Data
                 Console.WriteLine($"{row["Name"]}, {row["Price"]}");
             }
             Console.WriteLine("============================");
-
+            
             // 특정 조건의 행 찾기
             Console.WriteLine("가격이 1500보다 높은 과일 찾기");
             DataRow[] result = dtFruit.Select("Price > 1500");
@@ -59,10 +66,10 @@ namespace Data
                 Console.WriteLine($"{row["Name"]}, {row["Price"]}");
             }
             Console.WriteLine("============================");
-
+            
             // XML
             dtFruit.WriteXml("Fruit.xml"); // xml로 저장
-
+            
             dtFruit.Clear();
 
             dtFruit.ReadXml("Fruit.xml"); // xml 읽기
@@ -72,7 +79,7 @@ namespace Data
             }
             Console.WriteLine("============================");
 
-            // 고객
+            // 고객 테이블 생성
             DataTable dtCustomer = new DataTable("Custoer");
             dtCustomer.Columns.Add("Name", typeof(string));
             dtCustomer.Columns.Add("Age", typeof(int));
@@ -83,7 +90,7 @@ namespace Data
             dtCustomer.Rows.Add("Sarah", 21, 1450);
             dtCustomer.Rows.Add("David", 34, 3450);
 
-            // 직원
+            // 직원 테이블 생성
             DataTable dtEmployee = new DataTable("employee");
             dtEmployee.Columns.Add("Name", typeof(string));
             dtEmployee.Columns.Add("Age", typeof(int));
@@ -121,32 +128,32 @@ namespace Data
             }
 
             // xml 쓰기
-            ds.WriteXml("mart.xml");
+            //ds.WriteXml("mart.xml");
 
 
             // xml 읽기
-            DataSet dsRead = new DataSet("read_mart");
-            dsRead.ReadXml("mart.xml");
-
-            // 전체 조회
-            foreach (DataTable table in dsRead.Tables)
-            {
-                Console.WriteLine($"Table Name: {table.TableName}");
-                foreach (DataColumn col in table.Columns)
-                {
-                    Console.Write($"{col.ColumnName}\t");
-                }
-                Console.WriteLine();
-                foreach (DataRow row in table.Rows)
-                {
-                    foreach (DataColumn col in table.Columns)
-                    {
-                        Console.Write($"{row[col.ColumnName]}\t");
-                    }
-                    Console.WriteLine();
-                }
-                Console.WriteLine("============================");
-            }
+            //DataSet dsRead = new DataSet("read_mart");
+            //dsRead.ReadXml("mart.xml");
+            //
+            //// 전체 조회
+            //foreach (DataTable table in dsRead.Tables)
+            //{
+            //    Console.WriteLine($"Table Name: {table.TableName}");
+            //    foreach (DataColumn col in table.Columns)
+            //    {
+            //        Console.Write($"{col.ColumnName}\t");
+            //    }
+            //    Console.WriteLine();
+            //    foreach (DataRow row in table.Rows)
+            //    {
+            //        foreach (DataColumn col in table.Columns)
+            //        {
+            //            Console.Write($"{row[col.ColumnName]}\t");
+            //        }
+            //        Console.WriteLine();
+            //    }
+            //    Console.WriteLine("============================");
+            //}
         }
     }
 }
