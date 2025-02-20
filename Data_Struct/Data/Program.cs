@@ -128,32 +128,34 @@ namespace Data
             }
 
             // xml 쓰기
-            //ds.WriteXml("mart.xml");
+            ds.WriteXml("mart.xml");
 
 
             // xml 읽기
-            //DataSet dsRead = new DataSet("read_mart");
-            //dsRead.ReadXml("mart.xml");
-            //
-            //// 전체 조회
-            //foreach (DataTable table in dsRead.Tables)
-            //{
-            //    Console.WriteLine($"Table Name: {table.TableName}");
-            //    foreach (DataColumn col in table.Columns)
-            //    {
-            //        Console.Write($"{col.ColumnName}\t");
-            //    }
-            //    Console.WriteLine();
-            //    foreach (DataRow row in table.Rows)
-            //    {
-            //        foreach (DataColumn col in table.Columns)
-            //        {
-            //            Console.Write($"{row[col.ColumnName]}\t");
-            //        }
-            //        Console.WriteLine();
-            //    }
-            //    Console.WriteLine("============================");
-            //}
+            DataSet dsRead = new DataSet("read_mart");
+            dsRead.ReadXml("mart.xml");
+            Console.WriteLine();
+            Console.WriteLine("====== Read XML DataSet ======");
+
+            // 전체 조회
+            foreach (DataTable table in dsRead.Tables)
+            {
+                Console.WriteLine($"Table Name: {table.TableName}");
+                foreach (DataColumn col in table.Columns)
+                {
+                    Console.Write($"{col.ColumnName}\t");
+                }
+                Console.WriteLine();
+                foreach (DataRow row in table.Rows)
+                {
+                    foreach (DataColumn col in table.Columns)
+                    {
+                        Console.Write($"{row[col.ColumnName]}\t");
+                    }
+                    Console.WriteLine();
+                }
+                Console.WriteLine("============================");
+            }
         }
     }
 }
