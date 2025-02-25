@@ -13,14 +13,18 @@ namespace WinFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            m_table = new DataTable();
-            m_table.Columns.Add("ID", typeof(int));
-            m_table.Columns.Add("Name", typeof(string));
-            m_table.Rows.Add(1, "Alice");
-            m_table.Rows.Add(2, "Bob");
+            // 과일 테이블 생성
+            DataTable dtFruit = new DataTable("Fruit");
+            dtFruit.Columns.Add("Name", typeof(string));
+            dtFruit.Columns.Add("Price", typeof(int));
 
-            dataGridView.DataSource = m_table;
+            dtFruit.Rows.Add("Apple", 1200);
+            dtFruit.Rows.Add("Banana", 1000);
+            dtFruit.Rows.Add("Blueberry", 1700);
+            dtFruit.Rows.Add("Cherry", 2500);
+            dtFruit.Rows.Add("Melon", 3000);
 
+            dataGridView.DataSource = dtFruit;
         }
     }
 }
