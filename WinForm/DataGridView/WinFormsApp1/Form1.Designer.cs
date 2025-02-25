@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             dataGridView = new DataGridView();
-            btnSave = new Button();
-            btnLoad = new Button();
             lbSelect = new Label();
+            btnLoad = new Button();
+            btnSave = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
             SuspendLayout();
             // 
@@ -44,15 +44,14 @@
             dataGridView.TabIndex = 0;
             dataGridView.CellClick += dataGridView_CellClick;
             // 
-            // btnSave
+            // lbSelect
             // 
-            btnSave.Location = new Point(327, 316);
-            btnSave.Name = "btnSave";
-            btnSave.Size = new Size(75, 23);
-            btnSave.TabIndex = 2;
-            btnSave.Text = "Save";
-            btnSave.UseVisualStyleBackColor = true;
-            btnSave.Click += btnSave_Click;
+            lbSelect.BorderStyle = BorderStyle.FixedSingle;
+            lbSelect.Location = new Point(12, 316);
+            lbSelect.Name = "lbSelect";
+            lbSelect.Size = new Size(308, 23);
+            lbSelect.TabIndex = 1;
+            lbSelect.Text = "Select";
             // 
             // btnLoad
             // 
@@ -64,14 +63,15 @@
             btnLoad.UseVisualStyleBackColor = true;
             btnLoad.Click += btnLoad_Click;
             // 
-            // lbSelect
+            // btnSave
             // 
-            lbSelect.BorderStyle = BorderStyle.FixedSingle;
-            lbSelect.Location = new Point(12, 316);
-            lbSelect.Name = "lbSelect";
-            lbSelect.Size = new Size(308, 23);
-            lbSelect.TabIndex = 1;
-            lbSelect.Text = "Select";
+            btnSave.Location = new Point(327, 316);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(75, 23);
+            btnSave.TabIndex = 2;
+            btnSave.Text = "Save";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
             // 
             // Form1
             // 
@@ -92,8 +92,8 @@
         #endregion
 
         private DataGridView dataGridView;
-        private Button btnSave;
-        private Button btnLoad;
         private Label lbSelect;
+        private Button btnLoad;
+        private Button btnSave;
     }
 }
