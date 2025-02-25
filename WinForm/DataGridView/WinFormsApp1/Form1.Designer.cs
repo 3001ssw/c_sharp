@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             dataGridView = new DataGridView();
+            btnSave = new Button();
+            btnLoad = new Button();
+            lbSelect = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
             SuspendLayout();
             // 
@@ -39,12 +42,45 @@
             dataGridView.Name = "dataGridView";
             dataGridView.Size = new Size(505, 298);
             dataGridView.TabIndex = 0;
+            dataGridView.CellClick += dataGridView_CellClick;
+            // 
+            // btnSave
+            // 
+            btnSave.Location = new Point(327, 316);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(75, 23);
+            btnSave.TabIndex = 2;
+            btnSave.Text = "Save";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
+            // 
+            // btnLoad
+            // 
+            btnLoad.Location = new Point(408, 316);
+            btnLoad.Name = "btnLoad";
+            btnLoad.Size = new Size(75, 23);
+            btnLoad.TabIndex = 3;
+            btnLoad.Text = "Load";
+            btnLoad.UseVisualStyleBackColor = true;
+            btnLoad.Click += btnLoad_Click;
+            // 
+            // lbSelect
+            // 
+            lbSelect.BorderStyle = BorderStyle.FixedSingle;
+            lbSelect.Location = new Point(12, 316);
+            lbSelect.Name = "lbSelect";
+            lbSelect.Size = new Size(308, 23);
+            lbSelect.TabIndex = 1;
+            lbSelect.Text = "Select";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(529, 322);
+            ClientSize = new Size(530, 354);
+            Controls.Add(lbSelect);
+            Controls.Add(btnLoad);
+            Controls.Add(btnSave);
             Controls.Add(dataGridView);
             Name = "Form1";
             Text = "Form1";
@@ -56,5 +92,8 @@
         #endregion
 
         private DataGridView dataGridView;
+        private Button btnSave;
+        private Button btnLoad;
+        private Label lbSelect;
     }
 }
