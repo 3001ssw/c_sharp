@@ -1,4 +1,4 @@
-﻿namespace DataGridView_DataTable
+﻿namespace DataGridView_List
 {
     partial class Form1
     {
@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             dataGridView = new DataGridView();
-            lbSelect = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
             SuspendLayout();
             // 
@@ -39,25 +38,14 @@
             dataGridView.Location = new Point(12, 12);
             dataGridView.Name = "dataGridView";
             dataGridView.Size = new Size(505, 298);
-            dataGridView.TabIndex = 0;
-            dataGridView.CellClick += dataGridView_CellClick;
+            dataGridView.TabIndex = 1;
             dataGridView.SelectionChanged += dataGridView_SelectionChanged;
-            // 
-            // lbSelect
-            // 
-            lbSelect.BorderStyle = BorderStyle.FixedSingle;
-            lbSelect.Location = new Point(12, 316);
-            lbSelect.Name = "lbSelect";
-            lbSelect.Size = new Size(506, 106);
-            lbSelect.TabIndex = 1;
-            lbSelect.Text = "Select";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(530, 431);
-            Controls.Add(lbSelect);
+            ClientSize = new Size(529, 322);
             Controls.Add(dataGridView);
             Name = "Form1";
             Text = "Form1";
@@ -69,6 +57,5 @@
         #endregion
 
         private DataGridView dataGridView;
-        private Label lbSelect;
     }
 }

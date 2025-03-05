@@ -1,13 +1,12 @@
-using System.Data;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms;
 
-namespace DataGridView_DataTable
+namespace DataGridView_List
 {
     public partial class Form1 : Form
     {
-        DataTable m_table = new DataTable("DataTable");
-
         public Form1()
         {
             InitializeComponent();
@@ -15,19 +14,52 @@ namespace DataGridView_DataTable
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.Text = "DataGridView - DataTable";
+            this.Text = "DataGridView - List";
+
+            InitDataGridViewProperty();
+
+            // List로 추가
+            //List<CPerson> persons = new List<CPerson>();
+            //persons.Add(new CPerson("Jake", 10));
+            //persons.Add(new CPerson("David", 12));
+            //persons.Add(new CPerson("Rachel", 20));
+            //dataGridView.DataSource = persons;
+
+            // 칼럼
+            dataGridView.AutoGenerateColumns = false;
+
+            DataGridViewTextBoxColumn colName = new DataGridViewTextBoxColumn();
+            colName.DataPropertyName = "NAME"; // 속성 이름
+            colName.HeaderText = "Person Name"; // 헤더 표시
+
+            DataGridViewTextBoxColumn colBirth = new DataGridViewTextBoxColumn();
+            colBirth.DataPropertyName = "AGE"; // 속성 이름
+            colBirth.HeaderText = "Person Age"; // 헤더 표시
+
+            dataGridView.Columns.Add(colName);
+            dataGridView.Columns.Add(colBirth);
+
+            // BindingList로 추가
+            BindingList<CPerson> persons = new BindingList<CPerson>();
+            persons.Add(new CPerson("Jake", 10));
+            persons.Add(new CPerson("David", 12));
+            persons.Add(new CPerson("Rachel", 20));
+            dataGridView.DataSource = persons;
+        }
+
+        private void InitDataGridViewProperty()
+        {
 
             //사이즈 변경
             dataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lbSelect.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 
             // 속성
             //dataGridView.Dock = DockStyle.Fill; // 화면에 채우기
-            dataGridView.AllowUserToAddRows = false; // 사용자가 행 추가하기
-            dataGridView.AllowUserToDeleteRows = false; // 사용자가 행 삭제 가능한지
+            dataGridView.AllowUserToAddRows = true; // 사용자가 행 추가하기
+            dataGridView.AllowUserToDeleteRows = true; // 사용자가 행 삭제 가능한지
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill; // 표시되는 열의 자동 크기 조정 모드. 열 채우기
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect; // 셀 선택 모드. 모든 행 선택
-            dataGridView.MultiSelect = true; // 여러줄 선택
+            //dataGridView.MultiSelect = true; // 여러줄 선택
             //dataGridView.ReadOnly = true; // 읽기 전용
 
             // 배경색 및 기본 스타일 설정
@@ -57,52 +89,18 @@ namespace DataGridView_DataTable
 
             // 행 스타일 변경
             dataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.LightBlue; // 짝수 행 배경색 변경
-
-            // DataTable 생성
-            m_table.Columns.Add("Name", typeof(string));
-            m_table.Columns.Add("Price", typeof(int));
-
-            m_table.Rows.Add("Apple", 1200);
-            m_table.Rows.Add("Banana", 1000);
-            m_table.Rows.Add("Blueberry", 1700);
-            m_table.Rows.Add("Cherry", 2500);
-            m_table.Rows.Add("Melon", 3000);
-
-            dataGridView.DataSource = m_table;
-        }
-
-        private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            // cell click
-            if ((0 <= e.RowIndex && e.RowIndex < dataGridView.Rows.Count) &&
-                (0 <= e.ColumnIndex && e.ColumnIndex < dataGridView.Columns.Count))
-            {
-                string? strVal = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                if (strVal != null)
-                    lbSelect.Text = strVal;
-            }
         }
 
         private void dataGridView_SelectionChanged(object sender, EventArgs e)
         {
-            // row 클릭
-            StringBuilder sbTotal = new StringBuilder();
-            for (int iRowIndex = 0; iRowIndex < dataGridView.SelectedRows.Count; iRowIndex++)
+            foreach (DataGridViewRow row in dataGridView.SelectedRows)
             {
-                StringBuilder sbRow = new StringBuilder();
-                for (int iColIndex = 0; iColIndex < dataGridView.Columns.Count; iColIndex++)
+                CPerson? person = row.DataBoundItem as CPerson;
+                if (person != null)
                 {
-                    string? strVal = dataGridView.SelectedRows[iRowIndex].Cells[iColIndex].Value.ToString();
-                    if (strVal != null)
-                    {
-                        if (0 < sbRow.Length)
-                            sbRow.Append(",");
-                        sbRow.Append(strVal);
-                    }
+                    Debug.WriteLine($"Name: {person.NAME}, Age: {person.AGE}");
                 }
-                sbTotal.AppendLine(sbRow.ToString());
             }
-            lbSelect.Text = sbTotal.ToString();
         }
     }
 }

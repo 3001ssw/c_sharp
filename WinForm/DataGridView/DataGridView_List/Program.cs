@@ -1,4 +1,4 @@
-namespace DataGridView_DataTable
+namespace DataGridView_List
 {
     internal static class Program
     {
