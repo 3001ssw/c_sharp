@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "00_BasicControl", "00_Basic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01_Navigation", "01_Navigation\01_Navigation.csproj", "{FBED1DD7-2ED1-4669-B8F7-532A7B310047}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02_Understanding_XAML", "02_Understanding_XAML\02_Understanding_XAML.csproj", "{77700864-058F-407D-A08F-B5F5F7B4208D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "03_Layout", "03_Layout\03_Layout.csproj", "{DE9D505D-6C0F-4FC7-8CF3-4C6DBB17B393}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{FBED1DD7-2ED1-4669-B8F7-532A7B310047}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBED1DD7-2ED1-4669-B8F7-532A7B310047}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBED1DD7-2ED1-4669-B8F7-532A7B310047}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77700864-058F-407D-A08F-B5F5F7B4208D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77700864-058F-407D-A08F-B5F5F7B4208D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77700864-058F-407D-A08F-B5F5F7B4208D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77700864-058F-407D-A08F-B5F5F7B4208D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE9D505D-6C0F-4FC7-8CF3-4C6DBB17B393}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE9D505D-6C0F-4FC7-8CF3-4C6DBB17B393}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE9D505D-6C0F-4FC7-8CF3-4C6DBB17B393}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE9D505D-6C0F-4FC7-8CF3-4C6DBB17B393}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

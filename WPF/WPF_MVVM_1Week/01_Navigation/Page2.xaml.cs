@@ -16,18 +16,13 @@ using System.Windows.Shapes;
 namespace _01_Navigation
 {
     /// <summary>
-    /// Page1.xaml에 대한 상호 작용 논리
+    /// Page2.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class Page1 : Page
+    public partial class Page2 : Page
     {
-        public Page1()
+        public Page2()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/Page2.xaml", UriKind.Relative));
         }
     }
 }
