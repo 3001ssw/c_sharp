@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             dataGridView = new DataGridView();
-            lbSelect = new Label();
+            textBox = new TextBox();
             ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
             SuspendLayout();
             // 
@@ -41,34 +41,35 @@
             dataGridView.Size = new Size(505, 298);
             dataGridView.TabIndex = 0;
             dataGridView.CellClick += dataGridView_CellClick;
+            dataGridView.CellValueChanged += dataGridView_CellValueChanged;
             dataGridView.SelectionChanged += dataGridView_SelectionChanged;
             // 
-            // lbSelect
+            // textBox
             // 
-            lbSelect.BorderStyle = BorderStyle.FixedSingle;
-            lbSelect.Location = new Point(12, 316);
-            lbSelect.Name = "lbSelect";
-            lbSelect.Size = new Size(506, 106);
-            lbSelect.TabIndex = 1;
-            lbSelect.Text = "Select";
+            textBox.Location = new Point(12, 316);
+            textBox.Multiline = true;
+            textBox.Name = "textBox";
+            textBox.Size = new Size(505, 103);
+            textBox.TabIndex = 1;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(530, 431);
-            Controls.Add(lbSelect);
+            Controls.Add(textBox);
             Controls.Add(dataGridView);
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private DataGridView dataGridView;
-        private Label lbSelect;
+        private TextBox textBox;
     }
 }

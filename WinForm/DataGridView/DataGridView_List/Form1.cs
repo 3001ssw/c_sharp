@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
@@ -18,15 +19,8 @@ namespace DataGridView_List
 
             InitDataGridViewProperty();
 
-            // List로 추가
-            //List<CPerson> persons = new List<CPerson>();
-            //persons.Add(new CPerson("Jake", 10));
-            //persons.Add(new CPerson("David", 12));
-            //persons.Add(new CPerson("Rachel", 20));
-            //dataGridView.DataSource = persons;
-
             // 칼럼
-            dataGridView.AutoGenerateColumns = false;
+            dataGridView.AutoGenerateColumns = false; // 칼럼 자동 생성 false 설정
 
             DataGridViewTextBoxColumn colName = new DataGridViewTextBoxColumn();
             colName.DataPropertyName = "NAME"; // 속성 이름
@@ -39,11 +33,13 @@ namespace DataGridView_List
             dataGridView.Columns.Add(colName);
             dataGridView.Columns.Add(colBirth);
 
-            // BindingList로 추가
-            BindingList<CPerson> persons = new BindingList<CPerson>();
+
+            // List로 추가
+            List<CPerson> persons = new List<CPerson>();
             persons.Add(new CPerson("Jake", 10));
             persons.Add(new CPerson("David", 12));
             persons.Add(new CPerson("Rachel", 20));
+
             dataGridView.DataSource = persons;
         }
 
@@ -100,6 +96,16 @@ namespace DataGridView_List
                 {
                     Debug.WriteLine($"Name: {person.NAME}, Age: {person.AGE}");
                 }
+            }
+        }
+
+        private void btnIncreaseAge_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in dataGridView.SelectedRows)
+            {
+                CPerson? person = row.DataBoundItem as CPerson;
+                if (person != null)
+                    person.AGE++;
             }
         }
     }

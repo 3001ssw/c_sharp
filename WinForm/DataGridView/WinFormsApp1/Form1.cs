@@ -1,6 +1,8 @@
 using System.Data;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace DataGridView_DataTable
 {
@@ -19,15 +21,16 @@ namespace DataGridView_DataTable
 
             //사이즈 변경
             dataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lbSelect.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            textBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            textBox.ScrollBars = ScrollBars.Vertical;
 
             // 속성
-            //dataGridView.Dock = DockStyle.Fill; // 화면에 채우기
-            dataGridView.AllowUserToAddRows = false; // 사용자가 행 추가하기
-            dataGridView.AllowUserToDeleteRows = false; // 사용자가 행 삭제 가능한지
+            dataGridView.Dock = DockStyle.Fill; // 화면에 채우기
+            dataGridView.AllowUserToAddRows = false; // 사용자가 행 추가 막기
+            dataGridView.AllowUserToDeleteRows = false; // 사용자가 행 삭제 막기
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill; // 표시되는 열의 자동 크기 조정 모드. 열 채우기
-            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect; // 셀 선택 모드. 모든 행 선택
-            dataGridView.MultiSelect = true; // 여러줄 선택
+            //dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect; // 셀 선택 모드. 모든 행 선택
+            //dataGridView.MultiSelect = true; // 여러 줄 선택
             //dataGridView.ReadOnly = true; // 읽기 전용
 
             // 배경색 및 기본 스타일 설정
@@ -73,26 +76,36 @@ namespace DataGridView_DataTable
 
         private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // cell click
+            // cell 클릭
             if ((0 <= e.RowIndex && e.RowIndex < dataGridView.Rows.Count) &&
                 (0 <= e.ColumnIndex && e.ColumnIndex < dataGridView.Columns.Count))
             {
                 string? strVal = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
                 if (strVal != null)
-                    lbSelect.Text = strVal;
+                {
+                    textBox.AppendText(Environment.NewLine);
+                    textBox.AppendText($"[{e.RowIndex}, {e.ColumnIndex}] 셀 클릭: {strVal}");
+                }
             }
+        }
+
+        private void dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            // 셀 값 변경 시 호출
+            textBox.AppendText(Environment.NewLine);
+            textBox.AppendText($"[{e.RowIndex}, {e.ColumnIndex}] 값 변경됨: {dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value}");
         }
 
         private void dataGridView_SelectionChanged(object sender, EventArgs e)
         {
             // row 클릭
             StringBuilder sbTotal = new StringBuilder();
-            for (int iRowIndex = 0; iRowIndex < dataGridView.SelectedRows.Count; iRowIndex++)
+            foreach (DataGridViewRow row in dataGridView.SelectedRows)
             {
                 StringBuilder sbRow = new StringBuilder();
-                for (int iColIndex = 0; iColIndex < dataGridView.Columns.Count; iColIndex++)
+                foreach (DataGridViewCell cell in row.Cells)
                 {
-                    string? strVal = dataGridView.SelectedRows[iRowIndex].Cells[iColIndex].Value.ToString();
+                    string? strVal = cell.Value.ToString();
                     if (strVal != null)
                     {
                         if (0 < sbRow.Length)
@@ -100,9 +113,16 @@ namespace DataGridView_DataTable
                         sbRow.Append(strVal);
                     }
                 }
-                sbTotal.AppendLine(sbRow.ToString());
+                string strRow = $"{row.Index}: {sbRow.ToString()}";
+                sbTotal.AppendLine(strRow);
             }
-            lbSelect.Text = sbTotal.ToString();
+
+            if (0 < sbTotal.Length)
+            {
+                string strTotal = "SelectionChanged" + Environment.NewLine + sbTotal.ToString();
+                textBox.AppendText(Environment.NewLine);
+                textBox.AppendText(strTotal);
+            }
         }
     }
 }

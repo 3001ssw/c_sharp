@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             dataGridView = new DataGridView();
+            btnIncreaseAge = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
             SuspendLayout();
             // 
@@ -41,11 +42,22 @@
             dataGridView.TabIndex = 1;
             dataGridView.SelectionChanged += dataGridView_SelectionChanged;
             // 
+            // btnIncreaseAge
+            // 
+            btnIncreaseAge.Location = new Point(442, 316);
+            btnIncreaseAge.Name = "btnIncreaseAge";
+            btnIncreaseAge.Size = new Size(75, 23);
+            btnIncreaseAge.TabIndex = 2;
+            btnIncreaseAge.Text = "button1";
+            btnIncreaseAge.UseVisualStyleBackColor = true;
+            btnIncreaseAge.Click += btnIncreaseAge_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(529, 322);
+            ClientSize = new Size(529, 358);
+            Controls.Add(btnIncreaseAge);
             Controls.Add(dataGridView);
             Name = "Form1";
             Text = "Form1";
@@ -57,5 +69,6 @@
         #endregion
 
         private DataGridView dataGridView;
+        private Button btnIncreaseAge;
     }
 }
