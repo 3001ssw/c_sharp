@@ -1,0 +1,26 @@
+﻿<Window x:Class="_04_List_Control.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_04_List_Control"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <!--
+    <ListBox Width="150" Height="200">
+        <Label> Element 1</Label>
+        <Label> Element 2</Label>
+        <GroupBox Header="Element 3">
+            Element 3 Description
+        </GroupBox>
+    </ListBox>
+    -->
+    <ComboBox Width="150" Height="50" >
+        <Label>Element 1</Label>
+        <Label>Element 2</Label>
+        <GroupBox Header="Element 3">
+            Element 3 Description
+        </GroupBox>
+    </ComboBox>
+    
+</Window>
