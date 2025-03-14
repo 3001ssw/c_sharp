@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "03_Layout", "03_Layout\03_L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04_List_Control", "04_List_Control\04_List_Control.csproj", "{B6614661-C0B3-48F2-BAB4-855DC2C40BC0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05_DataBinding", "05_DataBinding\05_DataBinding.csproj", "{C6A62239-6BCB-4268-8954-9987CD62E96B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06_Converters", "06_Converters\06_Converters.csproj", "{AFB1B914-E8BD-4633-B920-C342CE36B275}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{B6614661-C0B3-48F2-BAB4-855DC2C40BC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6614661-C0B3-48F2-BAB4-855DC2C40BC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6614661-C0B3-48F2-BAB4-855DC2C40BC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6A62239-6BCB-4268-8954-9987CD62E96B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6A62239-6BCB-4268-8954-9987CD62E96B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6A62239-6BCB-4268-8954-9987CD62E96B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6A62239-6BCB-4268-8954-9987CD62E96B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFB1B914-E8BD-4633-B920-C342CE36B275}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFB1B914-E8BD-4633-B920-C342CE36B275}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFB1B914-E8BD-4633-B920-C342CE36B275}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFB1B914-E8BD-4633-B920-C342CE36B275}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
