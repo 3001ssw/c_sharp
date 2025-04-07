@@ -13,9 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-
-
-namespace _06_Converters
+namespace _07_Chatting
 {
     /// <summary>
     /// MainWindow.xaml에 대한 상호 작용 논리
@@ -25,19 +23,6 @@ namespace _06_Converters
         public MainWindow()
         {
             InitializeComponent();
-
-            var Person = new List<Human>();
-            for (int i = 0; i < 5; i++)
-            {
-                Person.Add(new Human()
-                {
-                    Name = $"{i}번째 사람",
-                    Age = i * 10
-                }); ;
-            }
-
-            this.DataContext = Person;
         }
     }
 }
-

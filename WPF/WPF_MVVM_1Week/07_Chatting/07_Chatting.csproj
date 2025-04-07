@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AFB1B914-E8BD-4633-B920-C342CE36B275}</ProjectGuid>
+    <ProjectGuid>{6325DE74-1284-463D-AF70-F71EF1D3DFF3}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>_06_Converters</RootNamespace>
-    <AssemblyName>06_Converters</AssemblyName>
+    <RootNamespace>_07_Chatting</RootNamespace>
+    <AssemblyName>07_Chatting</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -63,14 +63,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Human.cs" />
+    <Compile Include="Chattings.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DoubleConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

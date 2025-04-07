@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05_DataBinding", "05_DataBi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06_Converters", "06_Converters\06_Converters.csproj", "{AFB1B914-E8BD-4633-B920-C342CE36B275}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07_Chatting", "07_Chatting\07_Chatting.csproj", "{6325DE74-1284-463D-AF70-F71EF1D3DFF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{AFB1B914-E8BD-4633-B920-C342CE36B275}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFB1B914-E8BD-4633-B920-C342CE36B275}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFB1B914-E8BD-4633-B920-C342CE36B275}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6325DE74-1284-463D-AF70-F71EF1D3DFF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6325DE74-1284-463D-AF70-F71EF1D3DFF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6325DE74-1284-463D-AF70-F71EF1D3DFF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6325DE74-1284-463D-AF70-F71EF1D3DFF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

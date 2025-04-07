@@ -16,5 +16,38 @@
         <!-- 변환된 값을 표시하는 TextBlock -->
         <TextBlock Text="{Binding Text, ElementName=inputBox, Converter={StaticResource DoubleConv}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                    Background="LightGray" Margin="5"/>
+
+        <!-- 목록 컨트롤을 사용하는 컬렉션 표시 -->
+        <ListBox ItemsSource="{Binding}"/>
+        
+        <!-- 목록 컨트롤 사용자 정의 1 -->
+        <ListBox ItemsSource="{Binding}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="이름: {0}, 나이: {1}">
+                                <Binding Path="Name" />
+                                <Binding Path="Age" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <!-- 목록 컨트롤 사용자 정의 2 -->
+        <ListBox ItemsSource="{Binding}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="Name"/>
+                        <TextBox Text="{Binding Name}"/>
+                        <TextBlock Text="Age"/>
+                        <Slider Value="{Binding Age}" Maximum="100"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </StackPanel>
 </Window>
