@@ -11,7 +11,6 @@
 
     <StackPanel>
         <TextBlock HorizontalAlignment="Stretch" Height="30" Text="hi" Margin="10"/>
-        <TextBox HorizontalAlignment="Stretch" Height="30" Text="text" Margin="10"/>
-        <Button HorizontalAlignment="Stretch" Height="30" Margin="10" Content="move" Click="Button_Click" />
+        <Button HorizontalAlignment="Stretch" Content="Go to Page2" Click="Button_Click" />
     </StackPanel>
 </Page>

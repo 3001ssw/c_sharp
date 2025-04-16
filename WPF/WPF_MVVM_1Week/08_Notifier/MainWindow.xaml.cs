@@ -13,21 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace _01_Navigation
+namespace _08_Notifier
 {
     /// <summary>
-    /// Page2.xaml에 대한 상호 작용 논리
+    /// MainWindow.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class Page2 : Page
+    public partial class MainWindow : Window
     {
-        public Page2()
+        public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/Page3.xaml", UriKind.Relative));
         }
     }
 }

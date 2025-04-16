@@ -6,7 +6,5 @@
         xmlns:local="clr-namespace:_01_Navigation"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Frame Source="/Page1.xaml"/>
-    </Grid>
+    <Frame Source="/Page1.xaml"/>
 </Window>

@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06_Converters", "06_Convert
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07_Chatting", "07_Chatting\07_Chatting.csproj", "{6325DE74-1284-463D-AF70-F71EF1D3DFF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "08_Notifier", "08_Notifier\08_Notifier.csproj", "{D4EFF345-A0BF-44A3-9FCA-DC7947A8CF32}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{6325DE74-1284-463D-AF70-F71EF1D3DFF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6325DE74-1284-463D-AF70-F71EF1D3DFF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6325DE74-1284-463D-AF70-F71EF1D3DFF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4EFF345-A0BF-44A3-9FCA-DC7947A8CF32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4EFF345-A0BF-44A3-9FCA-DC7947A8CF32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4EFF345-A0BF-44A3-9FCA-DC7947A8CF32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4EFF345-A0BF-44A3-9FCA-DC7947A8CF32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
