@@ -8,7 +8,7 @@
         Title="MainWindow" Height="450" Width="800"
         xmlns:data="clr-namespace:_08_Notifier">
     <StackPanel>
-        <ListBox >
+        <ListBox SelectedItem="{Binding SelectedHuman, Mode=TwoWay}">
             <ListBox.ItemsSource>
                 <data:Person/>
             </ListBox.ItemsSource>
@@ -17,11 +17,13 @@
                     <StackPanel Width="500">
                         <TextBlock Text="{Binding Name}"/>
                         <TextBlock Text="{Binding Age}"/>
-                        <Slider Value="{Binding Age}" Maximum="100"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        
+        <StackPanel DataContext="{Binding SelectedHuman}">
+            <TextBox Text="{Binding Name, Mode=TwoWay}"/>
+            <Slider Value="{Binding Age, Mode=TwoWay}" Maximum="100"/>
+        </StackPanel>
     </StackPanel>
 </Window>
