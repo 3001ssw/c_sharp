@@ -23,7 +23,6 @@ namespace _08_Notifier
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new HumanViewModel();
         }
     }
 }

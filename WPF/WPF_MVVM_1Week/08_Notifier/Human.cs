@@ -17,6 +17,11 @@ namespace _08_Notifier
             this.Add(new Human() { Name = "Park", Age = 40 });
             this.Add(new Human() { Name = "Choi", Age = 50 });
         }
+
+        public IEnumerable<Human> FindHuman(string searchString)
+        {
+            return this.Where(p => p.Name.Contains(searchString));
+        }
     }
 
     public class Human : Notifier

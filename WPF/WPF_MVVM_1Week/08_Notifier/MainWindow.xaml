@@ -4,14 +4,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_08_Notifier"
+        xmlns:vm="clr-namespace:_08_Notifier"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         xmlns:data="clr-namespace:_08_Notifier">
+    <Window.DataContext>
+        <vm:HumanViewModel/>
+    </Window.DataContext>
     <StackPanel>
-        <ListBox SelectedItem="{Binding SelectedHuman, Mode=TwoWay}">
-            <ListBox.ItemsSource>
-                <data:Person/>
-            </ListBox.ItemsSource>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Search" Width="50"/>
+            <!--
+            UpdateSourceTrigger는 TextBox의 값이 바뀔 때, 그 변경을 바인딩된 속성(ViewModel)에 언제 반영할지 결정하는 속성
+            Default: 기본, TextBox는 포커스 잃을 때(LostFocus)
+            PropertyChanged: 사용자가 타이핑할 때마다 즉시 ViewModel에 반영됨
+            LostFocus: 포커스 잃을 때
+            Explicit: 수동 반영(BindingExpression.UpdateSource() 호출해야 반영)
+            -->
+            <TextBox Text="{Binding SearchHuman, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="300" />
+        </StackPanel>
+        <!--
+        ListBox의 ItemsSource에는 FindHuman이 바인딩 됨. 아이템을 선택하면 SelectedHuman이 바인딩 됨
+        -->
+        <ListBox ItemsSource="{Binding FindHuman}" SelectedItem="{Binding SelectedHuman, Mode=TwoWay}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Width="500">
@@ -21,9 +36,11 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <StackPanel DataContext="{Binding SelectedHuman}">
-            <TextBox Text="{Binding Name, Mode=TwoWay}"/>
-            <Slider Value="{Binding Age, Mode=TwoWay}" Maximum="100"/>
-        </StackPanel>
+        <Border DataContext="{Binding SelectedHuman}">
+            <StackPanel>
+                <TextBox Text="{Binding Name, Mode=TwoWay}"/>
+                <Slider Value="{Binding Age, Mode=TwoWay}" Maximum="100"/>
+            </StackPanel>
+        </Border>
     </StackPanel>
 </Window>
