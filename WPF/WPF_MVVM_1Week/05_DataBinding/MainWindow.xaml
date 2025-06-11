@@ -5,15 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_05_DataBinding"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
-        Background="{Binding Text, ElementName=tbColor}">
+        Title="MainWindow" Height="450" Width="800">
     <StackPanel>
-        <Slider Maximum="100" x:Name="slider" Value="50" Margin="5"/>
+        <!--TextBox의 Text가 바인딩 됨-->
+        <TextBox x:Name="tbColor" Text="Yellow" Margin="5"/>
+        <Label x:Name="label" Background="{Binding Text, ElementName=tbColor}" Content="This is Label" Margin="5"/>
+
         <!--slider의 Value가 Binding됨-->
+        <Slider x:Name="slider" Minimum="0" Maximum="100" Value="50" Margin="5"/>
         <ProgressBar Value="{Binding Value, ElementName=slider}" Height="30" Margin="5"/>
-        <TextBox Text="{Binding Value, ElementName=slider}" Margin="5"/>
-        <TextBox Text="{Binding Path=Value, ElementName=slider}" Margin="5"/>
-        <TextBox Text="Yellow" x:Name="tbColor" Margin="5"/>
+        <TextBox x:Name="tbColor_Text" Text="{Binding Value, ElementName=slider, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
         
     </StackPanel>
 </Window>
