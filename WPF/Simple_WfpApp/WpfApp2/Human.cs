@@ -12,6 +12,8 @@ namespace WpfApp2
         public int Age { get; set; }
         public Human()
         {
+            Name = "";
+            Age = 0;
         }
     }
 }

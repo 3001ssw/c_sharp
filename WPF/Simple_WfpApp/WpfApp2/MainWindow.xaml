@@ -7,17 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
-        <local:Human Name="son" Age="10"/>
+        <local:Human/>
     </Window.DataContext>
-    <StackPanel>
-        <StackPanel>
-            <StackPanel.DataContext>
-                <local:Human Name="Kim" Age="11"/>
-            </StackPanel.DataContext>
-            <TextBlock Text="{Binding Name}"/>
-            <TextBlock Text="{Binding Age}"/>
-        </StackPanel>
-        <TextBlock Text="{Binding Path=Name}"/>
+    <StackPanel x:Name="stackpanel">
+        <TextBlock Text="{Binding Name}"/>
         <TextBlock Text="{Binding Age}"/>
     </StackPanel>
 </Window>

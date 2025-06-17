@@ -23,6 +23,9 @@ namespace WpfApp2
         public MainWindow()
         {
             InitializeComponent();
+            Human human = new Human();
+            //this.DataContext = human;
+            //stackpanel.DataContext = human;
         }
     }
 }
