@@ -58,7 +58,8 @@ namespace WpfApp3
         // SaveCommand가 실행 가능한지 판단하는 조건
         private bool CanSave()
         {
-            return !string.IsNullOrWhiteSpace(Name);
+            bool bRet = !string.IsNullOrWhiteSpace(Name) && 0 <= Age;
+            return bRet;
         }
 
         // 속성 변경 이벤트

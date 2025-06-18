@@ -19,6 +19,6 @@
         <TextBlock Text="{Binding Age, Mode=TwoWay}" />
 
         <!-- 저장 버튼: SaveCommand와 바인딩되어 클릭 시 Save() 실행 -->
-        <Button Content="저장" Command="{Binding SaveCommand}" IsEnabled="{Binding EnableButton}" />
+        <Button Content="저장" Command="{Binding SaveCommand}" />
     </StackPanel>
 </Window>
