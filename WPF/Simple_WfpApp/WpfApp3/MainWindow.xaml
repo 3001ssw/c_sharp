@@ -16,7 +16,6 @@
 
         <!-- 나이 입력: ViewModel의 Age 속성과 양방향 바인딩 -->
         <TextBox Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}" />
-        <TextBlock Text="{Binding Age, Mode=TwoWay}" />
 
         <!-- 저장 버튼: SaveCommand와 바인딩되어 클릭 시 Save() 실행 -->
         <Button Content="저장" Command="{Binding SaveCommand}" />

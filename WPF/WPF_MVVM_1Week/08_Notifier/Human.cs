@@ -20,7 +20,7 @@ namespace _08_Notifier
 
         public IEnumerable<Human> FindHuman(string searchString)
         {
-            return this.Where(p => p.Name.Contains(searchString));
+            return this.Where(item => item.Name.Contains(searchString));
         }
     }
 
