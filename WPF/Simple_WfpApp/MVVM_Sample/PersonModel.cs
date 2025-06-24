@@ -5,13 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Serialize
+namespace MVVM_Sample.Model
 {
-    //[Serializable]
     public class PersonModel
     {
         public string Name { get; set; }
-        //[XmlIgnore]
         public int Age { get; set; }
 
         public string Gender { get; set; }

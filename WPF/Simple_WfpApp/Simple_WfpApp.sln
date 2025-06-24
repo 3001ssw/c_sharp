@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp3", "WpfApp3\WpfApp3.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serialize", "Serialize\Serialize.csproj", "{B1695AF2-E6BE-4189-AD61-FC876D552CE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVVM_Sample", "MVVM_Sample\MVVM_Sample.csproj", "{B54B2831-A831-4613-BEDE-A0ABC5563335}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{B1695AF2-E6BE-4189-AD61-FC876D552CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1695AF2-E6BE-4189-AD61-FC876D552CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1695AF2-E6BE-4189-AD61-FC876D552CE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B54B2831-A831-4613-BEDE-A0ABC5563335}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B54B2831-A831-4613-BEDE-A0ABC5563335}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B54B2831-A831-4613-BEDE-A0ABC5563335}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B54B2831-A831-4613-BEDE-A0ABC5563335}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

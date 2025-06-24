@@ -35,10 +35,10 @@ namespace Serialize
         public MainWindowViewModel()
         {
             People = new ObservableCollection<PersonModel>();
-            People.Add(new PersonModel("김", 10));
-            People.Add(new PersonModel("이", 20));
-            People.Add(new PersonModel("박", 30));
-            People.Add(new PersonModel("최", 40));
+            People.Add(new PersonModel("김", 10, "남자"));
+            People.Add(new PersonModel("이", 20, "여자"));
+            People.Add(new PersonModel("박", 30, "여자"));
+            People.Add(new PersonModel("최", 40, "남자"));
 
             ISaveXml = new Command(SaveXml, CanExecuteSaveXml);
             ILoadXml = new Command(LoadXml, CanExecuteLoadXml);
