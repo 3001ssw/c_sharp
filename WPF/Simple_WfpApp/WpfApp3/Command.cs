@@ -8,14 +8,13 @@ using System.Windows.Input;
 namespace WpfApp3
 {
     // ICommand 인터페이스 구현
-    // MVVM에서 버튼 클릭 등 명령을 처리할 때 사용
-    public class RelayCommand : ICommand
+    public class Command : ICommand
     {
         private readonly Action execute;         // 명령 실행 메서드
         private readonly Func<bool> canExecute;  // 명령 실행 가능 여부 판단
 
         // 생성자: 실행 메서드와 실행 가능 조건을 받음
-        public RelayCommand(Action execute, Func<bool> canExecute = null)
+        public Command(Action execute, Func<bool> canExecute = null)
         {
             this.execute = execute;
             this.canExecute = canExecute;

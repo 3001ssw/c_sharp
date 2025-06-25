@@ -76,7 +76,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="PersonModel.cs" />
     <Compile Include="PersonView.xaml.cs">
       <DependentUpon>PersonView.xaml</DependentUpon>

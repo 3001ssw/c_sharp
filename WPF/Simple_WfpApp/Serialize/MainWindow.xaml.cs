@@ -24,5 +24,10 @@ namespace Serialize
         {
             InitializeComponent();
         }
+
+        public void SaveFunction()
+        {
+
+        }
     }
 }

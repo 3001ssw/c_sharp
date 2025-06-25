@@ -11,7 +11,7 @@ namespace WpfApp3
 {
     // View와 Model 사이에서 중간 역할을 하는 클래스
     // INotifyPropertyChanged: 바인딩된 속성 값이 변경되었음을 View에 알림
-    public class UserViewModel : INotifyPropertyChanged
+    public class UserViewModel : Notifier
     {
         private string name;
         private int age;
@@ -39,13 +39,13 @@ namespace WpfApp3
         }
 
         // 저장 명령을 담는 ICommand 구현체
-        public RelayCommand SaveCommand { get; }
+        public Command SaveCommand { get; }
 
         // 생성자
         public UserViewModel()
         {
             // 명령 객체 생성: 실행 메서드 Save, 실행 가능 여부 CanSave
-            SaveCommand = new RelayCommand(Save, CanSave);
+            SaveCommand = new Command(Save, CanSave);
         }
 
         // SaveCommand가 실행할 메서드: Model 생성 + 가상 저장 처리
@@ -61,13 +61,6 @@ namespace WpfApp3
             bool bRet = !string.IsNullOrWhiteSpace(Name) && 0 <= Age;
             return bRet;
         }
-
-        // 속성 변경 이벤트
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        // 속성 변경 이벤트를 호출하는 메서드
-        protected void OnPropertyChanged(string name) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
 }

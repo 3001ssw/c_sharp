@@ -55,7 +55,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="RelayCommand.cs" />
+    <Compile Include="Command.cs" />
+    <Compile Include="Notifier.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserViewModel.cs" />
     <Page Include="MainWindow.xaml">

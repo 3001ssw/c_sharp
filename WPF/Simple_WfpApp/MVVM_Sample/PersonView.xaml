@@ -4,12 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MVVM_Sample"
+             xmlns:vm="clr-namespace:MVVM_Sample.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel DataContext="{Binding Person, Mode=TwoWay}">
+    <UserControl.DataContext>
+        <vm:PersonViewModel/>
+    </UserControl.DataContext>
+    <StackPanel>
         <Label Content="Person View"/>
-        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBox Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBox Text="{Binding Gender, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        <TextBox Text="{Binding Age, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        <TextBox Text="{Binding GenderDisp, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"/>
     </StackPanel>
 </UserControl>

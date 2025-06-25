@@ -12,16 +12,16 @@ namespace MVVM_Sample.Model
         public string Name { get; set; }
         public int Age { get; set; }
 
-        public string Gender { get; set; }
+        public int Gender { get; set; }
 
         public PersonModel()
         {
             Name = "";
             Age = 0;
-            Gender = "";
+            Gender = 0;
         }
 
-        public PersonModel(string name = "", int age = 0, string gender = "")
+        public PersonModel(string name = "", int age = 0, int gender = 0)
         {
             Name = name;
             Age = age;
