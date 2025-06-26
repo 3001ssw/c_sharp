@@ -25,20 +25,5 @@ namespace WpfApp4
         {
             InitializeComponent();
         }
-
-        public void ShowInfo()
-        {
-
-        }
-
-        private void ShowInfo(object sender, RoutedEventArgs e)
-        {
-            // UserControl에서 ViewModel 가져오기
-            PersonViewModel vm = PersonViewControl.DataContext as PersonViewModel;
-            if (vm != null)
-            {
-                MessageBox.Show($"이름: {vm.Name}\n나이: {vm.Age}", "Person 정보");
-            }
-        }
     }
 }

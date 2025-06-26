@@ -4,17 +4,21 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using WpfApp4.Models;
+using WpfApp4.Util;
 
 namespace WpfApp4.ViewModels
 {
-    public class PersonViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : Notifier
     {
         private Person _person;
+        public Command ShowPersonInfoCommand { get; }
 
-        public PersonViewModel()
+        public MainWindowViewModel()
         {
             _person = new Person { Name = "홍길동", Age = 30 };
+            ShowPersonInfoCommand = new Command(OnShowPersonInfo, CanExecuteShowPersonInfo);
         }
 
         public string Name
@@ -43,9 +47,15 @@ namespace WpfApp4.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propName)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        private void OnShowPersonInfo()
+        {
+            MessageBox.Show($"이름: {Name}\n나이: {Age}", "Person 정보");
+        }
+
+        private bool CanExecuteShowPersonInfo()
+        {
+            return true;
+        }
     }
 
 }

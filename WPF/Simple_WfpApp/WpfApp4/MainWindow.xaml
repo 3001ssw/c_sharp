@@ -4,12 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp4"
-        xmlns:views="clr-namespace:WpfApp4.Views"
+        xmlns:vm="clr-namespace:WpfApp4.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <vm:MainWindowViewModel />
+    </Window.DataContext>
     <StackPanel>
-        <Button Content="Message Show" Click="ShowInfo"/>
-        <!-- 밑에 Person 정보 표시-->
-        <views:PersonView x:Name="PersonViewControl"/>
+        <Button Content="Show Person Info" Command="{Binding ShowPersonInfoCommand}"/>
+        
+        <!-- Person 정보-->
+        <StackPanel Margin="10">
+            <TextBlock Text="이름:" />
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+            <TextBlock Text="나이:" />
+            <TextBox Text="{Binding Age, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+        </StackPanel>
     </StackPanel>
 </Window>
