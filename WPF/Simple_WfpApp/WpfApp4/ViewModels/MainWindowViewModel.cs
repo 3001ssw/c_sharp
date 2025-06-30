@@ -13,12 +13,12 @@ namespace WpfApp4.ViewModels
     public class MainWindowViewModel : Notifier
     {
         private Person _person;
-        public Command ShowPersonInfoCommand { get; }
+        public Command SaveCommand { get; }
 
         public MainWindowViewModel()
         {
             _person = new Person { Name = "홍길동", Age = 30 };
-            ShowPersonInfoCommand = new Command(OnShowPersonInfo, CanExecuteShowPersonInfo);
+            SaveCommand = new Command(OnSave, CanExecuteSave);
         }
 
         public string Name
@@ -47,12 +47,12 @@ namespace WpfApp4.ViewModels
             }
         }
 
-        private void OnShowPersonInfo()
+        private void OnSave()
         {
             MessageBox.Show($"이름: {Name}\n나이: {Age}", "Person 정보");
         }
 
-        private bool CanExecuteShowPersonInfo()
+        private bool CanExecuteSave()
         {
             return true;
         }

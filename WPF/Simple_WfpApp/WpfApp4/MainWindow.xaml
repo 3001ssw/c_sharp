@@ -11,7 +11,7 @@
         <vm:MainWindowViewModel />
     </Window.DataContext>
     <StackPanel>
-        <Button Content="Show Person Info" Command="{Binding ShowPersonInfoCommand}"/>
+        <Button Content="Save" Command="{Binding SaveCommand}"/>
         
         <!-- Person 정보-->
         <StackPanel Margin="10">
