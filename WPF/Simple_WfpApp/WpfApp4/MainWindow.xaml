@@ -14,10 +14,8 @@
         <!-- Person 정보-->
         <TextBlock Text="이름:" />
         <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-
         <TextBlock Text="나이:" />
         <TextBox Text="{Binding Age, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-
         <Button Content="Save" Command="{Binding SaveCommand}" Margin="0,10,0,10"/>
 
         <Border Background="Gray" Height="3" Margin="10"/>
@@ -36,7 +34,8 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <Border Background="Gray" Height="3" Margin="10"/>
+        <Border Background="Gray" Height="1" Margin="10"/>
+
         <!--SelectedPerson 정보-->
         <Border DataContext="{Binding SelectedPerson}">
             <StackPanel>
