@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WpfApp5.Dialogs;
 
 namespace WpfApp5
 {
@@ -22,6 +23,8 @@ namespace WpfApp5
         public TestWindow()
         {
             InitializeComponent();
+            DialogService service = new DialogService(this);
+            this.DataContext = new TestWindowViewModel(service);
         }
     }
 }

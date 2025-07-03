@@ -20,7 +20,8 @@ namespace WpfApp5
         {
             TestWindow test = new TestWindow();
             test.ShowDialog();
-            MessageBox.Show("Show Dialog TestWindow");
+            
+            MessageBox.Show("Show Dialog TestWindow Result: " + test.DialogResult);
         }
 
         private bool CanExecutePopupWindow()
