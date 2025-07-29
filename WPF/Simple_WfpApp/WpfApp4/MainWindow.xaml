@@ -11,16 +11,16 @@
         <vm:MainWindowViewModel />
     </Window.DataContext>
     <StackPanel Margin="10">
-        <!-- Person 정보-->
+        <!-- 추가할 사람 정보 입력 -->
         <TextBlock Text="이름:" />
-        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        <TextBox Text="{Binding AddName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
         <TextBlock Text="나이:" />
-        <TextBox Text="{Binding Age, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-        <Button Content="Save" Command="{Binding SaveCommand}" Margin="0,10,0,10"/>
+        <TextBox Text="{Binding AddAge, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+        <Button Content="Add" Command="{Binding AddCommand}" Margin="0,10,0,10"/>
 
         <Border Background="Gray" Height="3" Margin="10"/>
 
-        <!-- People 정보-->
+        <!-- 입력된 모든 사람 정보 표시 -->
         <ListBox ItemsSource="{Binding People}" SelectedItem="{Binding SelectedPerson, Mode=TwoWay}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -34,9 +34,9 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <Border Background="Gray" Height="1" Margin="10"/>
+        <Border Background="Gray" Height="3" Margin="10"/>
 
-        <!--SelectedPerson 정보-->
+        <!-- 리스트에서 선택된 SelectedPerson 정보 표시 -->
         <Border DataContext="{Binding SelectedPerson}">
             <StackPanel>
                 <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>

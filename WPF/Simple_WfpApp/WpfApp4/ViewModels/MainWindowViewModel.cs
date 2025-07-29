@@ -13,66 +13,63 @@ namespace WpfApp4.ViewModels
 {
     public class MainWindowViewModel : Notifier
     {
-        private string name = "홍길동";
-        public string Name
+        private string _addName = "홍길동";
+        public string AddName // 이름 입력
         {
-            get => name;
+            get => _addName;
             set
             {
-                name = value;
-                OnPropertyChanged(nameof(Name));
-                SaveCommand.RaiseCanExecuteChanged();
+                _addName = value;
+                OnPropertyChanged();
+                AddCommand.RaiseCanExecuteChanged();
             }
         }
 
-        private int age = 0;
-        public int Age
+        private int _addAge = 0;
+        public int AddAge // 나이 입력
         {
-            get => age;
+            get => _addAge;
             set
             {
-                age = value;
-                OnPropertyChanged(nameof(Age));
-                SaveCommand.RaiseCanExecuteChanged();
+                _addAge = value;
+                OnPropertyChanged();
+                AddCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public Command SaveCommand { get; }
+        public Command AddCommand { get; } // Add 버튼 Command
 
-
-        public ObservableCollection<Person> People { get; }
-
+        public ObservableCollection<Person> People { get; } // 리스트에 표시되는 전체 정보
 
         private Person _selectedPerson;
-        public Person SelectedPerson
+        public Person SelectedPerson // 리스트에서 선택한 정보
         {
             get => _selectedPerson;
             set
             {
                 _selectedPerson = value;
-                OnPropertyChanged(nameof(SelectedPerson));
+                OnPropertyChanged();
             }
         }
 
         public MainWindowViewModel()
         {
-            SaveCommand = new Command(OnSave, CanExecuteSave);
+            AddCommand = new Command(OnAdd, CanExecuteAdd);
 
             People = new ObservableCollection<Person>();
         }
 
-        private void OnSave()
+        private void OnAdd()
         {
-            Person person = new Person(Name, Age);
+            Person person = new Person(AddName, AddAge);
             People.Add(person);
-            Name = "";
-            Age = 0;
+            AddName = "";
+            AddAge = 0;
         }
 
-        private bool CanExecuteSave()
+        private bool CanExecuteAdd()
         {
-            return !string.IsNullOrEmpty(Name);
+            return !string.IsNullOrEmpty(AddName);
         }
     }
-
 }
