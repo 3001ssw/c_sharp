@@ -1,0 +1,50 @@
+﻿<Window x:Class="WpfMenu.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfMenu"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="Open" Command="{Binding OpenCommand}"/>
+                <MenuItem Header="Save" Command="{Binding SaveCommand}"/>
+                <Separator />
+                <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
+            </MenuItem>
+            <MenuItem Header="_Options">
+                <MenuItem Header="Checked Menu"
+                  IsCheckable="True"
+                  IsChecked="{Binding IsCheckMenu}"
+                  Command="{Binding CheckedMenuCommand}"/>
+            </MenuItem>
+            <MenuItem Header="_Settings">
+                <MenuItem Header="Radio Menu">
+                    <!-- ComboBox 메뉴 항목 -->
+                    <MenuItem.StaysOpenOnClick>True</MenuItem.StaysOpenOnClick>
+                    <ComboBox Width="120"
+                      ItemsSource="{Binding ComboItemsSource}"
+                      SelectedItem="{Binding SelectedComboItem, Mode=TwoWay}"/>
+                </MenuItem>
+            </MenuItem>
+
+            <MenuItem Header="_Tools">
+                <local:MyMenuItem/>
+            </MenuItem>
+        </Menu>
+        
+        <Grid>
+            <TextBlock Text="{Binding Message}" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"
+                       FontSize="18"/>
+        </Grid>
+    </DockPanel>
+</Window>
