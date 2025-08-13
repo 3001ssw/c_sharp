@@ -7,9 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="350"
              Background="White">
-    <UserControl.DataContext>
-        <local:MyMenuItemViewModel/>
-    </UserControl.DataContext>
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -17,20 +14,16 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Label -->
-        <Label Grid.Row="0" Grid.Column="0" Content="Test" VerticalAlignment="Center"/>
-
         <!-- Button -->
-        <Button Grid.Row="0" Grid.Column="1"
+        <Button Grid.Row="0" Grid.Column="0"
                     Content="Button"
                     Command="{Binding ButtonCommand}"
                     VerticalAlignment="Center"/>
 
         <!-- Slider -->
-        <Slider Grid.Row="0" Grid.Column="2"
+        <Slider Grid.Row="0" Grid.Column="1"
                     Minimum="0" Maximum="100"
                     Value="{Binding SliderValue, Mode=TwoWay}"
                     VerticalAlignment="Center"/>

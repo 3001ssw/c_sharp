@@ -10,7 +10,9 @@ namespace WpfMenu
 {
     public class MainViewModel : Notifier
     {
-
+        /// <summary>
+        /// 메시지
+        /// </summary>
         private string? _message;
         public string? Message
         {
@@ -25,7 +27,38 @@ namespace WpfMenu
             }
         }
 
+        public MainViewModel()
+        {
+            // 메시지
+            Message = "메뉴를 선택하세요.";
 
+            // 기본 메뉴
+            OpenCommand = new Command(Open);
+            SaveCommand = new Command(Save);
+            ExitCommand = new Command(Exit);
+
+            // 체크박스 메뉴
+            CheckedMenuCommand = new Command(CommandChecked);
+
+            // MyMenuItem
+            ButtonCommand = new Command(OnButtonClicked);
+            _sliderValue = 50;  // 기본값
+        }
+
+        /// <summary>
+        /// 기본 메뉴
+        /// </summary>
+        public ICommand OpenCommand { get; }
+        public ICommand SaveCommand { get; }
+        public ICommand ExitCommand { get; }
+
+        private void Open() => Message = "Open 클릭됨!";
+        private void Save() => Message = "Save 클릭됨!";
+        private void Exit() => Application.Current.Shutdown();
+
+        /// <summary>
+        /// 체크 박스 메뉴
+        /// </summary>
         private bool _isCheckedMenu;
         public bool IsCheckMenu
         {
@@ -39,7 +72,15 @@ namespace WpfMenu
                 }
             }
         }
-        public ObservableCollection<string> _comboItemsSource = new ObservableCollection<string> {
+        public ICommand CheckedMenuCommand { get; }
+
+        private void CommandChecked() => Message = "Check 메뉴 클릭됨! : " + IsCheckMenu.ToString();
+        
+        /// <summary>
+        /// 라디오 메뉴
+        /// </summary>
+        public ObservableCollection<string> _comboItemsSource = new ObservableCollection<string>
+        {
             "Item1", "Item2", "Item3"
         };
 
@@ -63,36 +104,28 @@ namespace WpfMenu
             }
         }
 
-        public ICommand OpenCommand { get; }
-        public ICommand SaveCommand { get; }
-        public ICommand ExitCommand { get; }
+        private void ApplyTheme(string theme) => Message = "Radio 메뉴 선택됨! : " + theme;
 
-        public ICommand CheckedMenuCommand { get; }
+        /// <summary>
+        /// MyMenuItem
+        /// </summary>
+        public ICommand ButtonCommand { get; }
 
-        public MainViewModel()
+        private double _sliderValue;
+        public double SliderValue
         {
-            OpenCommand = new Command(Open);
-            SaveCommand = new Command(Save);
-            ExitCommand = new Command(Exit);
-
-            Message = "메뉴를 선택하세요.";
-
-            CheckedMenuCommand = new Command(CommandChecked);
+            get => _sliderValue;
+            set
+            {
+                if (_sliderValue != value)
+                {
+                    _sliderValue = value;
+                    OnPropertyChanged(nameof(SliderValue));
+                    Message = $"SliderValue={SliderValue}";
+                }
+            }
         }
 
-        private void Open() => Message = "Open 클릭됨!";
-        private void Save() => Message = "Save 클릭됨!";
-        private void Exit() => Application.Current.Shutdown();
-
-
-        private void CommandChecked()
-        {
-            Message = "Check 메뉴 클릭됨! : " + IsCheckMenu.ToString();
-        }
-
-        private void ApplyTheme(string theme)
-        {
-            Message = "Radio 메뉴 선택됨! : " + theme;
-        }
+        private void OnButtonClicked() => Message = "Button clicked!";
     }
 }
