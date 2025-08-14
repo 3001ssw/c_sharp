@@ -5,27 +5,29 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfMenu"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="350"
+             d:DesignHeight="30" d:DesignWidth="300"
              Background="White">
-    <Grid Margin="5">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
 
         <!-- Button -->
         <Button Grid.Row="0" Grid.Column="0"
                     Content="Button"
                     Command="{Binding ButtonCommand}"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center"
+                    Margin="5"/>
 
         <!-- Slider -->
         <Slider Grid.Row="0" Grid.Column="1"
                     Minimum="0" Maximum="100"
                     Value="{Binding SliderValue, Mode=TwoWay}"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center"
+                    Margin="5"/>
     </Grid>
 </UserControl>

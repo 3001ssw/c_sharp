@@ -8,7 +8,7 @@ using WpfMenu.Util;
 
 namespace WpfMenu
 {
-    public class MainViewModel : Notifier
+    public class MainWindowViewModel : Notifier
     {
         /// <summary>
         /// 메시지
@@ -27,7 +27,7 @@ namespace WpfMenu
             }
         }
 
-        public MainViewModel()
+        public MainWindowViewModel()
         {
             // 메시지
             Message = "메뉴를 선택하세요.";
@@ -38,7 +38,15 @@ namespace WpfMenu
             ExitCommand = new Command(Exit);
 
             // 체크박스 메뉴
+            _isCheckedMenu = false;
             CheckedMenuCommand = new Command(CommandChecked);
+
+            // 라디오 메뉴
+            _comboItemsSource = new ObservableCollection<string>
+            {
+                "Item1", "Item2", "Item3"
+            };
+            _selectedComboItem = "Item1";
 
             // MyMenuItem
             ButtonCommand = new Command(OnButtonClicked);
@@ -75,21 +83,18 @@ namespace WpfMenu
         public ICommand CheckedMenuCommand { get; }
 
         private void CommandChecked() => Message = "Check 메뉴 클릭됨! : " + IsCheckMenu.ToString();
-        
+
         /// <summary>
         /// 라디오 메뉴
         /// </summary>
-        public ObservableCollection<string> _comboItemsSource = new ObservableCollection<string>
-        {
-            "Item1", "Item2", "Item3"
-        };
+        public ObservableCollection<string> _comboItemsSource;
 
         public ObservableCollection<string> ComboItemsSource
         {
             get => _comboItemsSource;
         }
 
-        private string _selectedComboItem = "Item1";
+        private string _selectedComboItem;
         public string SelectedComboItem
         {
             get => _selectedComboItem;
@@ -99,12 +104,10 @@ namespace WpfMenu
                 {
                     _selectedComboItem = value;
                     OnPropertyChanged();
-                    ApplyTheme(_selectedComboItem);
+                    Message = "Radio 메뉴 선택됨! : " + _selectedComboItem;
                 }
             }
         }
-
-        private void ApplyTheme(string theme) => Message = "Radio 메뉴 선택됨! : " + theme;
 
         /// <summary>
         /// MyMenuItem

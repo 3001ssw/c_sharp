@@ -8,41 +8,42 @@
         Title="MainWindow" Height="450" Width="800">
     
     <Window.DataContext>
-        <local:MainViewModel/>
+        <local:MainWindowViewModel/>
     </Window.DataContext>
 
     <DockPanel>
+        <!--메뉴-->
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
+            <MenuItem Header="_Basic">
                 <MenuItem Header="_Open" Command="{Binding OpenCommand}"/>
                 <MenuItem Header="_Save" Command="{Binding SaveCommand}"/>
                 <Separator />
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}"/>
             </MenuItem>
             
-            <MenuItem Header="_Options">
-                <MenuItem Header="Checked Menu"
+            <MenuItem Header="_Check">
+                <MenuItem Header="Check"
                   IsCheckable="True"
                   IsChecked="{Binding IsCheckMenu}"
-                  Command="{Binding CheckedMenuCommand}"/>
+                  Command="{Binding CheckedMenuCommand}"
+                  StaysOpenOnClick="True"/>
             </MenuItem>
-            
-            <MenuItem Header="_Settings">
-                <MenuItem Header="Radio Menu">
-                    <!-- ComboBox 메뉴 항목 -->
-                    <MenuItem.StaysOpenOnClick>True</MenuItem.StaysOpenOnClick>
+
+            <MenuItem Header="C_omboBox">
+                <MenuItem Header="Item List">
                     <ComboBox Width="120"
                       ItemsSource="{Binding ComboItemsSource}"
                       SelectedItem="{Binding SelectedComboItem, Mode=TwoWay}"/>
                 </MenuItem>
             </MenuItem>
 
-            <MenuItem Header="_Tools">
+            <MenuItem Header="_UserControl">
                 <local:MyMenuItem/>
                 <!--<local:MyMenuItem DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=Window}}"/>-->
             </MenuItem>
         </Menu>
         
+        <!--메시지 표시-->
         <Grid>
             <TextBlock Text="{Binding Message}" 
                        HorizontalAlignment="Center" 
