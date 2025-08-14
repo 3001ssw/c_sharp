@@ -41,7 +41,7 @@ namespace WpfMenu
             _isCheckedMenu = false;
             CheckedMenuCommand = new Command(CommandChecked);
 
-            // 라디오 메뉴
+            // 콤보 메뉴
             _comboItemsSource = new ObservableCollection<string>
             {
                 "Item1", "Item2", "Item3"
@@ -85,7 +85,7 @@ namespace WpfMenu
         private void CommandChecked() => Message = "Check 메뉴 클릭됨! : " + IsCheckMenu.ToString();
 
         /// <summary>
-        /// 라디오 메뉴
+        /// 콤보 메뉴
         /// </summary>
         public ObservableCollection<string> _comboItemsSource;
 
@@ -104,7 +104,7 @@ namespace WpfMenu
                 {
                     _selectedComboItem = value;
                     OnPropertyChanged();
-                    Message = "Radio 메뉴 선택됨! : " + _selectedComboItem;
+                    Message = "콤보 메뉴 선택됨! : " + _selectedComboItem;
                 }
             }
         }
