@@ -6,21 +6,31 @@
         xmlns:local="clr-namespace:WpfTask"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Grid Margin="16">
+        <!-- ✅ 올바른 RowDefinitions 표기 -->
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="9*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
-            <Button Width="100" Content="Start" Margin="10" Command="{Binding CommandStart}"/>
-            <Button Width="100" Content="Pause" Margin="10" Command="{Binding CommandPause}"/>
-            <Button Width="100" Content="Stop" Margin="10" Command="{Binding CommandStop}"/>
+
+        <TextBlock Grid.Row="0" Text="1초마다 1~10 출력" FontSize="16" FontWeight="SemiBold"/>
+
+        <!-- WPF엔 Spacing이 없으므로 버튼마다 Margin으로 간격 -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Content="Start"  Command="{Binding StartCommand}"  Width="70" Margin="0,0,8,0"/>
+            <Button Content="Pause"  Command="{Binding PauseCommand}"  Width="70" Margin="0,0,8,0"/>
+            <Button Content="Resume" Command="{Binding ResumeCommand}" Width="70" Margin="0,0,8,0"/>
+            <Button Content="Stop"   Command="{Binding StopCommand}"   Width="70"/>
         </StackPanel>
-        <ListView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="10" ItemsSource="{Binding Logs}" />
+
+        <ListBox Grid.Row="2" ItemsSource="{Binding Items}" />
+
+        <!-- IsRunning/IsPaused 대신 Task.Status 바인딩 예시 -->
+        <TextBlock Grid.Row="3" Foreground="Gray" Margin="0,12,0,0">
+            <Run Text="Task.Status: "/><Run Text="{Binding WorkTaskStatus}"/>
+            <Run Text="   Paused: "/><Run Text="{Binding IsPausedUI}"/>
+        </TextBlock>
     </Grid>
 </Window>

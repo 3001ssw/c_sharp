@@ -12,130 +12,102 @@ namespace WpfTask
 {
     public class MainWindowViewModel : Notifier
     {
-        // ListView 바인딩 대상
-        public ObservableCollection<string> Logs { get; }
+        private CancellationTokenSource? _cts;
+        private Task? _workTask;
+        private TaskCompletionSource<bool>? _resumeSignal;
 
-        // 버튼 커맨드
-        public Command CommandStart { get; }
-        public Command CommandPause { get; }
-        public Command CommandStop { get; }
+        public ObservableCollection<int> Items { get; } = new();
 
-        // 취소 토큰
-        private CancellationTokenSource? _cts = null;
-
-
-        // 일시정지/재개 신호
-        private TaskCompletionSource<bool> _resumeSignal;
-
-        // 현재 일시정지 여부
-        private bool _isPaused;
+        public ICommand StartCommand { get; }
+        public ICommand PauseCommand { get; }
+        public ICommand ResumeCommand { get; }
+        public ICommand StopCommand { get; }
 
         public MainWindowViewModel()
         {
-            Logs = new ObservableCollection<string>();
+            StartCommand = new Command(_ => Start(), _ => _workTask == null || _workTask.IsCompleted);
+            PauseCommand = new Command(_ => Pause(), _ => _workTask != null && !_workTask.IsCompleted && _resumeSignal == null);
+            ResumeCommand = new Command(_ => Resume(), _ => _resumeSignal != null);
+            StopCommand = new Command(_ => Stop(), _ => _workTask != null && !_workTask.IsCompleted);
+        }
 
-            CommandStart = new Command(OnStart);
-            CommandPause = new Command(OnPause);
-            CommandStop = new Command(OnStop);
+        private void Start()
+        {
+            if (_workTask != null && !_workTask.IsCompleted) return;
+
+            Items.Clear();
+            _cts = new CancellationTokenSource();
+
+            _workTask = RunCounterAsync(_cts.Token);
+            RaiseCanExecutes();
+        }
+
+        private void Pause()
+        {
+            if (_workTask == null || _workTask.IsCompleted) return;
+            if (_resumeSignal != null) return; // 이미 pause 상태
 
             _resumeSignal = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-            _resumeSignal.SetResult(true); // 기본은 '열림(진행 가능)' 상태
+            RaiseCanExecutes();
         }
 
-        private async void OnStart()
+        private void Resume()
         {
-            // 실행 중일 때는 새로 시작하지 않음
-            if (_cts != null)
-                return;
+            if (_resumeSignal == null) return;
 
-            _cts = new CancellationTokenSource();
-            await RunWorkAsync(_cts.Token);
-            Logs.Add($"[{DateTime.Now:HH:mm:ss}] OnStart 종료");
+            _resumeSignal.TrySetResult(true);
+            _resumeSignal = null;
+            RaiseCanExecutes();
         }
 
-        private void OnPause()
+        private async void Stop()
         {
-            if (_cts == null)
-                return; // 실행중이 아니면 무시
+            if (_workTask == null) return;
 
-            if (!_isPaused)
-            {
-                // 일시정지: 새 미완료 TCS로 갈아끼워서 대기시키기
-                _isPaused = true;
-                _resumeSignal = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-                Logs.Add($"[{DateTime.Now:HH:mm:ss}] Pause");
-            }
-            else
-            {
-                // 재개: 신호 완료시켜서 대기중인 작업들 통과시키기
-                _isPaused = false;
-                _resumeSignal.TrySetResult(true);
-                Logs.Add($"[{DateTime.Now:HH:mm:ss}] Resume");
-            }
+            _cts?.Cancel();
+            try { await _workTask; }
+            catch (OperationCanceledException) { }
+
+            _cts?.Dispose();
+            _cts = null;
+            _resumeSignal = null;
+            _workTask = null;
+            RaiseCanExecutes();
         }
 
-        private void OnStop()
+        private async Task RunCounterAsync(CancellationToken token)
         {
-            if (_cts != null)
-            {
-                _resumeSignal?.TrySetResult(true);
-
-                _cts.Cancel();   // 취소 신호 보냄
-                _cts.Dispose();
-                _cts = null;
-
-                Logs.Add($"[{DateTime.Now:HH:mm:ss}] Stop (취소 요청됨)");
-            }
-        }
-
-
-        // ===== 실제 작업 =====
-        private async Task RunWorkAsync(CancellationToken token)
-        {
-            Logs.Add($"[{DateTime.Now:HH:mm:ss}] Start");
-
-            Task[] tasks = new Task[10];
-
-            for (int i = 0; i < 10; i++)
-            {
-                int id = i; // 캡처 문제 방지
-                tasks[i] = Task.Run(async () =>
-                {
-                    // UI에 로그 추가
-                    App.Current.Dispatcher.Invoke(() =>
-                    {
-                        Logs.Add($"[{DateTime.Now:HH:mm:ss}] Task {id} 시작");
-                    });
-
-                    await Task.Delay(5000, token); // 토큰 연결
-
-                    // 일시정지 중이면 여기서 대기 (Resume 시 통과)
-                    await _resumeSignal.Task;
-
-                    // UI에 로그 추가
-                    App.Current.Dispatcher.Invoke(() =>
-                    {
-                        Logs.Add($"[{DateTime.Now:HH:mm:ss}] Task {id} 완료");
-                    });
-                }, token);
-            }
-
             try
             {
-                await Task.WhenAll(tasks);
-                Logs.Add($"[{DateTime.Now:HH:mm:ss}] 모든 Task 완료");
-            }
-            catch (OperationCanceledException e)
-            {
-                
-                Logs.Add($"[{DateTime.Now:HH:mm:ss}] 모든 Task 취소됨({e.Message})");
+                for (int i = 1; i <= 10; i++)
+                {
+                    token.ThrowIfCancellationRequested();
+
+                    // pause 상태면 여기서 resumeSignal이 SetResult될 때까지 대기
+                    if (_resumeSignal != null)
+                    {
+                        await _resumeSignal.Task;
+                    }
+
+                    Items.Add(i);
+
+                    await Task.Delay(1000, token);
+                }
             }
             finally
             {
-                _cts?.Dispose();
-                _cts = null;
+                _resumeSignal = null;
+                RaiseCanExecutes();
             }
-            Logs.Add($"[{DateTime.Now:HH:mm:ss}] 모든 Task 완료");
+        }
+
+        private void RaiseCanExecutes()
+        {
+            (StartCommand as Command)?.RaiseCanExecuteChanged();
+            (PauseCommand as Command)?.RaiseCanExecuteChanged();
+            (ResumeCommand as Command)?.RaiseCanExecuteChanged();
+            (StopCommand as Command)?.RaiseCanExecuteChanged();
         }
     }
 }
+
