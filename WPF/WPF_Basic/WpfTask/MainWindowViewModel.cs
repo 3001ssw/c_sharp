@@ -12,12 +12,19 @@ namespace WpfTask
 {
     public class MainWindowViewModel : Notifier
     {
+        // 작업 취소를 제어하기 위한 토큰 소스
         private CancellationTokenSource? _cts;
+
+        // 백그라운드에서 실행되는 작업(Task)
         private Task? _workTask;
+
+        // 일시정지/재개를 제어하는 신호 (Pause -> Resume)
         private TaskCompletionSource<bool>? _resumeSignal;
 
+        // ListBox 등에 바인딩할 숫자 목록 (1~10)
         public ObservableCollection<int> Items { get; } = new();
 
+        // 각 버튼에 연결할 Command
         public ICommand StartCommand { get; }
         public ICommand PauseCommand { get; }
         public ICommand ResumeCommand { get; }
@@ -25,89 +32,120 @@ namespace WpfTask
 
         public MainWindowViewModel()
         {
-            StartCommand = new Command(_ => Start(), _ => _workTask == null || _workTask.IsCompleted);
-            PauseCommand = new Command(_ => Pause(), _ => _workTask != null && !_workTask.IsCompleted && _resumeSignal == null);
-            ResumeCommand = new Command(_ => Resume(), _ => _resumeSignal != null);
-            StopCommand = new Command(_ => Stop(), _ => _workTask != null && !_workTask.IsCompleted);
+            // Start 버튼: 실행 중인 작업이 없을 때만 가능
+            StartCommand = new Command(Start, () => _workTask == null || _workTask.IsCompleted);
+
+            // Pause 버튼: 작업이 실행 중이고, 아직 일시정지 상태가 아닐 때만 가능
+            PauseCommand = new Command(Pause, () => _workTask != null && !_workTask.IsCompleted && _resumeSignal == null);
+
+            // Resume 버튼: 현재 일시정지 상태일 때만 가능
+            ResumeCommand = new Command(Resume, () => _resumeSignal != null);
+
+            // Stop 버튼: 작업이 실행 중일 때만 가능
+            StopCommand = new Command(Stop, () => _workTask != null && !_workTask.IsCompleted);
         }
 
+        /// <summary>
+        /// 1~10까지 1초 간격으로 출력하는 작업 시작
+        /// </summary>
         private void Start()
         {
-            if (_workTask != null && !_workTask.IsCompleted) return;
+            // 이미 실행 중이면 무시
+            if (_workTask != null && !_workTask.IsCompleted)
+                return;
 
+            // 기존 데이터 초기화
             Items.Clear();
+
+            // 새 취소 토큰 준비
             _cts = new CancellationTokenSource();
 
+            // 백그라운드 카운터 작업 시작
             _workTask = RunCounterAsync(_cts.Token);
-            RaiseCanExecutes();
         }
 
+        /// <summary>
+        /// 일시정지 - Resume 신호를 기다리도록 설정
+        /// </summary>
         private void Pause()
         {
             if (_workTask == null || _workTask.IsCompleted) return;
-            if (_resumeSignal != null) return; // 이미 pause 상태
+            if (_resumeSignal != null) return; // 이미 일시정지 중이면 무시
 
+            // Resume될 때까지 대기할 수 있도록 새로운 TaskCompletionSource 생성
             _resumeSignal = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-            RaiseCanExecutes();
         }
 
+        /// <summary>
+        /// 일시정지 해제 - 대기 중인 ResumeSignal을 완료시킴
+        /// </summary>
         private void Resume()
         {
             if (_resumeSignal == null) return;
 
+            // Pause 상태 해제 → 대기 중인 Task를 계속 진행시킴
             _resumeSignal.TrySetResult(true);
             _resumeSignal = null;
-            RaiseCanExecutes();
         }
 
+        /// <summary>
+        /// 작업 강제 중단
+        /// </summary>
         private async void Stop()
         {
             if (_workTask == null) return;
 
+            // 취소 신호 전달
             _cts?.Cancel();
-            try { await _workTask; }
-            catch (OperationCanceledException) { }
+            try
+            {
+                // 실행 중인 작업이 취소되기를 기다림
+                await _workTask;
+            }
+            catch (OperationCanceledException)
+            {
+                // 정상적인 취소 예외는 무시
+            }
 
+            // 리소스 정리
             _cts?.Dispose();
             _cts = null;
             _resumeSignal = null;
             _workTask = null;
-            RaiseCanExecutes();
         }
 
+        /// <summary>
+        /// 1~10까지 숫자를 1초마다 추가하는 비동기 작업
+        /// </summary>
         private async Task RunCounterAsync(CancellationToken token)
         {
             try
             {
-                for (int i = 1; i <= 10; i++)
+                int i = 0;
+                while (true)
                 {
+                    // 취소 요청 시 즉시 종료
                     token.ThrowIfCancellationRequested();
 
-                    // pause 상태면 여기서 resumeSignal이 SetResult될 때까지 대기
+                    // 일시정지 상태라면 Resume 신호가 들어올 때까지 대기
                     if (_resumeSignal != null)
                     {
                         await _resumeSignal.Task;
                     }
 
+                    // 숫자를 Items에 추가 (UI에 표시됨)
                     Items.Add(i);
 
+                    i++;
+                    // 1초 대기 (취소 가능)
                     await Task.Delay(1000, token);
                 }
             }
             finally
             {
+                // 루프가 끝나면 일시정지 신호 초기화
                 _resumeSignal = null;
-                RaiseCanExecutes();
             }
-        }
-
-        private void RaiseCanExecutes()
-        {
-            (StartCommand as Command)?.RaiseCanExecuteChanged();
-            (PauseCommand as Command)?.RaiseCanExecuteChanged();
-            (ResumeCommand as Command)?.RaiseCanExecuteChanged();
-            (StopCommand as Command)?.RaiseCanExecuteChanged();
         }
     }
 }
-
