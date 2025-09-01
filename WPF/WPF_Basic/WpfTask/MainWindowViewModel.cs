@@ -16,7 +16,7 @@ namespace WpfTask
         private CancellationTokenSource? _cts;
 
         // 백그라운드에서 실행되는 작업(Task)
-        private Task? _workTask;
+        private Task<int>? _workTask;
 
         // 일시정지/재개를 제어하는 신호 (Pause -> Resume)
         private TaskCompletionSource<bool>? _resumeSignal;
@@ -61,7 +61,8 @@ namespace WpfTask
             _cts = new CancellationTokenSource();
 
             // 백그라운드 카운터 작업 시작
-            _workTask = RunCounterAsync(_cts.Token);
+            _workTask = CounterAsync(_cts.Token);
+            
         }
 
         /// <summary>
@@ -69,8 +70,10 @@ namespace WpfTask
         /// </summary>
         private void Pause()
         {
-            if (_workTask == null || _workTask.IsCompleted) return;
-            if (_resumeSignal != null) return; // 이미 일시정지 중이면 무시
+            if (_workTask == null || _workTask.IsCompleted)
+                return;
+            if (_resumeSignal != null)
+                return; // 이미 일시정지 중이면 무시
 
             // Resume될 때까지 대기할 수 있도록 새로운 TaskCompletionSource 생성
             _resumeSignal = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -81,7 +84,8 @@ namespace WpfTask
         /// </summary>
         private void Resume()
         {
-            if (_resumeSignal == null) return;
+            if (_resumeSignal == null)
+                return;
 
             // Pause 상태 해제 → 대기 중인 Task를 계속 진행시킴
             _resumeSignal.TrySetResult(true);
@@ -93,14 +97,16 @@ namespace WpfTask
         /// </summary>
         private async void Stop()
         {
-            if (_workTask == null) return;
+            if (_workTask == null)
+                return;
 
             // 취소 신호 전달
             _cts?.Cancel();
             try
             {
                 // 실행 중인 작업이 취소되기를 기다림
-                await _workTask;
+                int i = await _workTask;
+
             }
             catch (OperationCanceledException)
             {
@@ -117,8 +123,9 @@ namespace WpfTask
         /// <summary>
         /// 1~10까지 숫자를 1초마다 추가하는 비동기 작업
         /// </summary>
-        private async Task RunCounterAsync(CancellationToken token)
+        private async Task<int> CounterAsync(CancellationToken token)
         {
+            int res = 0;
             try
             {
                 int i = 0;
@@ -139,12 +146,14 @@ namespace WpfTask
                     i++;
                     // 1초 대기 (취소 가능)
                     await Task.Delay(1000, token);
+                    res = i;
                 }
             }
             finally
             {
                 // 루프가 끝나면 일시정지 신호 초기화
                 _resumeSignal = null;
+                return res;
             }
         }
     }
