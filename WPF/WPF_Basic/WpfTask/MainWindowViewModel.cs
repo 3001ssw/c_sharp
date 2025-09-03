@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Util;
 
@@ -22,7 +23,7 @@ namespace WpfTask
         private TaskCompletionSource<bool>? _resumeSignal;
 
         // ListBox 등에 바인딩할 숫자 목록 (1~10)
-        public ObservableCollection<int> Items { get; } = new();
+        public ObservableCollection<string> Logs { get; } = new();
 
         // 각 버튼에 연결할 Command
         public ICommand StartCommand { get; }
@@ -48,21 +49,29 @@ namespace WpfTask
         /// <summary>
         /// 1~10까지 1초 간격으로 출력하는 작업 시작
         /// </summary>
-        private void Start()
+        private async void Start()
         {
             // 이미 실행 중이면 무시
             if (_workTask != null && !_workTask.IsCompleted)
                 return;
 
             // 기존 데이터 초기화
-            Items.Clear();
+            Logs.Clear();
 
             // 새 취소 토큰 준비
             _cts = new CancellationTokenSource();
 
             // 백그라운드 카운터 작업 시작
             _workTask = CounterAsync(_cts.Token);
-            
+            int i = await _workTask;
+
+            Logs.Add(string.Format($"Task result {i}"));
+
+            _cts?.Dispose();
+            _cts = null;
+            _workTask = null;
+
+            CommandManager.InvalidateRequerySuggested();
         }
 
         /// <summary>
@@ -95,23 +104,14 @@ namespace WpfTask
         /// <summary>
         /// 작업 강제 중단
         /// </summary>
-        private async void Stop()
+        private void Stop()
         {
             if (_workTask == null)
                 return;
 
             // 취소 신호 전달
             _cts?.Cancel();
-            try
-            {
-                // 실행 중인 작업이 취소되기를 기다림
-                int i = await _workTask;
-
-            }
-            catch (OperationCanceledException)
-            {
-                // 정상적인 취소 예외는 무시
-            }
+            _resumeSignal?.TrySetResult(false);
 
             // 리소스 정리
             _cts?.Dispose();
@@ -128,33 +128,40 @@ namespace WpfTask
             int res = 0;
             try
             {
-                int i = 0;
-                while (true)
+                res = await Task.Run(async () =>
                 {
-                    // 취소 요청 시 즉시 종료
-                    token.ThrowIfCancellationRequested();
-
-                    // 일시정지 상태라면 Resume 신호가 들어올 때까지 대기
-                    if (_resumeSignal != null)
+                    _ = Application.Current.Dispatcher.BeginInvoke(() => Logs.Add("Start"));
+                    int i = 0;
+                    while (i < 10)
                     {
-                        await _resumeSignal.Task;
+                        // 일시정지 상태라면 Resume 신호가 들어올 때까지 대기
+                        if (_resumeSignal != null)
+                            await _resumeSignal.Task;
+
+                        // 취소 요청 시 즉시 종료
+                        token.ThrowIfCancellationRequested();
+
+                        // 숫자를 Items에 추가 (UI에 표시됨)
+                        _ = Application.Current.Dispatcher.BeginInvoke(() => Logs.Add($"{i}"));
+                        i++;
+
+                        // 1초 대기
+                        await Task.Delay(1000, token);
                     }
 
-                    // 숫자를 Items에 추가 (UI에 표시됨)
-                    Items.Add(i);
-
-                    i++;
-                    // 1초 대기 (취소 가능)
-                    await Task.Delay(1000, token);
-                    res = i;
-                }
+                    return i;
+                }, token);
+            }
+            catch (OperationCanceledException)
+            {
+                _ = Application.Current.Dispatcher.BeginInvoke(() => Logs.Add("catch OperationCanceledException"));
             }
             finally
             {
                 // 루프가 끝나면 일시정지 신호 초기화
                 _resumeSignal = null;
-                return res;
             }
+            return res;
         }
     }
 }
