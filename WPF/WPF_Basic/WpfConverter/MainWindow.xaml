@@ -11,6 +11,7 @@
     <Window.Resources>
         <local:BoolToStringConverter x:Key="BoolToStringConverter"/>
     </Window.Resources>
+
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
@@ -18,7 +19,7 @@
     <StackPanel Orientation="Vertical">
         <CheckBox IsChecked="{Binding Checked}"
                   Height="20"/>
-        <TextBox Text="{Binding Checked, Converter={StaticResource BoolToStringConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        <TextBox Text="{Binding Checked, Converter={StaticResource BoolToStringConverter}, UpdateSourceTrigger=PropertyChanged}"
                  Height="20"/>
     </StackPanel>
 </Window>
