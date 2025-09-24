@@ -1,0 +1,24 @@
+﻿<Window x:Class="WpfConverter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:WpfConverter"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="MainWindow"
+        Width="800"
+        Height="450"
+        mc:Ignorable="d">
+    <Window.Resources>
+        <local:BoolToStringConverter x:Key="BoolToStringConverter"/>
+    </Window.Resources>
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <StackPanel Orientation="Vertical">
+        <CheckBox IsChecked="{Binding Checked}"
+                  Height="20"/>
+        <TextBox Text="{Binding Checked, Converter={StaticResource BoolToStringConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Height="20"/>
+    </StackPanel>
+</Window>
