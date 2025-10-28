@@ -4,30 +4,38 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfTabControl"
+        xmlns:tabitemViews="clr-namespace:WpfTabControl.TabControlItem.Views"
+        xmlns:tabitemViewModels="clr-namespace:WpfTabControl.TabControlItem.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
         Width="800">
+    <Window.Resources>
+        <!--  ViewModel 타입 => View 연결  -->
+        <DataTemplate DataType="{x:Type tabitemViewModels:TabItem1ViewModel}">
+            <tabitemViews:TabItem1View/>
+        </DataTemplate>
+        <!--  ViewModel 타입 => View 연결  -->
+        <DataTemplate DataType="{x:Type tabitemViewModels:TabItem2ViewModel}">
+            <tabitemViews:TabItem2View/>
+        </DataTemplate>
+    </Window.Resources>
+
 
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
 
     <Grid>
-        <TabControl ItemsSource="{Binding Tabs}">
-            <!--  TabItem Header  -->
+        <TabControl ItemsSource="{Binding Tabs}"
+                    SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
+
+            <!--  TabItem Title  -->
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Header}"/>
+                    <TextBlock Text="{Binding Title}"/>
                 </DataTemplate>
             </TabControl.ItemTemplate>
-
-            <!--  TabItem Content  -->
-            <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <ContentPresenter Content="{Binding Content}"/>
-                </DataTemplate>
-            </TabControl.ContentTemplate>
         </TabControl>
     </Grid>
 </Window>

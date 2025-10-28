@@ -21,8 +21,9 @@ namespace Util
         }
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        protected void OnPropertyChangedAll() =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
     }
 }

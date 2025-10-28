@@ -2,7 +2,10 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <Compile Update="MyControl.xaml.cs">
+    <Compile Update="TabControlItem\Views\TabItem1View.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="TabControlItem\Views\TabItem2View.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

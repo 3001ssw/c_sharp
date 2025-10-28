@@ -5,28 +5,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Util;
+using WpfTabControl.TabControlItem.ViewModels;
+using WpfTabControl.TabControlItem.Views;
 
 namespace WpfTabControl
 {
     public class MainWindowViewModel : Notifier
     {
-        public ObservableCollection<TabItemViewModel> Tabs { get; }
+        public ObservableCollection<TabItemBaseViewModel> Tabs { get; } = new ObservableCollection<TabItemBaseViewModel>();
+        public TabItemBaseViewModel SelectedTab { get; set; }
 
         public MainWindowViewModel()
         {
-            Tabs = new ObservableCollection<TabItemViewModel>
+            TabItem1ViewModel vm1 = new TabItem1ViewModel()
             {
-                new TabItemViewModel
-                {
-                    Header = "첫번째 탭",
-                    Content = new Views.MyControl()   // UserControl 직접 할당
-                },
-                new TabItemViewModel
-                {
-                    Header = "두번째 탭",
-                    Content = new Views.MyControl()   // 또 다른 UserControl
-                }
+                Title = "View 1",
             };
+            TabItem2ViewModel vm2 = new TabItem2ViewModel()
+            {
+                Title = "View 2",
+            };
+            Tabs.Add(vm1);
+            Tabs.Add(vm2);
+
+            SelectedTab = vm1;
         }
     }
 }

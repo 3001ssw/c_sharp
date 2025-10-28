@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WpfTabControl
+namespace WpfTabControl.TabControlItem.Views
 {
     /// <summary>
-    /// MyControl.xaml에 대한 상호 작용 논리
+    /// TabItem1View.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class MyControl : UserControl
+    public partial class TabItem1View : UserControl
     {
-        public MyControl()
+        public TabItem1View()
         {
             InitializeComponent();
         }

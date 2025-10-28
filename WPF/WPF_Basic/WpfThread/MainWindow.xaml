@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfThread"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"
+        Height="450"
+        Width="800">
     <Grid Margin="12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -13,16 +15,27 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
-            <Button Content="시작" Width="80" Margin="0 0 8 0" Command="{Binding StartCommand}"/>
-            <Button Content="일시정지" Width="80" Margin="0 0 8 0" Command="{Binding PauseCommand}"/>
-            <Button Content="중지" Width="80" Command="{Binding StopCommand}"/>
+        <StackPanel Orientation="Horizontal"
+                    Margin="0,0,0,10">
+            <Button Content="시작"
+                    Width="80"
+                    Margin="0,0,8,0"
+                    Command="{Binding StartCommand}"/>
+            <Button Content="일시정지"
+                    Width="80"
+                    Margin="0,0,8,0"
+                    Command="{Binding PauseCommand}"/>
+            <Button Content="중지"
+                    Width="80"
+                    Command="{Binding StopCommand}"/>
         </StackPanel>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding Numbers}" />
+        <ListView Grid.Row="1"
+                  ItemsSource="{Binding Numbers}"/>
 
-        <StatusBar Grid.Row="2" Margin="0,8,0,0">
-            <StatusBarItem Content="{Binding StatusText}" />
+        <StatusBar Grid.Row="2"
+                   Margin="0,8,0,0">
+            <StatusBarItem Content="{Binding StatusText}"/>
         </StatusBar>
     </Grid>
 </Window>
