@@ -19,9 +19,11 @@ namespace WpfThread
 
         // 백그라운드에서 숫자를 증가시키는 작업 스레드
         private Thread? _thread;
-        // 일시정지/재개 제어 (true=실행, Reset()하면 Wait()에서 멈춤)
+        // 일시 정지/재개 제어 (true=실행, Reset()하면 Wait()에서 멈춤)
         private readonly ManualResetEventSlim _pause = new ManualResetEventSlim(true);
-        private volatile bool _threadStop;
+        // 중지 토큰 (정지 신호)
+        private CancellationTokenSource? _cts;
+
         // UI 스레드 컨텍스트 (Dispatcher 대신 사용)
         private readonly SynchronizationContext? uiThread;
 
@@ -52,11 +54,11 @@ namespace WpfThread
             }
 
             // 새 실행
-            _threadStop = false;
+            _cts = new CancellationTokenSource();
             _pause.Set();
             StatusText = "실행(시작)";
 
-            _thread = new Thread(Loop)
+            _thread = new Thread(() => Loop(_cts!.Token))
             {
                 IsBackground = true,
                 Name = "NumberRunner-Thread"
@@ -72,8 +74,7 @@ namespace WpfThread
 
         private void Stop()
         {
-            _threadStop = true;
-            _pause.Set();      // 정지 중 깨어서 종료되게
+            _cts?.Cancel();
             uiThread?.Post(_ => Numbers.Clear(), null);
             StatusText = "중지";
 
@@ -85,29 +86,34 @@ namespace WpfThread
             _thread = null;
         }
 
-        private void Loop()
+        private void Loop(CancellationToken token)
         {
             try
             {
                 int _current = 0;
-                for (int i = _current + 1; i <= 100; i++)
+                for (int i = _current + 1; i <= 10; i++)
                 {
-                    if (_threadStop)
-                        break;
-
-                    _pause.Wait();       // 일시정지 지원
-                    if (_threadStop)
-                        break;
+                    _pause.Wait(token); // 일시정지 시에도 token으로 깨어남
 
                     int v = i;
                     uiThread?.Post(_ => Numbers.Add(v), null);
                     _current = v;
 
-                    Thread.Sleep(80);    // 데모용 지연
+                    if (WaitHandle.WaitAny(new WaitHandle[] { token.WaitHandle }, 1000) == 0)
+                        break;
                 }
 
-                if (!_threadStop && _current >= 100)
-                    uiThread?.Post(_ => StatusText = "완료", null);
+                if (token.IsCancellationRequested is true)
+                {
+                    uiThread?.Post(_ => StatusText = "취소됨", null);
+                }
+                else
+                {
+                    if (100 <= _current)
+                        uiThread?.Post(_ => StatusText = "완료", null);
+                    else
+                        uiThread?.Post(_ => StatusText = "완료", null);
+                }
             }
             finally
             {

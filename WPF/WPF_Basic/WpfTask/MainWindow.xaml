@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfTask"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"
+        Height="450"
+        Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -14,15 +16,34 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="1초마다 1~10 출력" FontSize="16" FontWeight="SemiBold" Margin="5"/>
+        <TextBlock Grid.Row="0"
+                   Text="1초마다 1~10 출력"
+                   FontSize="16"
+                   FontWeight="SemiBold"
+                   Margin="5"/>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
-            <Button Content="Start"  Command="{Binding StartCommand}"  Width="70" Margin="0,0,8,0"/>
-            <Button Content="Pause"  Command="{Binding PauseCommand}"  Width="70" Margin="0,0,8,0"/>
-            <Button Content="Resume" Command="{Binding ResumeCommand}" Width="70" Margin="0,0,8,0"/>
-            <Button Content="Stop"   Command="{Binding StopCommand}"   Width="70"/>
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    Margin="5">
+            <Button Content="Start"
+                    Command="{Binding StartCommand}"
+                    Width="70"
+                    Margin="0,0,8,0"/>
+            <Button Content="Pause"
+                    Command="{Binding PauseCommand}"
+                    Width="70"
+                    Margin="0,0,8,0"/>
+            <Button Content="Resume"
+                    Command="{Binding ResumeCommand}"
+                    Width="70"
+                    Margin="0,0,8,0"/>
+            <Button Content="Stop"
+                    Command="{Binding StopCommand}"
+                    Width="70"/>
         </StackPanel>
 
-        <ListBox Grid.Row="2" ItemsSource="{Binding Logs}" Margin="5"/>
+        <ListBox Grid.Row="2"
+                 ItemsSource="{Binding Logs}"
+                 Margin="5"/>
     </Grid>
 </Window>

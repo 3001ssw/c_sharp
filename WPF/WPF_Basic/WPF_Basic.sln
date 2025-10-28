@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfConverter", "WpfConverte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTabControl", "WpfTabControl\WpfTabControl.csproj", "{901BBCCF-59DC-4429-8705-5BDD3CA3EE40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTreeView", "WpfTreeView\WpfTreeView.csproj", "{8DA4A3EE-3BD2-4952-B066-5D2E1FB2150D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{901BBCCF-59DC-4429-8705-5BDD3CA3EE40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{901BBCCF-59DC-4429-8705-5BDD3CA3EE40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{901BBCCF-59DC-4429-8705-5BDD3CA3EE40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DA4A3EE-3BD2-4952-B066-5D2E1FB2150D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DA4A3EE-3BD2-4952-B066-5D2E1FB2150D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DA4A3EE-3BD2-4952-B066-5D2E1FB2150D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DA4A3EE-3BD2-4952-B066-5D2E1FB2150D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
