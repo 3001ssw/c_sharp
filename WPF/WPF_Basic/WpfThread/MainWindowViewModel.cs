@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -101,7 +102,7 @@ namespace WpfThread
 
                     _pause.Wait(token); // 일시정지 시에도 token으로 깨어남
 
-                    if (WaitHandle.WaitAny(new WaitHandle[] { token.WaitHandle }, 1000) != WaitHandle.WaitTimeout))
+                    if (WaitHandle.WaitAny(new WaitHandle[] { token.WaitHandle }, 1000) != WaitHandle.WaitTimeout)
                         break;
                 }
 
@@ -116,6 +117,10 @@ namespace WpfThread
                     else
                         uiThread?.Post(_ => StatusText = "완료", null);
                 }
+            }
+            catch (OperationCanceledException e)
+            {
+                Debug.WriteLine(e);
             }
             finally
             {
