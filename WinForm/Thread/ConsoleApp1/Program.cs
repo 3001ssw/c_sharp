@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 
 namespace ConsoleApp1
 {
@@ -79,15 +80,29 @@ namespace ConsoleApp1
             //    thread.Join(); // 종료할 때 까지 대기
             //}
 
+            // CancellationTokenSource
+            CancellationTokenSource cts = new CancellationTokenSource();
+            Thread thread = new Thread(() => Run(cts.Token));
+            thread.Start();
+            if (thread.IsAlive)
+            {
+                Thread.Sleep(3000);
+                cts.Cancel(); // 종료
+                thread?.Join(); // 종료할 때 까지 대기
+            }
+
             // parameter
-            Thread thParam = new Thread(new ParameterizedThreadStart(Run));
-            thParam.Start(3);
-            //thParam.Start(5);
-            thParam.Join();
+            //Thread thParam = new Thread(new ParameterizedThreadStart(Run));
+            //thParam.Start(3);
+            ////thParam.Start(5);
+            //thParam.Join();
 
             //Console.WriteLine("Close Main");
         }
 
+        /// <summary>
+        /// Thread - Flag 사용
+        /// </summary>
         static void Run()
         {
             Console.WriteLine("Start Thread");
@@ -110,6 +125,53 @@ namespace ConsoleApp1
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+            }
+
+            Console.WriteLine("Close Thread");
+        }
+
+        /// <summary>
+        /// Thread - Token 사용
+        /// </summary>
+        /// <param name="token">취소 Token</param>
+        static void Run(CancellationToken token)
+        {
+            Console.WriteLine("Start Thread");
+
+            try
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    Console.WriteLine($"Thread: {i}");
+
+                    // 1. ThrowIfCancellationRequested
+                    token.ThrowIfCancellationRequested(); // OperationCanceledException 에러 발생
+                    Thread.Sleep(1000);
+
+                    // 2. IsCancellationRequested 속성으로 처리
+                    //if (token.IsCancellationRequested)
+                    //{
+                    //    Console.WriteLine($"취소 요청");
+                    //    break;
+                    //}
+                    //Thread.Sleep(1000);
+
+                    // 3. WaitHandle로도 방식으로 처리 가능
+                    //if (WaitHandle.WaitAny(new WaitHandle[] { token.WaitHandle }, 1000) != WaitHandle.WaitTimeout)
+                    //{
+                    //    Console.WriteLine($"취소 요청");
+                    //    break;
+                    //}
+
+                }
+            }
+            catch (OperationCanceledException e)
+            {
+                Console.WriteLine($"취소 요청: {e}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
             }
 
             Console.WriteLine("Close Thread");

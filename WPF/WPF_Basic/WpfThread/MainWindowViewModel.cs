@@ -90,16 +90,18 @@ namespace WpfThread
         {
             try
             {
+                token.ThrowIfCancellationRequested();
+
                 int _current = 0;
                 for (int i = _current + 1; i <= 10; i++)
                 {
-                    _pause.Wait(token); // 일시정지 시에도 token으로 깨어남
-
                     int v = i;
                     uiThread?.Post(_ => Numbers.Add(v), null);
                     _current = v;
 
-                    if (WaitHandle.WaitAny(new WaitHandle[] { token.WaitHandle }, 1000) == 0)
+                    _pause.Wait(token); // 일시정지 시에도 token으로 깨어남
+
+                    if (WaitHandle.WaitAny(new WaitHandle[] { token.WaitHandle }, 1000) != WaitHandle.WaitTimeout))
                         break;
                 }
 
