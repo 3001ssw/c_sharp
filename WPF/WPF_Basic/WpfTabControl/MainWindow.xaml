@@ -10,6 +10,11 @@
         Title="MainWindow"
         Height="450"
         Width="800">
+    <!--  ViewModel 설정  -->
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+
     <Window.Resources>
         <!--  ViewModel 타입 => View 연결  -->
         <DataTemplate DataType="{x:Type tabitemViewModels:TabItem1ViewModel}">
@@ -21,21 +26,16 @@
         </DataTemplate>
     </Window.Resources>
 
+    <!--  TabControl  -->
+    <TabControl ItemsSource="{Binding Tabs}"
+                SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
 
-    <Window.DataContext>
-        <local:MainWindowViewModel/>
-    </Window.DataContext>
+        <!--  TabItem Header  -->
+        <TabControl.ItemTemplate>
+            <DataTemplate>
+                <TextBlock Text="{Binding Header}"/>
+            </DataTemplate>
+        </TabControl.ItemTemplate>
 
-    <Grid>
-        <TabControl ItemsSource="{Binding Tabs}"
-                    SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
-
-            <!--  TabItem Title  -->
-            <TabControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Title}"/>
-                </DataTemplate>
-            </TabControl.ItemTemplate>
-        </TabControl>
-    </Grid>
+    </TabControl>
 </Window>

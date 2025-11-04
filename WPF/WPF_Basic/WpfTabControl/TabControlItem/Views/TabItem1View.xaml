@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="200"
              d:DesignWidth="700"
-             Background="White">
+             Background="LightGray">
     <Grid ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>

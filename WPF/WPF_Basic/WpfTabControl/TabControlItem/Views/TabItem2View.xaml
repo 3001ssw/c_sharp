@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800"
-             Background="White">
+             Background="LightGray">
     <StackPanel Orientation="Vertical">
         <TextBox Text="{Binding InsertText, UpdateSourceTrigger=PropertyChanged}"/>
         <TextBlock Text="{Binding InsertText}"/>

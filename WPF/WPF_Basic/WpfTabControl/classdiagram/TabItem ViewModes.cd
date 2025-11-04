@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="WpfTabControl.TabControlItem.ViewModels.TabItem1ViewModel" Collapsed="true">
+    <Position X="0.5" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AEEEAAAAAAAAAAAAAAAAABAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TabControlItem\ViewModels\TabItem1ViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WpfTabControl.TabControlItem.ViewModels.TabItem2ViewModel" Collapsed="true">
+    <Position X="3" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TabControlItem\ViewModels\TabItem2ViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WpfTabControl.TabControlItem.ViewModels.TabItemBaseViewModel">
+    <Position X="1.75" Y="1.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TabControlItem\ViewModels\TabItemBaseViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

@@ -19,11 +19,11 @@ namespace WpfTabControl
         {
             TabItem1ViewModel vm1 = new TabItem1ViewModel()
             {
-                Title = "View 1",
+                Header = "View 1",
             };
             TabItem2ViewModel vm2 = new TabItem2ViewModel()
             {
-                Title = "View 2",
+                Header = "View 2",
             };
             Tabs.Add(vm1);
             Tabs.Add(vm2);
