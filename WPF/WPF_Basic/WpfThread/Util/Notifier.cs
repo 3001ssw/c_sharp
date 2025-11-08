@@ -1,28 +1,57 @@
-﻿using System;
+﻿using i_FOS_X.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
-namespace Util
+namespace i_FOS_X.Util
 {
+    [Serializable]
     public class Notifier : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void Set<T>(ref T field, T value, [CallerMemberName] string? name = null)
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private IDialogService _dialogService;
+
+        public Notifier()
         {
-            if (!Equals(field, value))
-            {
-                field = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-            }
+            _dialogService = null;
         }
 
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        public Notifier(Window dialog)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            DialogService service = new DialogService(dialog);
+            _dialogService = service;
         }
+
+        public void SetDlgService(Window dialog)
+        {
+            DialogService service = new DialogService(dialog);
+            _dialogService = service;
+        }
+
+        public void OnPropertyChanged<T>(ref T field, T newValue, [CallerMemberName] string name = null)
+        {
+            field = newValue;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public void OnPropertyChanged([CallerMemberName] string name = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        public void OnPropertyChangedAll() =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
+
+
+        public void CloseDialog(bool result = false)
+        {
+            _dialogService?.CloseDialog(result);
+        }
+
     }
 }

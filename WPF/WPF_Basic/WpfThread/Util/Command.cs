@@ -1,37 +1,111 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Util
+namespace i_FOS_X.Util
 {
-    // ICommand 인터페이스 구현
-    // MVVM에서 버튼 클릭 등 명령을 처리할 때 사용
-    public class Command : ICommand
+    /// <summary>
+    /// 매개변수가 없는 ICommand 구현체
+    /// </summary>
+    public sealed class Command : ICommand
     {
-        private readonly Action? execute;         // 명령 실행 메서드
-        private readonly Func<bool>? canExecute;  // 명령 실행 가능 여부 판단
+        // 실행할 동작
+        private readonly Action _execute;
 
-        // 생성자: 실행 메서드와 실행 가능 조건을 받음
-        public Command(Action execute, Func<bool>? canExecute = null)
+        // 실행 가능 여부를 판단하는 함수 (없으면 항상 true)
+        private readonly Func<bool> _canExecute;
+
+        /// <summary>
+        /// 생성자
+        /// </summary>
+        /// <param name="execute">실행할 동작</param>
+        /// <param name="canExecute">실행 가능 여부 판단 함수 (null 허용)</param>
+        public Command(Action execute, Func<bool> canExecute = null)
         {
-            this.execute = execute;
-            this.canExecute = canExecute;
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute;
         }
 
-        // 버튼 등 UI 요소가 명령 실행 가능한지 판단
-        public bool CanExecute(object parameter) => canExecute?.Invoke() ?? true;
+        /// <summary>
+        /// 명령 실행 가능 여부 반환
+        /// </summary>
+        public bool CanExecute(object parameter) => _canExecute?.Invoke() ?? true;
 
-        // 명령 실행
-        public void Execute(object parameter) => execute?.Invoke();
+        /// <summary>
+        /// 명령 실행
+        /// </summary>
+        public void Execute(object parameter) => _execute();
 
-        // CanExecute가 바뀔 때 UI에 알림
-        public event EventHandler? CanExecuteChanged;
+        /// <summary>
+        /// WPF CommandManager의 RequerySuggested 이벤트에 연결하여
+        /// 자동으로 CanExecute 갱신
+        /// </summary>
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
 
-        // 외부에서 실행 가능 여부를 재평가하라고 알릴 때 사용
-        public void RaiseCanExecuteChanged() =>
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        /// <summary>
+        /// 수동으로 CanExecute 재평가를 요청할 때 호출
+        /// </summary>
+        public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
+    }
+
+    /// <summary>
+    /// 매개변수를 가지는 ICommand 구현체
+    /// </summary>
+    public sealed class Command<T> : ICommand
+    {
+        // 실행할 동작
+        private readonly Action<T> _execute;
+
+        // 실행 가능 여부를 판단하는 함수 (없으면 항상 true)
+        private readonly Predicate<T> _canExecute;
+
+        /// <summary>
+        /// 생성자
+        /// </summary>
+        /// <param name="execute">실행할 동작</param>
+        /// <param name="canExecute">실행 가능 여부 판단 함수 (null 허용)</param>
+        public Command(Action<T> execute, Predicate<T> canExecute = null)
+        {
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute;
+        }
+
+        /// <summary>
+        /// 명령 실행 가능 여부 반환
+        /// </summary>
+        public bool CanExecute(object parameter)
+        {
+            // object → T 형변환 (실패 시 default(T))
+            var value = parameter is T t ? t : default(T);
+            return _canExecute?.Invoke(value) ?? true;
+        }
+
+        /// <summary>
+        /// 명령 실행
+        /// </summary>
+        public void Execute(object parameter)
+        {
+            // object → T 형변환 (실패 시 default(T))
+            var value = parameter is T t ? t : default(T);
+            _execute(value);
+        }
+
+        /// <summary>
+        /// WPF CommandManager의 RequerySuggested 이벤트에 연결하여
+        /// 자동으로 CanExecute 갱신
+        /// </summary>
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        /// <summary>
+        /// 수동으로 CanExecute 재평가를 요청할 때 호출
+        /// </summary>
+        public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
     }
 }
