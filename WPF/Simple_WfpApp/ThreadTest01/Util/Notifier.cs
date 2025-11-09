@@ -15,23 +15,9 @@ namespace Util
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private IDialogService _dialogService;
 
         public Notifier()
         {
-            _dialogService = null;
-        }
-
-        public Notifier(Window dialog)
-        {
-            DialogService service = new DialogService(dialog);
-            _dialogService = service;
-        }
-
-        public void SetDlgService(Window dialog)
-        {
-            DialogService service = new DialogService(dialog);
-            _dialogService = service;
         }
 
         public void OnPropertyChanged<T>(ref T field, T newValue, [CallerMemberName] string name = null)
@@ -47,10 +33,6 @@ namespace Util
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
 
 
-        public void CloseDialog(bool result = false)
-        {
-            _dialogService?.CloseDialog(result);
-        }
 
     }
 }

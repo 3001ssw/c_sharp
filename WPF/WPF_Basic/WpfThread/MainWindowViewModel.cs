@@ -33,7 +33,7 @@ namespace WpfThread
         public string StatusText
         {
             get => _statusText;
-            private set => Set(ref _statusText, value);
+            private set => OnPropertyChanged(ref _statusText, value);
         }
 
         public MainWindowViewModel()
@@ -92,31 +92,18 @@ namespace WpfThread
         {
             try
             {
-<<<<<<< HEAD
                 ObservableCollection<int> numbers = new ObservableCollection<int>();
-                int current = 0;
-                for (int i = current + 1; i <= 10; i++)
-                {
-                    pause.Wait(token); // 일시정지 시에도 token으로 깨어남
-
-=======
                 token.ThrowIfCancellationRequested();
 
                 int _current = 0;
                 for (int i = _current + 1; i <= 10; i++)
                 {
->>>>>>> e05555d3cc31d1db09c5d23578fc5e941aba72c4
-                    int v = i;
-                    numbers.Add(v);
-                    current = v;
+                    numbers.Add(i);
+                    _current = i;
 
-<<<<<<< HEAD
-                    if (WaitHandle.WaitAny(new[] { token.WaitHandle }, 1000) != WaitHandle.WaitTimeout)
-=======
-                    _pause.Wait(token); // 일시정지 시에도 token으로 깨어남
+                    pause.Wait(token); // 일시정지 시에도 token으로 깨어남
 
                     if (WaitHandle.WaitAny(new WaitHandle[] { token.WaitHandle }, 1000) != WaitHandle.WaitTimeout)
->>>>>>> e05555d3cc31d1db09c5d23578fc5e941aba72c4
                         break;
                 }
 
@@ -126,7 +113,7 @@ namespace WpfThread
                 }
                 else
                 {
-                    if (100 <= current)
+                    if (100 <= _current)
                         uiThread?.Post(_ => StatusText = "완료", null);
                     else
                         uiThread?.Post(_ => StatusText = "완료", null);
