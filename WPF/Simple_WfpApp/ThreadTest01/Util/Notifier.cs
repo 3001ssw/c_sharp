@@ -32,7 +32,5 @@ namespace Util
         public void OnPropertyChangedAll() =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
 
-
-
     }
 }

@@ -23,7 +23,7 @@ namespace ThreadTest01
             }
         }
 
-        public ObservableCollection<string> ListMsg
+        public ObservableCollection<ListItem> ListMsg
         {
             get => _model.ListMsg;
             set
@@ -36,8 +36,9 @@ namespace ThreadTest01
         public Command ThreadStartCommand { get; set; }
         public Command ThreadPauseCommand { get; set; }
         public Command ThreadStopCommand { get; set; }
+        public Command TestCommand { get; set; }
 
-
+        // ui
         SynchronizationContext _uiThread;
         // 백그라운드에서 숫자를 증가시키는 작업 스레드
         private Thread _thread;
@@ -57,6 +58,7 @@ namespace ThreadTest01
             ThreadStartCommand = new Command(OnThreadStartCommand, OnExecThreadStartCommand);
             ThreadPauseCommand = new Command(OnThreadPauseCommand, OnExecThreadPauseCommand);
             ThreadStopCommand = new Command(OnThreadStopCommand, OnExecThreadStopCommand);
+            TestCommand = new Command(OnTestCommand, OnExecTestCommand);
 
             _uiThread = SynchronizationContext.Current ?? DispatcherSynchronizationContext.Current;
 
@@ -137,6 +139,49 @@ namespace ThreadTest01
                 return false;
         }
 
+
+        // 백그라운드에서 숫자를 증가시키는 작업 스레드
+        private Thread _threadTest;
+        // 일시 정지/재개 제어 (true=실행, Reset()하면 Wait()에서 멈춤)
+        private ManualResetEventSlim _pauseTest;
+        // 중지 토큰 (정지 신호)
+        private CancellationTokenSource _ctsTest;
+
+        private void OnTestCommand()
+        {
+            if (_threadTest?.IsAlive is true)
+            {
+                if (_pauseTest?.IsSet is false)
+                    _pauseTest?.Set();
+
+                return;
+            }
+
+
+            _ctsTest = new CancellationTokenSource();
+            _pauseTest = new ManualResetEventSlim(true);
+            _pauseTest?.Set();
+            _threadTest = new Thread(() => ThreadTest(_ctsTest.Token, _pauseTest, _uiThread))
+            {
+                IsBackground = true,
+                Name = "ThreadTest",
+            };
+            _threadTest.Start();
+        }
+
+        private bool OnExecTestCommand()
+        {
+            if (_threadTest is null || _threadTest?.IsAlive is false)
+                return true;
+            else
+            {
+                if (_pauseTest?.IsSet is false)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
         private void OnThreadEventOccured(Object sender, int count)
         {
             //ListMsg.Add($"{count}");
@@ -161,10 +206,10 @@ namespace ThreadTest01
                 int count = 0;
                 while (true)
                 {
-
+                    ListItem item = new ListItem(count, string.Format($"msg: {count}"), string.Format($"desc: {count}"));
                     uiThread?.Post(_ =>
                     {
-                        ListMsg.Add($"{count}");
+                        ListMsg.Add(item);
                         Count = count;
                     }, null);
                     onThreadEventOccured?.Invoke(this, count);
@@ -177,7 +222,48 @@ namespace ThreadTest01
 
                 }
             }
-            catch (OperationCanceledException e)
+            catch (OperationCanceledException)
+            {
+
+            }
+            finally
+            {
+
+            }
+        }
+
+
+        /// <summary>
+        /// thread
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="pause"></param>
+        /// <param name="uiThread"></param>
+        private void ThreadTest(CancellationToken token, ManualResetEventSlim pause, SynchronizationContext uiThread)
+        {
+            try
+            {
+                if (0 < ListMsg.Count)
+                {
+                    ListItem itemReturn = ListMsg.FirstOrDefault((item) =>
+                    {
+                        if (item.Index == 1)
+                            return true;
+
+                        return false;
+                    });
+
+                    uiThread?.Post(_ =>
+                    {
+                        itemReturn.Message = "Find index 1";
+
+                    }, null);
+                }
+                Thread.Sleep(1000);
+                pause.Wait(token);
+                token.ThrowIfCancellationRequested();
+            }
+            catch (OperationCanceledException)
             {
 
             }

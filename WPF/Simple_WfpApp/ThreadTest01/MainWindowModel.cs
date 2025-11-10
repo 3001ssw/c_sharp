@@ -11,11 +11,19 @@ namespace ThreadTest01
     {
         public int Count { get; set; } = 0;
 
-        public ObservableCollection<string> ListMsg { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<ListItem> ListMsg { get; set; } = new ObservableCollection<ListItem>();
 
         public MainWindowModel()
         {
             
+        }
+
+        public int AddListMsg(string message = "", string description = "")
+        {
+            ListItem item = new ListItem(ListMsg.Count, message, description);
+            ListMsg.Add(item);
+
+            return ListMsg.Count;
         }
     }
 }
