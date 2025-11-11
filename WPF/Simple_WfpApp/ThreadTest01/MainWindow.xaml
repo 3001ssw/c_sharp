@@ -10,45 +10,39 @@
         mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0"
-                    Orientation="Horizontal">
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Button Width="100"
                     Margin="5"
                     Command="{Binding ThreadStartCommand}"
-                    Content="Start"/>
+                    Content="Start" />
             <Button Width="100"
                     Margin="5"
                     Command="{Binding ThreadPauseCommand}"
-                    Content="Pause"/>
+                    Content="Pause" />
             <Button Width="100"
                     Margin="5"
                     Command="{Binding ThreadStopCommand}"
-                    Content="Stop"/>
+                    Content="Stop" />
             <Button Width="100"
                     Margin="10,5,5,5"
                     Command="{Binding TestCommand}"
-                    Content="Test"/>
+                    Content="Test" />
         </StackPanel>
-        <TextBlock Grid.Row="1"
-                   Text="{Binding Count}"/>
+        <TextBlock Grid.Row="1" Text="{Binding Count}" />
         <ListView Grid.Row="2"
                   VerticalAlignment="Stretch"
                   ItemsSource="{Binding ListMsg}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border Background="LightGray"
-                            BorderThickness="1">
+                    <Border Background="LightGray" BorderThickness="1">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Index}"
-                                       Margin="5"/>
-                            <TextBlock Text="{Binding Message}"
-                                       Margin="5"/>
-                            <TextBlock Text="{Binding Description}"
-                                       Margin="5"/>
+                            <TextBlock Margin="5" Text="{Binding Index}" />
+                            <TextBlock Margin="5" Text="{Binding Message}" />
+                            <TextBlock Margin="5" Text="{Binding Description}" />
                         </StackPanel>
                     </Border>
                 </DataTemplate>

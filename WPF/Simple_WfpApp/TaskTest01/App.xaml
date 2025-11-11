@@ -1,7 +1,9 @@
-﻿<Application x:Class="ThreadTest02.App"
+﻿<Application x:Class="TaskTest01.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ThreadTest02"
+             xmlns:local="clr-namespace:TaskTest01"
              StartupUri="MainWindow.xaml">
-    <Application.Resources/>
+    <Application.Resources>
+
+    </Application.Resources>
 </Application>
