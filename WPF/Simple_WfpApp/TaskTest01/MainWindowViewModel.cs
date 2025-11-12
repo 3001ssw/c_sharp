@@ -47,13 +47,16 @@ namespace TaskTest01
             //int iRes = await Task<int>.Run(() => AddStudent(_addCts.Token, _uiThread));
 
             // 가장보편적임 2
-            _addTask = Task<int>.Run(() => AddStudent(_addCts.Token, _uiThread));
-            int iRes = await _addTask;
+            //_addTask = Task<int>.Run(() => AddStudent(_addCts.Token, _uiThread));
+            //int iRes = await _addTask;
 
             // 이렇게는 사용 안함
             //_addTask = new Task<int>(() => AddStudent(_addCts.Token, _uiThread));
             //_addTask.Start();
             //int iRes = await _addTask;
+
+            // UI스레드에서 사용
+            int iRes = await AddStudent(_addCts.Token);
 
             //_addCts = null;
             Debug.WriteLine($"count: {iRes}");
@@ -91,7 +94,7 @@ namespace TaskTest01
         }
 
 
-        public int AddStudent(CancellationToken token, SynchronizationContext uiThread)
+        public async Task<int> AddStudent(CancellationToken token, SynchronizationContext uiThread = null)
         {
             try
             {
@@ -103,7 +106,19 @@ namespace TaskTest01
                     token.ThrowIfCancellationRequested();
 
                     // UI 변경은 UI thread에서
-                    uiThread?.Post(_ =>
+                    if (uiThread != null)
+                    {
+                        uiThread?.Post(_ =>
+                        {
+                            Students.Add(new Student
+                            {
+                                ID = index,
+                                Name = $"name: {index}",
+                                Age = random.Next(1, 101),
+                            });
+                        }, null);
+                    }
+                    else
                     {
                         Students.Add(new Student
                         {
@@ -111,16 +126,18 @@ namespace TaskTest01
                             Name = $"name: {index}",
                             Age = random.Next(1, 101),
                         });
-                    }, null);
+                    }
 
-                    // 1초 쉬기 (동기 방식)
-                    Thread.Sleep(1000);
+                    await Task.Delay(1000, token);
                 }
+
             }
             catch (OperationCanceledException)
             {
 
             }
+
+            OnPropertyChangedAll();
 
             return Model.Students.Count;
         }
