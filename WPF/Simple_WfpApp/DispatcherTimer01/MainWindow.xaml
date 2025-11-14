@@ -16,8 +16,7 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0"
-                    Orientation="Horizontal">
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
             <TextBox Text="{Binding MillSec}"
                      Width="100"
                      Margin="10"
@@ -35,13 +34,6 @@
                   ItemsSource="{Binding Messages}"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
-                  Margin="10">
-            <!--
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-            -->
-        </ListView>
+                  Margin="10"/>
     </Grid>
 </Window>
