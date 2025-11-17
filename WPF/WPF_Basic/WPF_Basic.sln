@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTabControl", "WpfTabCont
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTreeView", "WpfTreeView\WpfTreeView.csproj", "{8DA4A3EE-3BD2-4952-B066-5D2E1FB2150D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfScrollViewer", "WpfScrollViewer\WpfScrollViewer.csproj", "{271C893D-5888-47B7-9BF0-769DB3A8A06D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{8DA4A3EE-3BD2-4952-B066-5D2E1FB2150D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DA4A3EE-3BD2-4952-B066-5D2E1FB2150D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DA4A3EE-3BD2-4952-B066-5D2E1FB2150D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{271C893D-5888-47B7-9BF0-769DB3A8A06D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{271C893D-5888-47B7-9BF0-769DB3A8A06D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{271C893D-5888-47B7-9BF0-769DB3A8A06D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{271C893D-5888-47B7-9BF0-769DB3A8A06D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

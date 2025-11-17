@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTest02", "TaskTest02\Ta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DispatcherTimer01", "DispatcherTimer01\DispatcherTimer01.csproj", "{DCA64B45-F484-44DC-B72C-CC6107357268}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messenger01", "Messenger01\Messenger01.csproj", "{B7D81DBD-92FB-474E-9189-C45B1BF67A1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{DCA64B45-F484-44DC-B72C-CC6107357268}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCA64B45-F484-44DC-B72C-CC6107357268}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCA64B45-F484-44DC-B72C-CC6107357268}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7D81DBD-92FB-474E-9189-C45B1BF67A1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7D81DBD-92FB-474E-9189-C45B1BF67A1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7D81DBD-92FB-474E-9189-C45B1BF67A1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7D81DBD-92FB-474E-9189-C45B1BF67A1D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
