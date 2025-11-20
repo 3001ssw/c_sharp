@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WpfTreeView
+namespace WpfTreeView.Views
 {
     /// <summary>
-    /// TreeItemView.xaml에 대한 상호 작용 논리
+    /// FolderView.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class TreeItemView : UserControl
+    public partial class FolderView : UserControl
     {
-        public TreeItemView()
+        public FolderView()
         {
             InitializeComponent();
         }

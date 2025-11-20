@@ -12,20 +12,6 @@
         <local:MainWindowViewModel/>
     </Window.DataContext>
 
-    <Grid>
-        <TreeView ItemsSource="{Binding Items}">
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type local:TreeItemViewModel}"
-                                          ItemsSource="{Binding Children}">
-                    <local:TreeItemView/>
-                </HierarchicalDataTemplate>
+    <TreeView ItemsSource="{Binding Items}"/>
 
-                <!--
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <TextBlock Text="{Binding Header}"/>
-                </HierarchicalDataTemplate>
-                -->
-            </TreeView.ItemTemplate>
-        </TreeView>
-    </Grid>
 </Window>
