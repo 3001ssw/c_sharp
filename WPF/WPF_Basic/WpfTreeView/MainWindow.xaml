@@ -8,5 +8,24 @@
         Title="MainWindow"
         Height="450"
         Width="800">
-    <Grid/>
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <TreeView ItemsSource="{Binding Items}">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type local:TreeItemViewModel}"
+                                          ItemsSource="{Binding Children}">
+                    <local:TreeItemView/>
+                </HierarchicalDataTemplate>
+
+                <!--
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding Header}"/>
+                </HierarchicalDataTemplate>
+                -->
+            </TreeView.ItemTemplate>
+        </TreeView>
+    </Grid>
 </Window>
