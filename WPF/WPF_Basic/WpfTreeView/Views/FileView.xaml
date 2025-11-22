@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="WpfTreeView.TreeItemView"
+﻿<UserControl x:Class="WpfTreeView.Views.FileView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -6,13 +6,13 @@
              xmlns:local="clr-namespace:WpfTreeView"
              mc:Ignorable="d"
              Height="Auto"
-             Width="Auto"
-             Background="White">
-
-    <Grid>
-        <Border Background="Gray"
-                BorderThickness="2">
-            <TextBlock Text="{Binding Header}"/>
-        </Border>
-    </Grid>
+             Width="Auto">
+    <StackPanel Grid.Column="1"
+                Orientation="Horizontal">
+        <TextBlock Text="📄"/>
+        <TextBlock Text="{Binding Name}"
+                   Margin="4,0,0,0"/>
+        <TextBlock Text="{Binding FileSize}"
+                   Margin="4,0,0,0"/>
+    </StackPanel>
 </UserControl>

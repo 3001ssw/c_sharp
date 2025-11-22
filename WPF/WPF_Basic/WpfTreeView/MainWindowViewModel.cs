@@ -1,40 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Util;
+using WpfTreeView.ViewModels;
+using WpfTreeView.Views;
 
 namespace WpfTreeView
 {
     public class MainWindowViewModel : Notifier
     {
-        public List<TreeItemViewModel> Items { get; set; }
+        public ObservableCollection<BaseViewModel> Items { get; set; } = new ObservableCollection<BaseViewModel>();
         public MainWindowViewModel()
         {
-
-            Items = new List<TreeItemViewModel>()
+            FolderViewModel root = new FolderViewModel()
             {
-                new TreeItemViewModel()
+                Name = "root",
+                Children =
                 {
-                    Header = "과일",
-                    Children =
+                    new FolderViewModel() { Name = "A", },
+                    new FolderViewModel()
                     {
-                        new TreeItemViewModel { Header = "사과" },
-                        new TreeItemViewModel { Header = "바나나" },
-                        new TreeItemViewModel { Header = "포도" },
+                        Name = "B",
+                        Children =
+                        {
+                            new FileViewModel()
+                            {
+                                Name = "f2",
+                                FileSize = 200,
+                            }
+                        },
+                    },
+                    new FolderViewModel() { Name = "C", },
+                    new FileViewModel()
+                    {
+                        Name = "f1",
+                        FileSize = 100,
                     }
                 },
-                new TreeItemViewModel
-                {
-                    Header = "동물",
-                    Children =
-                    {
-                        new TreeItemViewModel { Header = "강아지" },
-                        new TreeItemViewModel { Header = "고양이" },
-                    }
-                }
             };
+
+            Items.Add(root);
+
         }
     }
 }
