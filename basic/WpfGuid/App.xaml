@@ -1,0 +1,14 @@
+﻿<Application x:Class="WpfGuid.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:WpfGuid"
+             xmlns:vm="clr-namespace:WpfGuid.ViewModels"
+             xmlns:v="clr-namespace:WpfGuid.Views"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <DataTemplate DataType="{x:Type vm:SchoolTabViewModel}">
+            <v:SchoolTabView/>
+        </DataTemplate>
+
+    </Application.Resources>
+</Application>
