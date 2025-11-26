@@ -1,23 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Xml.Linq;
+﻿using System.Collections.ObjectModel;
 using WpfGuid.Models;
 
 namespace WpfGuid.ViewModels
 {
     public partial class SchoolTabViewModel : BasicTabViewModel
     {
-        [ObservableProperty]
-        private ObservableCollection<SchoolModel> schoolModels = null;
+        public ObservableCollection<SchoolModel> SchoolModels { get; set; } = null;
 
         private SchoolModel selectedItem = null;
         public SchoolModel SelectedItem
@@ -41,16 +29,30 @@ namespace WpfGuid.ViewModels
             }
         }
 
-        [ObservableProperty]
         private string schoolId = "";
 
-        [ObservableProperty]
+        public string SchoolId { get => schoolId; set => SetProperty(ref schoolId, value); }
+
         private string schoolName = "";
 
-        [ObservableProperty]
+        public string SchoolName { get => schoolName; set => SetProperty(ref schoolName, value); }
+
         private string schoolAddress = "";
 
-        [RelayCommand]
+        public string SchoolAddress { get => schoolAddress; set => SetProperty(ref schoolAddress, value); }
+
+        public DelegateCommand AddCommand { get; }
+        public DelegateCommand DeleteCommand { get; }
+        public DelegateCommand ModifyCommand { get; }
+
+        public SchoolTabViewModel()
+        {
+            Header = "학교";
+            AddCommand = new DelegateCommand(Add);
+            DeleteCommand = new DelegateCommand(Delete);
+            ModifyCommand = new DelegateCommand(Modify);
+        }
+
         private void Add()
         {
             SchoolModels?.Add(new SchoolModel()
@@ -61,7 +63,6 @@ namespace WpfGuid.ViewModels
             InitEdit();
         }
 
-        [RelayCommand]
         private void Delete()
         {
             SchoolModel item = SchoolModels.FirstOrDefault(item =>
@@ -72,12 +73,11 @@ namespace WpfGuid.ViewModels
                 return false;
             });
             if (item != null)
-                schoolModels.Remove(item);
+                SchoolModels.Remove(item);
 
             InitEdit();
         }
 
-        [RelayCommand]
         private void Modify()
         {
             SchoolModel item = SchoolModels.FirstOrDefault(item =>
@@ -99,11 +99,6 @@ namespace WpfGuid.ViewModels
         {
            SchoolName = "";
            SchoolAddress = "";
-        }
-
-        public SchoolTabViewModel()
-        {
-            Header = "학교";
         }
     }
 }

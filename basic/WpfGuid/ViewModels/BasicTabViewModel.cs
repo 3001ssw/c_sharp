@@ -1,16 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WpfGuid.ViewModels
+﻿namespace WpfGuid.ViewModels
 {
-    public partial class BasicTabViewModel : ObservableObject
+    public partial class BasicTabViewModel : BindableBase
     {
-        [ObservableProperty]
-        private string header = "";
+        public string Header { get; set; } = "";
 
         public BasicTabViewModel()
         {

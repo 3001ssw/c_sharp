@@ -1,22 +1,15 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WpfGuid.Models
+﻿namespace WpfGuid.Models
 {
-    public partial class SchoolModel : ObservableObject
+    public partial class SchoolModel : BindableBase
     {
-        [ObservableProperty]
-        public string id = "";
+        private string id = "";
+        public string Id { get => id; set => SetProperty(ref id, value); }
 
-        [ObservableProperty]
-        public string name = "";
+        private string name = "";
+        public string Name { get => name; set => SetProperty(ref name, value); }
 
-        [ObservableProperty]
-        public string address = "";
+        private string address = "";
+        public string Address { get => address; set => SetProperty(ref address, value); }
 
         public SchoolModel()
         {

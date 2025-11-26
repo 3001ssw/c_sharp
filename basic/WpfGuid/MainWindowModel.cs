@@ -1,21 +1,13 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using System.Xml;
 using WpfGuid.Models;
 
 namespace WpfGuid
 {
-    public partial class MainWindowModel : ObservableObject
+    public partial class MainWindowModel : BindableBase
     {
-        [ObservableProperty]
-        private ObservableCollection<SchoolModel> schoolModels = new ObservableCollection<SchoolModel>();
+        public ObservableCollection<SchoolModel> SchoolModels { get; set; } = new ObservableCollection<SchoolModel>();
 
         public MainWindowModel()
         {
