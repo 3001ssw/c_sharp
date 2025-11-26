@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "check_unchecked", "check_un
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_lock", "_lock\_lock.csproj", "{DB22752B-9FAD-45E2-9AFD-BF95E264B67E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_guid", "_guid\_guid.csproj", "{21E7C8BA-3EF3-4A4D-B94C-227D162E776B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{DB22752B-9FAD-45E2-9AFD-BF95E264B67E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB22752B-9FAD-45E2-9AFD-BF95E264B67E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB22752B-9FAD-45E2-9AFD-BF95E264B67E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21E7C8BA-3EF3-4A4D-B94C-227D162E776B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21E7C8BA-3EF3-4A4D-B94C-227D162E776B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21E7C8BA-3EF3-4A4D-B94C-227D162E776B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21E7C8BA-3EF3-4A4D-B94C-227D162E776B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
