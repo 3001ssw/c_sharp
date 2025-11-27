@@ -9,6 +9,9 @@
         <DataTemplate DataType="{x:Type vm:SchoolTabViewModel}">
             <v:SchoolTabView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TeacherTabViewModel}">
+            <v:TeacherTabView/>
+        </DataTemplate>
 
     </Application.Resources>
 </Application>

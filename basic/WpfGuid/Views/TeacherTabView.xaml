@@ -1,0 +1,85 @@
+﻿<UserControl x:Class="WpfGuid.Views.TeacherTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:WpfGuid.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="430"
+             d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+
+        <DataGrid Grid.Column="0"
+                  ItemsSource="{Binding TeacherModels}"
+                  SelectedItem="{Binding SelectedItem}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow"
+                  Margin="10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name"
+                                    Binding="{Binding Name}"
+                                    Width="100"/>
+                <DataGridTextColumn Header="Age"
+                                    Binding="{Binding Age}"
+                                    Width="50"/>
+                <DataGridTextColumn Header="Gen"
+                                    Binding="{Binding Gender}"
+                                    Width="50"/>
+                <DataGridTextColumn Header="Phone Number"
+                                    Binding="{Binding PhoneNumber}"
+                                    Width="100"/>
+                <DataGridTextColumn Header="Working School"
+                                    Binding="{Binding School}"
+                                    Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="0"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    Orientation="Vertical"
+                    Margin="10">
+            <TextBox Height="30"
+                     Text="{Binding SelectedName}"/>
+            <TextBox Height="30"
+                     Text="{Binding SelectedAge}"/>
+            <TextBox Height="30"
+                     Text="{Binding SelectedGender}"/>
+            <TextBox Height="30"
+                     Text="{Binding SelectedPhoneNumber}"/>
+            <StackPanel Height="30"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Stretch">
+                <TextBox Width="100"
+                         Text="{Binding SelectedSchool}"/>
+                <Button Content="Find School"
+                        Width="100"
+                        Command="{Binding FindSchoolCommand}"/>
+            </StackPanel>
+            <StackPanel Margin="10"
+                        Height="50"
+                        Orientation="Horizontal">
+                <Button Margin="5"
+                        Width="70"
+                        Content="Add"
+                        Command="{Binding AddCommand}"/>
+                <Button Margin="5"
+                        Width="70"
+                        Content="Delete"
+                        Command="{Binding DeleteCommand}"/>
+                <Button Margin="5"
+                        Width="70"
+                        Content="Modify"
+                        Command="{Binding ModifyCommand}"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

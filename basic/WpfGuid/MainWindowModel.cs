@@ -8,6 +8,7 @@ namespace WpfGuid
     public partial class MainWindowModel : BindableBase
     {
         public ObservableCollection<SchoolModel> SchoolModels { get; set; } = new ObservableCollection<SchoolModel>();
+        public ObservableCollection<TeacherModel> TeacherModels { get; set; } = new ObservableCollection<TeacherModel>();
 
         public MainWindowModel()
         {
@@ -15,9 +16,6 @@ namespace WpfGuid
 
         public void SaveData()
         {
-            // Serialize
-            string json = JsonSerializer.Serialize(SchoolModels);
-
             // 현재 실행 경로 가져오기
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string folderPath = Path.Combine(baseDir, "Data");
@@ -27,10 +25,15 @@ namespace WpfGuid
             {
                 Directory.CreateDirectory(folderPath);
             }
-            string filePath = Path.Combine(folderPath, "school.json");
+            string schoolFilePath = Path.Combine(folderPath, "school.json");
+            string teacherFilePath = Path.Combine(folderPath, "teacher.json");
 
-            // 파일 저장
-            File.WriteAllText(filePath, json);
+            // Serialize
+            string jsonSchool = JsonSerializer.Serialize(SchoolModels);
+            File.WriteAllText(schoolFilePath, jsonSchool); // 파일 저장
+
+            string jsonTeacher = JsonSerializer.Serialize(TeacherModels);
+            File.WriteAllText(teacherFilePath, jsonSchool); // 파일 저장
         }
 
         public void LoadData()
@@ -42,15 +45,21 @@ namespace WpfGuid
             // 폴더가 없으면 Load 중지
             if (!Directory.Exists(folderPath))
                 return;
-            string filePath = Path.Combine(folderPath, "school.json");
-            if (!Path.Exists(filePath))
-                return;
+            string schoolFilePath = Path.Combine(folderPath, "school.json");
+            if (Path.Exists(schoolFilePath))
+            {
+                string json = File.ReadAllText(schoolFilePath);
+                SchoolModels = JsonSerializer.Deserialize<ObservableCollection<SchoolModel>>(json);
 
-            string json = File.ReadAllText(filePath);
+            }
 
-            // Deserialize
-            SchoolModels = JsonSerializer.Deserialize<ObservableCollection<SchoolModel>>(json);
+            string teacherFilePath = Path.Combine(folderPath, "teacher.json");
+            if (Path.Exists(teacherFilePath))
+            {
+                string json= File.ReadAllText(teacherFilePath);
+                TeacherModels = JsonSerializer.Deserialize<ObservableCollection<TeacherModel>>(json);
 
+            }
         }
     }
 }

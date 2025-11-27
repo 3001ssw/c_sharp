@@ -6,9 +6,7 @@ namespace WpfGuid
 {
     public partial class MainWindowViewModel : BindableBase
     {
-        public static MainWindowModel AppData => mainModel;
-
-        private static MainWindowModel mainModel = new MainWindowModel();
+        private MainWindowModel mainModel = new MainWindowModel();
         public MainWindowModel MainModel
         {
             get => mainModel;
@@ -26,18 +24,22 @@ namespace WpfGuid
         {
             SaveCommand = new DelegateCommand(Save);
             CloseWindowCommand = new DelegateCommand(CloseWindow);
-            AppData.LoadData();
+            MainModel.LoadData();
 
-            SchoolTabViewModel schoolvm = new SchoolTabViewModel();
-            schoolvm.SchoolModels = mainModel.SchoolModels;
-            Tabs.Add(schoolvm);
+            SchoolTabViewModel schoolVm = new SchoolTabViewModel();
+            schoolVm.SchoolModels = mainModel.SchoolModels;
+            Tabs.Add(schoolVm);
 
-            SelectedTab = schoolvm;
+            TeacherTabViewModel teacherVm = new TeacherTabViewModel();
+            teacherVm.TeacherModels = mainModel.TeacherModels;
+            Tabs.Add(teacherVm);
+
+            SelectedTab = schoolVm;
         }
 
         private void Save()
         {
-            AppData.SaveData();
+            MainModel.SaveData();
         }
 
         private void CloseWindow()
