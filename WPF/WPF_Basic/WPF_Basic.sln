@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfScrollViewer", "WpfScrol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfMessenger", "WpfMessenger\WpfMessenger.csproj", "{CE2B2E3B-EAA5-440C-B9BA-F300709ED370}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfPopup", "WpfPopup\WpfPopup.csproj", "{945CD317-5D28-448F-8EC4-2CD71444A1B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfDependencyProperty", "WpfDependencyProperty\WpfDependencyProperty.csproj", "{3F8AC355-D921-4152-9155-84CFF66DDA01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,14 @@ Global
 		{CE2B2E3B-EAA5-440C-B9BA-F300709ED370}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE2B2E3B-EAA5-440C-B9BA-F300709ED370}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE2B2E3B-EAA5-440C-B9BA-F300709ED370}.Release|Any CPU.Build.0 = Release|Any CPU
+		{945CD317-5D28-448F-8EC4-2CD71444A1B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{945CD317-5D28-448F-8EC4-2CD71444A1B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{945CD317-5D28-448F-8EC4-2CD71444A1B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{945CD317-5D28-448F-8EC4-2CD71444A1B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F8AC355-D921-4152-9155-84CFF66DDA01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F8AC355-D921-4152-9155-84CFF66DDA01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F8AC355-D921-4152-9155-84CFF66DDA01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F8AC355-D921-4152-9155-84CFF66DDA01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
