@@ -1,7 +1,7 @@
-﻿<Application x:Class="WpfMenu.App"
+﻿<Application x:Class="WpfINotifyDataErrorInfo.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:WpfMenu"
+             xmlns:local="clr-namespace:WpfINotifyDataErrorInfo"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 

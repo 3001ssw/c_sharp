@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:WpfGuid"
              xmlns:vm="clr-namespace:WpfGuid.ViewModels"
              xmlns:v="clr-namespace:WpfGuid.Views"
+             xmlns:prism="http://prismlibrary.com/"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <DataTemplate DataType="{x:Type vm:SchoolTabViewModel}">

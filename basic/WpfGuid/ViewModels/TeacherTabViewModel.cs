@@ -88,24 +88,42 @@ namespace WpfGuid.ViewModels
         public DelegateCommand ModifyCommand { get; }
 
 
-        public TeacherTabViewModel()
+        public TeacherTabViewModel(IDialogService dialogService)
         {
             Header = "선생님";
             FindSchoolCommand = new DelegateCommand(FindSchool);
             AddCommand = new DelegateCommand(Add);
             DeleteCommand = new DelegateCommand(Delete);
             ModifyCommand = new DelegateCommand(Modify);
+
+            _dialogService = dialogService;
         }
 
+        private readonly IDialogService _dialogService;
         private void FindSchool()
         {
-            FindSchoolViewModel vm = new FindSchoolViewModel();
-            FindSchoolView v = new FindSchoolView()
+
+            var parameters = new DialogParameters
             {
-                DataContext = vm,
+                { "Message", "Hello from MainWindow" }
             };
 
-            v.ShowDialog();
+            _dialogService.ShowDialog("SampleDialog", parameters, r =>
+            {
+                if (r.Result == ButtonResult.OK)
+                {
+                    var value = r.Parameters.GetValue<string>("InputText");
+                    // 필요 시 값 사용
+                }
+            });
+
+            //FindSchoolViewModel vm = new FindSchoolViewModel();
+            //FindSchoolView v = new FindSchoolView()
+            //{
+            //    DataContext = vm,
+            //};
+            //
+            //v.ShowDialog();
         }
 
         private void Add()
