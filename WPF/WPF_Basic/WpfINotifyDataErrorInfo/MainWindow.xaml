@@ -13,6 +13,8 @@
     </Window.DataContext>
     <StackPanel>
         <TextBox Margin="5"
+                 Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"/>
+        <TextBox Margin="5"
                  Text="{Binding InputText1, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}">
             <TextBox.Style>
                 <Style TargetType="TextBox">

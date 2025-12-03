@@ -13,6 +13,18 @@ namespace WpfINotifyDataErrorInfo
 {
     public class MainViewModel : BindableBase, INotifyDataErrorInfo
     {
+        private string inputText = "";
+        public string InputText
+        {
+            get => inputText;
+            set
+            {
+                SetProperty(ref inputText, value);
+                //ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(nameof(InputText)));
+                ValidateProperty();
+            }
+        }
+
         private string inputText1 = "";
         public string InputText1
         {
@@ -20,9 +32,10 @@ namespace WpfINotifyDataErrorInfo
             set
             {
                 SetProperty(ref inputText1, value);
-                Validate();
+                ValidateProperty();
             }
         }
+
         private string inputText2 = "";
         public string InputText2
         {
@@ -30,57 +43,102 @@ namespace WpfINotifyDataErrorInfo
             set
             {
                 SetProperty(ref inputText2, value);
-                Validate();
+                ValidateProperty();
             }
         }
 
-        // 오류를 저장하는 사전
-        private readonly Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
-
-        private void Validate([CallerMemberName] string? propertyName = null)
+        public MainViewModel()
         {
+            ValidateProperty(null);
+        }
+
+        //// 현재 ViewModel에 하나라도 오류가 있는지 여부를 반환하는 bool 프로퍼티입니다.
+        //public bool HasErrors => throw new NotImplementedException();
+        //// 프로퍼티의 에러 상태가 바뀌었을 때 UI에게 알려주는 이벤트입니다.
+        //public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+        //// 해당 프로퍼티에 대한 에러(문자열 또는 객체)를 반환합니다.
+        //public IEnumerable GetErrors(string? propertyName)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        // 속성 1개 인 경우
+        //public bool HasErrors => InputText.Any(char.IsDigit);
+
+        //public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+        //public IEnumerable GetErrors(string? propertyName)
+        //{
+        //    if (propertyName == null || propertyName == nameof(InputText))
+        //    {
+        //        if (InputText.Any(char.IsDigit))
+        //            return new string[] { "숫자는 입력할 수 없습니다." };
+        //    }
+        //
+        //    return Enumerable.Empty<string>();
+        //}
+
+
+        /// <summary>
+        /// key(string): 속성, value(List<string>): 오류
+        /// </summary>
+        private readonly Dictionary<string, List<string>> dictErrors = new Dictionary<string, List<string>>();
+        private void ValidateProperty([CallerMemberName] string? propertyName = null)
+        {
+            // null인 경우엔 속성 모두 검증하기 위해 모두 지우기
             if (propertyName == null)
-                return;
+                dictErrors.Clear();
+            else
+            {
+                // 이름이 있으면 해당 속성만 지우기
+                if (dictErrors.ContainsKey(propertyName))
+                    dictErrors.Remove(propertyName);
+            }
 
-            ClearErrors(propertyName);
-
-            if (propertyName == nameof(InputText1))
+            // 속성 검증
+            if (propertyName == null || propertyName == nameof(InputText))
+            {
+                if (InputText.Any(char.IsDigit))
+                {
+                    dictErrors[nameof(InputText)] = new List<string>();
+                    dictErrors[nameof(InputText)].Add("숫자는 입력할 수 없습니다.");
+                }
+            }
+            if (propertyName == null || propertyName == nameof(InputText1))
             {
                 if (string.IsNullOrEmpty(InputText1) || !InputText1.Any(char.IsDigit))
-                    AddError(propertyName, "문자열에는 숫자가 하나 이상 포함되어야 합니다.");
+                {
+                    dictErrors[nameof(InputText1)] = new List<string>();
+                    dictErrors[nameof(InputText1)].Add("빈 문자열은 입력될 수 없습니다. 숫자가 하나 이상 입력되어야 합니다.");
+                }
             }
-            else if (propertyName == nameof(InputText2))
+            if (propertyName == null || propertyName == nameof(InputText2))
             {
-                if (string.IsNullOrEmpty(InputText2) || !InputText2.All(char.IsLetter))
-                    AddError(propertyName, "문자만 포함되어야 합니다.");
+                if (string.IsNullOrEmpty(InputText2) || !InputText2.All(char.IsDigit))
+                {
+                    dictErrors[nameof(InputText2)] = new List<string>();
+                    dictErrors[nameof(InputText2)].Add("빈 문자열은 입력될 수 없습니다. 숫자만 입력되어야 합니다.");
+                }
             }
-        }
-
-        // --- 오류 관리 함수들 ---
-        private void AddError(string propertyName, string error)
-        {
-            if (!_errors.ContainsKey(propertyName))
-                _errors[propertyName] = new List<string>();
-
-            _errors[propertyName].Add(error);
+        
+            // 에러가 change 됐다는 이벤트 발생
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
-        private void ClearErrors(string propertyName)
-        {
-            if (_errors.ContainsKey(propertyName))
-            {
-                _errors.Remove(propertyName);
-                ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-            }
-        }
 
-        // INotifyDataErrorInfo 구현부
+        public bool HasErrors => 0 < dictErrors.Count;
+
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
         public IEnumerable GetErrors(string? propertyName)
-            => (propertyName != null && _errors.ContainsKey(propertyName)) ? _errors[propertyName] : null;
-
-        public bool HasErrors => _errors.Any();
-
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+        {
+            if (propertyName == null)
+                return Enumerable.Empty<string>();
+        
+            if (dictErrors.ContainsKey(propertyName))
+               return dictErrors[propertyName];
+        
+            return Enumerable.Empty<string>();
+        }
     }
 }
