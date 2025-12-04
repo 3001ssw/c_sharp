@@ -106,19 +106,23 @@ namespace WpfINotifyDataErrorInfo
             }
             if (propertyName == null || propertyName == nameof(InputText1))
             {
-                if (string.IsNullOrEmpty(InputText1) || !InputText1.Any(char.IsDigit))
-                {
-                    dictErrors[nameof(InputText1)] = new List<string>();
-                    dictErrors[nameof(InputText1)].Add("빈 문자열은 입력될 수 없습니다. 숫자가 하나 이상 입력되어야 합니다.");
-                }
+                List<string> message = new List<string>();
+                if (string.IsNullOrEmpty(InputText1))
+                    message.Add("빈 문자열은 입력될 수 없습니다.");
+                if (!InputText1.Any(char.IsDigit))
+                    message.Add("숫자가 하나 이상 입력되어야 합니다.");
+                if (0 < message.Count)
+                    dictErrors[nameof(InputText1)] = new List<string>(message);
             }
             if (propertyName == null || propertyName == nameof(InputText2))
             {
-                if (string.IsNullOrEmpty(InputText2) || !InputText2.All(char.IsDigit))
-                {
-                    dictErrors[nameof(InputText2)] = new List<string>();
-                    dictErrors[nameof(InputText2)].Add("빈 문자열은 입력될 수 없습니다. 숫자만 입력되어야 합니다.");
-                }
+                List<string> message = new List<string>();
+                if (string.IsNullOrEmpty(InputText2))
+                    message.Add("빈 문자열은 입력될 수 없습니다.");
+                if (!InputText2.All(char.IsDigit))
+                    message.Add("숫자만 입력되어야 합니다.");
+                if (0 < message.Count)
+                    dictErrors[nameof(InputText2)] = new List<string>(message);
             }
         
             // 에러가 change 됐다는 이벤트 발생

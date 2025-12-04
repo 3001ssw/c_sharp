@@ -20,12 +20,25 @@
                 <Style TargetType="TextBox">
                     <Style.Triggers>
                         <Trigger Property="Validation.HasError" Value="True">
-                            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                            <Setter Property="ToolTip">
+                                <Setter.Value>
+                                    <ToolTip>
+                                        <ItemsControl ItemsSource="{Binding PlacementTarget.(Validation.Errors), RelativeSource={RelativeSource AncestorType=ToolTip}}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ToolTip>
+                                </Setter.Value>
+                            </Setter>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
             </TextBox.Style>
         </TextBox>
+
 
         <TextBox Margin="5"
                  Text="{Binding InputText2, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}">
@@ -33,7 +46,19 @@
                 <Style TargetType="TextBox">
                     <Style.Triggers>
                         <Trigger Property="Validation.HasError" Value="True">
-                            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                            <Setter Property="ToolTip">
+                                <Setter.Value>
+                                    <ToolTip>
+                                        <ItemsControl ItemsSource="{Binding PlacementTarget.(Validation.Errors), RelativeSource={RelativeSource AncestorType=ToolTip}}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ToolTip>
+                                </Setter.Value>
+                            </Setter>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
