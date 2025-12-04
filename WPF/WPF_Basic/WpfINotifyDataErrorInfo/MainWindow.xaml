@@ -64,5 +64,55 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
+
+        <DataGrid ItemsSource="{Binding People}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="False"
+                  CanUserAddRows="True"
+                  Height="100"
+                  Margin="5">
+            <DataGrid.Resources>
+                <Style x:Key="DataGridTextBoxErrorTooltipStyle"
+                       TargetType="TextBox">
+                    <Setter Property="ToolTip">
+                        <Setter.Value>
+                            <ToolTip>
+                                <ItemsControl ItemsSource="{Binding PlacementTarget.(Validation.Errors), RelativeSource={RelativeSource AncestorType=ToolTip}}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding ErrorContent}"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ToolTip>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+            </DataGrid.Resources>
+
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name"
+                                    Width="200"
+                                    EditingElementStyle="{StaticResource DataGridTextBoxErrorTooltipStyle}">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="Name"
+                                 UpdateSourceTrigger="PropertyChanged"
+                                 ValidatesOnNotifyDataErrors="True"/>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Age"
+                                    Width="200"
+                                    EditingElementStyle="{StaticResource DataGridTextBoxErrorTooltipStyle}">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="Age"
+                                 UpdateSourceTrigger="PropertyChanged"
+                                 ValidatesOnNotifyDataErrors="True"/>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </StackPanel>
 </Window>

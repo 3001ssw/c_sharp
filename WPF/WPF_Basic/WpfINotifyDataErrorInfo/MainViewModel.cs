@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -11,6 +12,90 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WpfINotifyDataErrorInfo
 {
+    public class Person : BindableBase, INotifyDataErrorInfo
+    {
+        private string name = "";
+        public string Name
+        {
+            get => name;
+            set
+            {
+                SetProperty(ref name, value);
+                ValidateProperty();
+            }
+        }
+
+        private int age = 0;
+        public int Age
+        {
+            get => age;
+            set
+            {
+                SetProperty(ref age, value);
+                ValidateProperty();
+            }
+        }
+
+        public Person()
+        {
+            ValidateProperty(null);
+        }
+
+        private readonly Dictionary<string, List<string>> dictErrors = new Dictionary<string, List<string>>();
+        private void ValidateProperty([CallerMemberName] string? propertyName = null)
+        {
+            // null인 경우엔 속성 모두 검증하기 위해 모두 지우기
+            if (propertyName == null)
+                dictErrors.Clear();
+            else
+            {
+                // 이름이 있으면 해당 속성만 지우기
+                if (dictErrors.ContainsKey(propertyName))
+                    dictErrors.Remove(propertyName);
+            }
+
+            // 속성 검증
+            if (propertyName == null || propertyName == nameof(Name))
+            {
+                List<string> message = new List<string>();
+                if (string.IsNullOrEmpty(Name))
+                    message.Add("빈 문자열은 입력될 수 없습니다.");
+                if (0 < message.Count)
+                    dictErrors[nameof(Name)] = new List<string>(message);
+            }
+            if (propertyName == null || propertyName == nameof(Age))
+            {
+                List<string> message = new List<string>();
+                if (string.IsNullOrEmpty(Age.ToString()))
+                    message.Add("빈 문자열은 입력될 수 없습니다.");
+                if (Age < 0)
+                    message.Add("나이는 0살보다 작을 수 없습니다.");
+                if (150 < Age)
+                    message.Add("나이는 150살보다 클 수 없습니다.");
+                if (0 < message.Count)
+                    dictErrors[nameof(Age)] = new List<string>(message);
+            }
+
+            // 에러가 change 됐다는 이벤트 발생
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+        public bool HasErrors => 0 < dictErrors.Count;
+
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+        public IEnumerable GetErrors(string? propertyName)
+        {
+            if (propertyName == null)
+                return Enumerable.Empty<string>();
+
+            if (dictErrors.ContainsKey(propertyName))
+                return dictErrors[propertyName];
+
+            return Enumerable.Empty<string>();
+        }
+    }
+
+
     public class MainViewModel : BindableBase, INotifyDataErrorInfo
     {
         private string inputText = "";
@@ -46,6 +131,8 @@ namespace WpfINotifyDataErrorInfo
                 ValidateProperty();
             }
         }
+
+        public ObservableCollection<Person> People { get; set; } = new ObservableCollection<Person>();
 
         public MainViewModel()
         {
