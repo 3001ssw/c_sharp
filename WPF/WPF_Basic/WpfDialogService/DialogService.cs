@@ -47,6 +47,7 @@ namespace WpfDialogService
                 .OfType<Window>()
                 .SingleOrDefault(x => x.IsActive);
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.ShowInTaskbar = false;
 
             // ViewModel이 RequestClose 이벤트 제공하면 연결
             if (viewModel is IDialogViewModel vm)
@@ -63,13 +64,16 @@ namespace WpfDialogService
 
         public bool? ShowDialogDataTemplate(object viewModel)
         {
-            // 이방식으로 만들어진 View는 UserControl이여야함
+            // 이방식으로 만들어진 xaml은 Window가 아니여야함
+            Window? owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
             Window window = new Window
             {
                 Content = viewModel,
-                Owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive),
+                Owner = owner,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
                 SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize,
+                ShowInTaskbar = false,
             };
 
             // RequestClose 지원
