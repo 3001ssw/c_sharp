@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:WpfDialogService"
         mc:Ignorable="d"
         Title="UserDialogView"
-        Height="450"
-        Width="800">
+        Height="300"
+        Width="300">
     <StackPanel Margin="20">
         <Button Content="OK"
                 Command="{Binding OkCommand}"/>

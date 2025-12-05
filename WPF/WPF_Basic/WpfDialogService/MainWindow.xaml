@@ -13,6 +13,10 @@
     </Window.DataContext>
     <StackPanel Margin="20">
         <Button Content="OK"
+                Margin="5"
                 Command="{Binding PopupDialogCommand}"/>
+        <Button Content="OK"
+                Margin="5"
+                Command="{Binding PopupDialog2Command}"/>
     </StackPanel>
 </Window>

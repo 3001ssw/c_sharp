@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:WpfDialogService"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-
+        <ResourceDictionary>
+            <DataTemplate DataType="{x:Type local:UserDialog2ViewModel}">
+                <local:UserDialog2View/>
+            </DataTemplate>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

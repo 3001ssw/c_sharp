@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+
+namespace WpfDialogService
+{
+    public class UserDialog2ViewModel : BindableBase, IDialogViewModel
+    {
+        public event EventHandler<bool?> RequestClose;
+
+        public ICommand OkCommand { get; }
+        public ICommand CancelCommand { get; }
+
+        public UserDialog2ViewModel()
+        {
+            OkCommand = new DelegateCommand(() => RequestClose?.Invoke(this, true));    // DialogResult = true
+
+            CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(this, false));   // DialogResult = false
+        }
+    }
+}

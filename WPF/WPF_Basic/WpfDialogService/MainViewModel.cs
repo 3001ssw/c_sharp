@@ -11,9 +11,11 @@ namespace WpfDialogService
     public class MainViewModel : BindableBase
     {
         public DelegateCommand PopupDialogCommand { get; }
+        public DelegateCommand PopupDialog2Command { get; }
         public MainViewModel()
         {
             PopupDialogCommand = new DelegateCommand(OnPopupDialog, CanPopupDialog);
+            PopupDialog2Command = new DelegateCommand(OnPopupDialog2, CanPopupDialog2);
         }
 
         private void OnPopupDialog()
@@ -21,11 +23,25 @@ namespace WpfDialogService
             var dialog = new DialogService();
             var vm = new UserDialogViewModel();
 
-            bool? result = dialog.ShowDialog(this, vm);
+            bool? result = dialog.ShowDialogActivator(vm);
             Debug.WriteLine($"result: {result}");
         }
 
         private bool CanPopupDialog()
+        {
+            return true;
+        }
+
+        private void OnPopupDialog2()
+        {
+            var dialog = new DialogService();
+            var vm = new UserDialog2ViewModel();
+
+            bool? result = dialog.ShowDialogDataTemplate(vm);
+            Debug.WriteLine($"result: {result}");
+        }
+
+        private bool CanPopupDialog2()
         {
             return true;
         }
