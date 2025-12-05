@@ -7,14 +7,14 @@ using System.Windows.Input;
 
 namespace WpfDialogService
 {
-    public class UserDialog2ViewModel : BindableBase, IDialogViewModel
+    public class UserControlViewModel : BindableBase, IDialogViewModel
     {
         public event EventHandler<bool?> RequestClose;
 
         public ICommand OkCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public UserDialog2ViewModel()
+        public UserControlViewModel()
         {
             OkCommand = new DelegateCommand(() => RequestClose?.Invoke(this, true));    // DialogResult = true
 

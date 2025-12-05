@@ -10,17 +10,19 @@ namespace WpfDialogService
 {
     public class MainViewModel : BindableBase
     {
-        public DelegateCommand PopupDialogCommand { get; }
-        public DelegateCommand PopupDialog2Command { get; }
-        public DelegateCommand PopupDialog3Command { get; }
+        public DelegateCommand ShowDialogCommand { get; }
+        public DelegateCommand ShowCommand { get; }
+        public DelegateCommand ShowDialogActivatorCommand { get; }
+        public DelegateCommand ShowDialogDataTemplateCommand { get; }
         public MainViewModel()
         {
-            PopupDialogCommand = new DelegateCommand(OnPopupDialog, CanPopupDialog);
-            PopupDialog2Command = new DelegateCommand(OnPopupDialog2, CanPopupDialog2);
-            PopupDialog3Command = new DelegateCommand(OnPopupDialog3, CanPopupDialog3);
+            ShowDialogCommand = new DelegateCommand(OnShowDialog, CanShowDialog);
+            ShowCommand = new DelegateCommand(OnShow, CanShow);
+            ShowDialogActivatorCommand = new DelegateCommand(OnShowDialogActivator, CanShowDialogActivator);
+            ShowDialogDataTemplateCommand = new DelegateCommand(OnShowDialogDataTemplate, CanShowDialogDataTemplate);
         }
 
-        private void OnPopupDialog()
+        private void OnShowDialogActivator()
         {
             var dialog = new DialogService();
             var vm = new UserDialogViewModel();
@@ -29,26 +31,26 @@ namespace WpfDialogService
             Debug.WriteLine($"result: {result}");
         }
 
-        private bool CanPopupDialog()
+        private bool CanShowDialogActivator()
         {
             return true;
         }
 
-        private void OnPopupDialog2()
+        private void OnShowDialogDataTemplate()
         {
             var dialog = new DialogService();
-            var vm = new UserDialog2ViewModel();
+            var vm = new UserControlViewModel();
 
             bool? result = dialog.ShowDialogDataTemplate(vm);
             Debug.WriteLine($"result: {result}");
         }
 
-        private bool CanPopupDialog2()
+        private bool CanShowDialogDataTemplate()
         {
             return true;
         }
 
-        private void OnPopupDialog3()
+        private void OnShowDialog()
         {
             var dialog = new DialogService();
             var vm = new UserDialogViewModel();
@@ -57,7 +59,20 @@ namespace WpfDialogService
             Debug.WriteLine($"result: {result}");
         }
 
-        private bool CanPopupDialog3()
+        private bool CanShowDialog()
+        {
+            return true;
+        }
+
+        private void OnShow()
+        {
+            var dialog = new DialogService();
+            var vm = new UserDialogViewModel();
+
+            dialog.Show<UserDialogView>(vm);
+        }
+
+        private bool CanShow()
         {
             return true;
         }

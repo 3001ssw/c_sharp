@@ -11,6 +11,29 @@ namespace WpfDialogService
 {
     public class DialogService : IDialogService
     {
+        public void Show<T>(object viewModel) where T : Window
+        {
+            Window? window = Activator.CreateInstance<T>() as Window;
+            if (window == null)
+                throw new Exception();
+
+            window.DataContext = viewModel;
+            window.Owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.ShowInTaskbar = false;
+
+            // ViewModel이 RequestClose 이벤트 제공하면 연결
+            if (viewModel is IDialogViewModel vm)
+            {
+                vm.RequestClose += (s, dialogResult) =>
+                {
+                    window.Close();
+                };
+            }
+
+            window.Show();
+        }
+
         public bool? ShowDialog<T>(object viewModel) where T : Window
         {
             Window? window = Activator.CreateInstance<T>() as Window;
@@ -112,14 +135,20 @@ namespace WpfDialogService
         }
     }
 
+    /// <summary>
+    /// ShowDialog, Show를 하기위한 Interface
+    /// </summary>
     public interface IDialogService
     {
+        void Show<T>(object viewModel) where T : Window;
         bool? ShowDialog<T>(object viewModel) where T : Window;
         bool? ShowDialogActivator(object viewModel);
         bool? ShowDialogDataTemplate(object viewModel);
     }
 
-    
+    /// <summary>
+    /// Close를 하기 위한 Interface
+    /// </summary>
     public interface IDialogViewModel
     {
         event EventHandler<bool?> RequestClose;

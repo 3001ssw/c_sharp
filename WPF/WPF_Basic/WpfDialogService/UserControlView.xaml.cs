@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace WpfDialogService
 {
     /// <summary>
-    /// UserDialog2View.xaml에 대한 상호 작용 논리
+    /// UserControlView.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class UserDialog2View : UserControl
+    public partial class UserControlView : UserControl
     {
-        public UserDialog2View()
+        public UserControlView()
         {
             InitializeComponent();
         }
