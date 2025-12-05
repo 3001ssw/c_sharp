@@ -18,9 +18,7 @@ namespace WpfDialogService
                 throw new Exception();
 
             window.DataContext = viewModel;
-            window.Owner = Application.Current.Windows
-                .OfType<Window>()
-                .SingleOrDefault(x => x.IsActive);
+            window.Owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.ShowInTaskbar = false;
 
