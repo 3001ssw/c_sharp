@@ -5,8 +5,8 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <DataTemplate DataType="{x:Type local:UserControlView}">
-                <local:UserControlViewModel/>
+            <DataTemplate DataType="{x:Type local:UserControlViewModel}">
+                <local:UserControlView/>
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
