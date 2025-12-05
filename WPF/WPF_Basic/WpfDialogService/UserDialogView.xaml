@@ -8,6 +8,10 @@
         Title="UserDialogView"
         Height="300"
         Width="300">
+    <Window.InputBindings>
+        <KeyBinding Key="Esc"
+                    Command="{Binding CancelCommand}"/>
+    </Window.InputBindings>
     <StackPanel Margin="20">
         <Button Content="OK"
                 Command="{Binding OkCommand}"/>

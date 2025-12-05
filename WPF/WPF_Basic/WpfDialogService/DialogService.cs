@@ -11,7 +11,31 @@ namespace WpfDialogService
 {
     public class DialogService : IDialogService
     {
-        public Window? window = null;
+        public bool? ShowDialog<T>(object viewModel) where T : Window
+        {
+            Window? window = Activator.CreateInstance<T>() as Window;
+            if (window == null)
+                throw new Exception();
+
+            window.DataContext = viewModel;
+            window.Owner = Application.Current.Windows
+                .OfType<Window>()
+                .SingleOrDefault(x => x.IsActive);
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.ShowInTaskbar = false;
+
+            // ViewModel이 RequestClose 이벤트 제공하면 연결
+            if (viewModel is IDialogViewModel vm)
+            {
+                vm.RequestClose += (s, dialogResult) =>
+                {
+                    window.DialogResult = dialogResult;
+                    window.Close();
+                };
+            }
+
+            return window.ShowDialog();
+        }
 
         // xxxxxViewModel -> xxxxxView 이름 규칙을 명백히 지켜줘야함
         public bool? ShowDialogActivator(object viewModel)
@@ -92,6 +116,7 @@ namespace WpfDialogService
 
     public interface IDialogService
     {
+        bool? ShowDialog<T>(object viewModel) where T : Window;
         bool? ShowDialogActivator(object viewModel);
         bool? ShowDialogDataTemplate(object viewModel);
     }

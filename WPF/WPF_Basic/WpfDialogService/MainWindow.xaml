@@ -12,11 +12,14 @@
         <local:MainViewModel/>
     </Window.DataContext>
     <StackPanel Margin="20">
-        <Button Content="OK"
+        <Button Content="ShowDialogActivator"
                 Margin="5"
                 Command="{Binding PopupDialogCommand}"/>
-        <Button Content="OK"
+        <Button Content="ShowDialogDataTemplate"
                 Margin="5"
                 Command="{Binding PopupDialog2Command}"/>
+        <Button Content="ShowDialog T"
+                Margin="5"
+                Command="{Binding PopupDialog3Command}"/>
     </StackPanel>
 </Window>

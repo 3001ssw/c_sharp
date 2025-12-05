@@ -7,9 +7,14 @@
              mc:Ignorable="d"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
+             Focusable="True"
              Width="400"
              Height="250"
              Background="Gray">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Esc"
+                    Command="{Binding CancelCommand}"/>
+    </UserControl.InputBindings>
     <StackPanel Margin="20">
         <Button Content="OK"
                 Command="{Binding OkCommand}"/>
