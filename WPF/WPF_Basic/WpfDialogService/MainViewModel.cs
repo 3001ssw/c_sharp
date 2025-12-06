@@ -5,49 +5,36 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace WpfDialogService
 {
     public class MainViewModel : BindableBase
     {
+        private readonly IDialogService _dialogService;
+        public DelegateCommand NotMVVMCommand { get; }
         public DelegateCommand ShowDialogCommand { get; }
         public DelegateCommand ShowCommand { get; }
         public DelegateCommand ShowDialogActivatorCommand { get; }
         public DelegateCommand ShowDialogDataTemplateCommand { get; }
-        public MainViewModel()
+        public MainViewModel(IDialogService dialogService)
         {
-            ShowDialogCommand = new DelegateCommand(OnShowDialog, CanShowDialog);
-            ShowCommand = new DelegateCommand(OnShow, CanShow);
-            ShowDialogActivatorCommand = new DelegateCommand(OnShowDialogActivator, CanShowDialogActivator);
-            ShowDialogDataTemplateCommand = new DelegateCommand(OnShowDialogDataTemplate, CanShowDialogDataTemplate);
+            _dialogService = dialogService;
+            NotMVVMCommand = new DelegateCommand(OnNotMVVM);
+            ShowDialogCommand = new DelegateCommand(OnShowDialog);
+            ShowCommand = new DelegateCommand(OnShow);
+            ShowDialogActivatorCommand = new DelegateCommand(OnShowDialogActivator);
+            ShowDialogDataTemplateCommand = new DelegateCommand(OnShowDialogDataTemplate);
         }
 
-        private void OnShowDialogActivator()
+        private void OnNotMVVM()
         {
-            var dialog = new DialogService();
-            var vm = new UserDialogViewModel();
-
-            bool? result = dialog.ShowDialogActivator(vm);
-            Debug.WriteLine($"result: {result}");
-        }
-
-        private bool CanShowDialogActivator()
-        {
-            return true;
-        }
-
-        private void OnShowDialogDataTemplate()
-        {
-            var dialog = new DialogService();
-            var vm = new UserControlViewModel();
-
-            bool? result = dialog.ShowDialogDataTemplate(vm);
-            Debug.WriteLine($"result: {result}");
-        }
-
-        private bool CanShowDialogDataTemplate()
-        {
-            return true;
+            UserDialogView v = new UserDialogView();
+            UserDialogViewModel vm = new UserDialogViewModel();
+            v.DataContext = vm;
+            v.Owner = Application.Current.MainWindow;
+            v.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            v.ShowDialog();
         }
 
         private void OnShowDialog()
@@ -55,26 +42,31 @@ namespace WpfDialogService
             var dialog = new DialogService();
             var vm = new UserDialogViewModel();
 
-            bool? result = dialog.ShowDialog<UserDialogView>(vm);
+            bool? result = _dialogService.ShowDialog<UserDialogView>(vm);
             Debug.WriteLine($"result: {result}");
-        }
-
-        private bool CanShowDialog()
-        {
-            return true;
         }
 
         private void OnShow()
         {
-            var dialog = new DialogService();
             var vm = new UserDialogViewModel();
 
-            dialog.Show<UserDialogView>(vm);
+            _dialogService.Show<UserDialogView>(vm);
         }
 
-        private bool CanShow()
+        private void OnShowDialogActivator()
         {
-            return true;
+            var vm = new UserDialogViewModel();
+
+            bool? result = _dialogService.ShowDialogActivator(vm);
+            Debug.WriteLine($"result: {result}");
+        }
+
+        private void OnShowDialogDataTemplate()
+        {
+            var vm = new UserControlViewModel();
+
+            bool? result = _dialogService.ShowDialogDataTemplate(vm);
+            Debug.WriteLine($"result: {result}");
         }
 
     }

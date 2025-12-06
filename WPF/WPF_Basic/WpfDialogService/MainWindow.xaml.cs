@@ -19,6 +19,7 @@ namespace WpfDialogService
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainViewModel(new DialogService());
         }
     }
 }
