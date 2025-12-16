@@ -24,14 +24,9 @@ namespace WpfDependencyProperty
 
         private static void IsVisibleSmartChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is ProgressBarBehavior progressBarBehavior && progressBarBehavior.AssociatedObject != null)
+            if (d is ProgressBarBehavior progressBarBehavior)
             {
-                ProgressBar progressBar = progressBarBehavior.AssociatedObject;
-                if ((bool)e.NewValue)
-                    progressBar.ValueChanged += progressBarBehavior.OnValueChanged;
-                else
-                    progressBar.ValueChanged -= progressBarBehavior.OnValueChanged;
-
+                progressBarBehavior.UpdateVisual();
             }
         }
 
@@ -45,14 +40,17 @@ namespace WpfDependencyProperty
         {
             base.OnAttached();
 
-            // todo .. : 
-            AssociatedObject.ValueChanged += OnValueChanged;
+            if (AssociatedObject != null)
+            {
+                AssociatedObject.ValueChanged += OnValueChanged;
+                UpdateVisual();
+            }
         }
 
         protected override void OnDetaching()
         {
-            // todo .. : 
-            AssociatedObject.ValueChanged -= OnValueChanged;
+            if (AssociatedObject != null)
+                AssociatedObject.ValueChanged -= OnValueChanged;
 
             base.OnDetaching();
         }
@@ -68,36 +66,42 @@ namespace WpfDependencyProperty
             if (AssociatedObject is ProgressBar progressBar)
             {
                 if (!IsVisibleSmart)
-                    return;
-
-                double pct = AssociatedObject.Maximum == 0
-                    ? 0
-                    : (AssociatedObject.Value / AssociatedObject.Maximum) * 100.0;
-
-                // 색상 변경
-                if (pct < 50)
-                    AssociatedObject.Foreground = Brushes.Red;
-                else if (pct < 80)
-                    AssociatedObject.Foreground = Brushes.Gold;
-                else
-                    AssociatedObject.Foreground = Brushes.LimeGreen;
-
-                if (pct >= 90)
-                {
-                    var anim = new DoubleAnimation
-                    {
-                        From = 1.0,
-                        To = 0.3,
-                        Duration = TimeSpan.FromSeconds(0.5),
-                        AutoReverse = true,
-                        RepeatBehavior = RepeatBehavior.Forever
-                    };
-                    AssociatedObject.BeginAnimation(UIElement.OpacityProperty, anim);
-                }
-                else
                 {
                     AssociatedObject.BeginAnimation(UIElement.OpacityProperty, null);
                     AssociatedObject.Opacity = 1.0;
+                    AssociatedObject.Foreground = Brushes.LimeGreen;
+                }
+                else
+                {
+                    double pct = AssociatedObject.Maximum == 0
+                        ? 0
+                        : (AssociatedObject.Value / AssociatedObject.Maximum) * 100.0;
+
+                    // 색상 변경
+                    if (pct < 50)
+                        AssociatedObject.Foreground = Brushes.Red;
+                    else if (pct < 80)
+                        AssociatedObject.Foreground = Brushes.Gold;
+                    else
+                        AssociatedObject.Foreground = Brushes.LimeGreen;
+
+                    if (pct >= 90)
+                    {
+                        var anim = new DoubleAnimation
+                        {
+                            From = 1.0,
+                            To = 0.3,
+                            Duration = TimeSpan.FromSeconds(0.5),
+                            AutoReverse = true,
+                            RepeatBehavior = RepeatBehavior.Forever
+                        };
+                        AssociatedObject.BeginAnimation(UIElement.OpacityProperty, anim);
+                    }
+                    else
+                    {
+                        AssociatedObject.BeginAnimation(UIElement.OpacityProperty, null);
+                        AssociatedObject.Opacity = 1.0;
+                    }
                 }
             }
         }
