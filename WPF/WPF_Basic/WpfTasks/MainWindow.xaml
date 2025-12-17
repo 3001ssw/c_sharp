@@ -1,0 +1,56 @@
+﻿<Window x:Class="WpfTasks.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfTasks"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="450"
+        Width="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0">
+            <TextBlock Text="병렬 개수"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Margin="5"/>
+            <TextBox Text="{Binding Count, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Width="100"
+                     Margin="5"/>
+            <Button Content="시작"
+                    Command="{Binding StartCommand}"
+                    Width="50"
+                    Margin="5"/>
+
+            <Button Content="정지"
+                    Command="{Binding StopCommand}"
+                    Width="50"
+                    Margin="5"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Counters}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  Margin="5">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id"
+                                    Binding="{Binding Id}"
+                                    Width="100"/>
+                <DataGridTextColumn Header="Count"
+                                    Binding="{Binding Count}"
+                                    Width="100"/>
+                <DataGridTextColumn Header="Sleep"
+                                    Binding="{Binding Sleep}"
+                                    Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

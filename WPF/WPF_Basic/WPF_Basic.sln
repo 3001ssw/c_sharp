@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfValidationRule", "WpfVal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfDialogService", "WpfDialogService\WpfDialogService.csproj", "{1AC6D5C1-4502-4488-885C-D7548A2704C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTasks", "WpfTasks\WpfTasks.csproj", "{96A41C58-1894-4B5E-BFA2-C5BDA6F9E728}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{1AC6D5C1-4502-4488-885C-D7548A2704C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AC6D5C1-4502-4488-885C-D7548A2704C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AC6D5C1-4502-4488-885C-D7548A2704C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96A41C58-1894-4B5E-BFA2-C5BDA6F9E728}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96A41C58-1894-4B5E-BFA2-C5BDA6F9E728}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96A41C58-1894-4B5E-BFA2-C5BDA6F9E728}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96A41C58-1894-4B5E-BFA2-C5BDA6F9E728}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
