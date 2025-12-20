@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace WpfBehavior.behavior
+namespace WpfBehavior
 {
     public class TextBoxBehavior : Behavior<TextBox>
     {
@@ -18,22 +18,22 @@ namespace WpfBehavior.behavior
         protected override void OnAttached()
         {
             base.OnAttached();
-            // 키보드 포커스를 받았을 때
-            AssociatedObject.GotKeyboardFocus += OnGotKeyboardFocus;
-            // 마우스 클릭으로 포커스를 받았을 때를 대비
-            AssociatedObject.PreviewMouseLeftButtonDown += OnPreviewMouseLeftButtonDown;
+            
+            AssociatedObject.GotKeyboardFocus += OnGotKeyboardFocus; // 키보드 포커스를 받았을 때
+            AssociatedObject.PreviewMouseLeftButtonDown += OnPreviewMouseLeftButtonDown; // 마우스 클릭으로 포커스를 받았을 때
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
+            // 이벤트 연결 해제
             AssociatedObject.GotKeyboardFocus -= OnGotKeyboardFocus;
             AssociatedObject.PreviewMouseLeftButtonDown -= OnPreviewMouseLeftButtonDown;
         }
 
         private void OnGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            AssociatedObject.SelectAll();
+            AssociatedObject.SelectAll(); // 모두 선택
         }
 
         private void OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

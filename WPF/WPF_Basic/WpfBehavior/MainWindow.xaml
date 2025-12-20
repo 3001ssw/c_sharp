@@ -5,17 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfBehavior"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:behavior="clr-namespace:WpfBehavior.behavior"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
         Width="800">
     <StackPanel Orientation="Vertical">
+        <!--  일반 TextBox  -->
+        <TextBox Margin="5"/>
         <TextBox Margin="5">
             <i:Interaction.Behaviors>
-                <behavior:TextBoxBehavior/>
+                <local:TextBoxBehavior/>
             </i:Interaction.Behaviors>
         </TextBox>
-        <TextBox Margin="5"/>
     </StackPanel>
 </Window>
