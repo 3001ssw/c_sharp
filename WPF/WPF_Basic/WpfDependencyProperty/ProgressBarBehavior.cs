@@ -61,44 +61,51 @@ namespace WpfDependencyProperty
                 UpdateVisual();
         }
 
+        private bool _isBlinking = false;
         private void UpdateVisual()
         {
             if (AssociatedObject is ProgressBar progressBar)
             {
                 if (!IsVisibleSmart)
                 {
+                    // 원상 복귀
                     AssociatedObject.BeginAnimation(UIElement.OpacityProperty, null);
                     AssociatedObject.Opacity = 1.0;
                     AssociatedObject.Foreground = Brushes.LimeGreen;
+                    _isBlinking = false;
                 }
                 else
                 {
-                    double pct = AssociatedObject.Maximum == 0
-                        ? 0
-                        : (AssociatedObject.Value / AssociatedObject.Maximum) * 100.0;
+                    double pct = AssociatedObject.Maximum == 0 ? 0 : (AssociatedObject.Value / AssociatedObject.Maximum) * 100.0;
 
                     // 색상 변경
                     if (pct < 50)
-                        AssociatedObject.Foreground = Brushes.Red;
+                        AssociatedObject.Foreground = Brushes.Red; // 50 이하 빨간색
                     else if (pct < 80)
-                        AssociatedObject.Foreground = Brushes.Gold;
+                        AssociatedObject.Foreground = Brushes.Gold; // 80 이하 황금색
                     else
-                        AssociatedObject.Foreground = Brushes.LimeGreen;
+                        AssociatedObject.Foreground = Brushes.LimeGreen; // 그 외 초록색
 
-                    if (pct >= 90)
+                    // 90 이상이면 깜빡이는 애니메이션
+                    if (90 <= pct)
                     {
-                        var anim = new DoubleAnimation
+                        if (_isBlinking == false)
                         {
-                            From = 1.0,
-                            To = 0.3,
-                            Duration = TimeSpan.FromSeconds(0.5),
-                            AutoReverse = true,
-                            RepeatBehavior = RepeatBehavior.Forever
-                        };
-                        AssociatedObject.BeginAnimation(UIElement.OpacityProperty, anim);
+                            var anim = new DoubleAnimation
+                            {
+                                From = 1.0,
+                                To = 0.3,
+                                Duration = TimeSpan.FromSeconds(0.5),
+                                AutoReverse = true,
+                                RepeatBehavior = RepeatBehavior.Forever
+                            };
+                            AssociatedObject.BeginAnimation(UIElement.OpacityProperty, anim);
+                            _isBlinking = true;
+                        }
                     }
                     else
                     {
+                        _isBlinking = false;
                         AssociatedObject.BeginAnimation(UIElement.OpacityProperty, null);
                         AssociatedObject.Opacity = 1.0;
                     }

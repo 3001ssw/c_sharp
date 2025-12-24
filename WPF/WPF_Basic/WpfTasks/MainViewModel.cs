@@ -10,7 +10,7 @@ using System.Windows.Controls;
 
 namespace WpfTasks
 {
-    public class MainViewModel : BindableBase, IDisposable
+    public class MainViewModel : BindableBase
     {
         private int count = 0;
         public int Count
