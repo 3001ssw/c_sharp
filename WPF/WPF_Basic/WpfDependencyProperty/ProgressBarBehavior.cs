@@ -17,10 +17,16 @@ namespace WpfDependencyProperty
     {
         public static readonly DependencyProperty IsVisibleSmartPropety =
             DependencyProperty.Register(
-                "IsVisibleSmart",
-                typeof(bool),
-                typeof(ProgressBarBehavior),
-                new PropertyMetadata(true, IsVisibleSmartChanged));
+                "IsVisibleSmart", // 속성 이름
+                typeof(bool), // 속성 데이터 타입
+                typeof(ProgressBarBehavior), // 이 속성을 소유한 클래스
+                new PropertyMetadata(false, IsVisibleSmartChanged)); // 기본값 (false으로 설정)
+
+        public bool IsVisibleSmart
+        {
+            get => (bool)GetValue(IsVisibleSmartPropety);
+            set => SetValue(IsVisibleSmartPropety, value);
+        }
 
         private static void IsVisibleSmartChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -28,12 +34,6 @@ namespace WpfDependencyProperty
             {
                 progressBarBehavior.UpdateVisual();
             }
-        }
-
-        public bool IsVisibleSmart
-        {
-            get => (bool)GetValue(IsVisibleSmartPropety);
-            set => SetValue(IsVisibleSmartPropety, value);
         }
 
         protected override void OnAttached()
