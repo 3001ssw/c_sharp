@@ -13,12 +13,14 @@
         <local:MainWindowViewModel/>
     </Window.DataContext>
     <StackPanel>
+        <TextBlock Text="ProgressBar"/>
         <ProgressBar Height="30"
                      Margin="5"
                      Value="{Binding Percent}"/>
         <Separator Margin="5"/>
         <CheckBox IsChecked="{Binding IsChecked}"
                   Margin="5"/>
+        <TextBlock Text="ProgressBarBehaviros"/>
         <ProgressBar Height="30"
                      Margin="5"
                      Value="{Binding Percent}">
@@ -26,6 +28,12 @@
                 <local:ProgressBarBehavior IsVisibleSmart="{Binding IsChecked}"/>
             </b:Interaction.Behaviors>
         </ProgressBar>
+        <Separator Margin="5"/>
+        <TextBlock Text="SmartProgressBar"/>
+        <local:SmartProgressBar Height="30"
+                                Margin="5"
+                                Value="{Binding Percent}"
+                                IsVisibleSmart="{Binding IsChecked}"/>
         <Separator Margin="5"/>
         <Button Margin="5"
                 Content="Start Progress"
