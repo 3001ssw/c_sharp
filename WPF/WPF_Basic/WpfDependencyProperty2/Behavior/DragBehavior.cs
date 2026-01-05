@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xaml.Behaviors;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,31 +12,47 @@ namespace WpfDependencyProperty2.Behavior
 {
     public class DragBehavior : Behavior<FrameworkElement>
     {
-        public static readonly DependencyProperty DragDataProperty =
-        DependencyProperty.Register("DragData",
-            typeof(object),
-            typeof(DragBehavior),
-            new PropertyMetadata(null));
+        #region drop
+        public static readonly DependencyProperty DropCommandProperty =
+                DependencyProperty.Register("DropCommand",
+                    typeof(ICommand),
+                    typeof(DragBehavior),
+                    new PropertyMetadata(null));
 
-        public object DragData
+        public ICommand DropCommand
         {
-            get => GetValue(DragDataProperty);
-            set => SetValue(DragDataProperty, value);
+            get => (ICommand)GetValue(DropCommandProperty);
+            set => SetValue(DropCommandProperty, value);
         }
 
         protected override void OnAttached()
         {
-            // 마우스를 누르고 움직일 때 드래그 시작
-            AssociatedObject.MouseMove += OnMouseMove;
+            base.OnAttached();
+            AssociatedObject.AllowDrop = true; // 중요: AllowDrop 활성화
+            AssociatedObject.Drop += OnDrop;
         }
 
-        private void OnMouseMove(object s, MouseEventArgs e)
+        protected override void OnDetaching()
         {
-            if (e.LeftButton == MouseButtonState.Pressed && DragData != null)
+            base.OnDetaching();
+            AssociatedObject.Drop -= OnDrop;
+        }
+        private void OnDrop(object s, DragEventArgs e)
+        {
+            // 1. 파일 드롭 형식인지 확인
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                // 드래그 앤 드롭 실행
-                DragDrop.DoDragDrop(AssociatedObject, DragData, DragDropEffects.Move);
+                // 2. 파일 경로들을 string[] 형태로 가져옴
+                var files = e.Data.GetData(DataFormats.FileDrop);
+
+                // 3. 커맨드가 존재하고 실행 가능한지 확인 후 파일 데이터 전달
+                if (DropCommand != null && DropCommand.CanExecute(files))
+                {
+                    DropCommand.Execute(files);
+                }
             }
         }
+        #endregion
+
     }
 }

@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTasks", "WpfTasks\WpfTas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfBehavior", "WpfBehavior\WpfBehavior.csproj", "{D3748402-BF77-4902-AFAD-ABA6057D083F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfDependencyProperty2", "WpfDependencyProperty2\WpfDependencyProperty2.csproj", "{37B6518B-FF36-4AD0-B867-E7D4C9B495EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{D3748402-BF77-4902-AFAD-ABA6057D083F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3748402-BF77-4902-AFAD-ABA6057D083F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3748402-BF77-4902-AFAD-ABA6057D083F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37B6518B-FF36-4AD0-B867-E7D4C9B495EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37B6518B-FF36-4AD0-B867-E7D4C9B495EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37B6518B-FF36-4AD0-B867-E7D4C9B495EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37B6518B-FF36-4AD0-B867-E7D4C9B495EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

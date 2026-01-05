@@ -4,9 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfDependencyProperty2"
+        xmlns:b="clr-namespace:WpfDependencyProperty2.Behavior"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:cvt="clr-namespace:WpfDependencyProperty2.Converter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow"
+        Height="450"
+        Width="800">
+    <Window.Resources>
+        <cvt:StringToBase64Converter x:Key="StringToBase64Converter"/>
+    </Window.Resources>
+    <Border Background="Transparent"
+            AllowDrop="True">
+        <i:Interaction.Behaviors>
+            <b:DragBehavior DropCommand="{Binding DropCommand}"/>
+        </i:Interaction.Behaviors>
 
-    </Grid>
+        <Image Source="{Binding Text, Converter={StaticResource StringToBase64Converter}}"
+               Stretch="Uniform"/>
+    </Border>
 </Window>
