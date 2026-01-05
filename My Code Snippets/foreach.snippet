@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>foreach</Title>
+			<Shortcut>fe</Shortcut>
+			<Description>foreach 문용 코드 조각</Description>
+			<Author>ssw</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+				<SnippetType>SurroundsWith</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>type</ID>
+					<ToolTip>컬렉션에서 반복할 개체 형식</ToolTip>
+					<Default>var</Default>
+				</Literal>
+				<Literal>
+					<ID>identifier</ID>
+					<ToolTip>컬렉션의 요소를 나타내는 식별자</ToolTip>
+					<Default>item</Default>
+				</Literal>
+				<Literal>
+					<ID>collection</ID>
+					<ToolTip>반복할 컬렉션 또는 배열의 이름</ToolTip>
+					<Default>collection</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp"><![CDATA[foreach ($type$ $identifier$ in $collection$)
+{
+	$selected$ $end$
+}]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
