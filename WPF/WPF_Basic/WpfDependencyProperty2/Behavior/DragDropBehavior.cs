@@ -12,14 +12,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Xml.Linq;
 
 namespace WpfDependencyProperty2.Behavior
 {
     public class DragDropBehavior : Behavior<FrameworkElement>
     {
-        private Point _mouseLeftButtonDownPosition;
-        private Point _mouseLeftButtonUpPosition;
-
         #region Drag
         public static readonly DependencyProperty SerializableDragCommandProperty =
                 DependencyProperty.Register("SerializableDragCommand",
@@ -59,6 +57,7 @@ namespace WpfDependencyProperty2.Behavior
             set => SetValue(FilesDropCommandProperty, value);
         }
 
+        #region override
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -66,202 +65,110 @@ namespace WpfDependencyProperty2.Behavior
             AssociatedObject.AllowDrop = true;
 
             // 드래그 시작 관련
-            AssociatedObject.PreviewMouseLeftButtonDown += OnMouseLeftButtonDown;
-            AssociatedObject.PreviewMouseLeftButtonUp += OnMouseLeftButtonUp;
-            AssociatedObject.PreviewMouseMove += OnMouseMove;
+            AssociatedObject.PreviewMouseLeftButtonDown += OnPreviewMouseLeftButtonDown;
+            AssociatedObject.PreviewMouseMove += OnPreviewMouseMove;
 
-            AssociatedObject.PreviewDragOver += OnDragOver;
-            AssociatedObject.Drop += OnDrop;
+            AssociatedObject.PreviewDragOver += OnPreviewDragOver;
+            AssociatedObject.PreviewDrop += OnPreviewDrop;
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
 
-            AssociatedObject.PreviewMouseLeftButtonDown -= OnMouseLeftButtonDown;
-            AssociatedObject.PreviewMouseLeftButtonUp -= OnMouseLeftButtonUp;
-            AssociatedObject.PreviewMouseMove -= OnMouseMove;
+            AssociatedObject.PreviewMouseLeftButtonDown -= OnPreviewMouseLeftButtonDown;
+            AssociatedObject.PreviewMouseMove -= OnPreviewMouseMove;
 
-            AssociatedObject.PreviewDragOver -= OnDragOver;
-            AssociatedObject.Drop -= OnDrop;
+            AssociatedObject.PreviewDragOver -= OnPreviewDragOver;
+            AssociatedObject.PreviewDrop -= OnPreviewDrop;
         }
+        #endregion
 
-        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            _mouseLeftButtonDownPosition = e.GetPosition(null);
-
             if (sender is DataGrid dataGrid)
             {
-                IInputElement element = dataGrid.InputHitTest(_mouseLeftButtonDownPosition);
-
-                if (element is DependencyObject target)
+                if (Keyboard.IsKeyDown(Key.LeftCtrl))
                 {
-                    DataGridCell? cell = FindParent<DataGridCell>(target);
-                    if (cell != null)
-                    {
-                        DataGridRow? row = FindParent<DataGridRow>(target);
-                        if (row != null)
-                        {
-                            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
-                            {
-                            }
-                            else if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-                            {
-                            }
-                            else if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control | ModifierKeys.Shift))
-                            {
-                            }
-                            else
-                            {
-                                // 드래그할 데이터 추출 (FileInfo 객체)
-                                IList dragData = dataGrid.SelectedItems;
+                    IList dragData = dataGrid.SelectedItems;
 
-                                // 데이터 패키지 생성
-                                DataObject data = new DataObject();
-                                // 1. 객체 자체를 담음
-                                data.SetData(dragData.GetType(), dragData);
-                                // 2. 파일 경로가 있다면 문자열로도 담음 (Border 쪽에서 인식하기 쉽게)
-                                data.SetData(DataFormats.Serializable, dragData);
+                    DataObject data = new DataObject();
+                    data.SetData(DataFormats.Serializable, dragData);
 
-                                // 드래그 시작
-                                DragDrop.DoDragDrop(dataGrid, data, DragDropEffects.Copy);
-                            }
-                        }
-                    }
+                    DragDrop.DoDragDrop(dataGrid, data, DragDropEffects.Copy | DragDropEffects.Move);
+                }
+            }
+        }
+
+        private void OnPreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                if (sender is DataGrid dataGrid)
+                {
+                    IList dragData = dataGrid.SelectedItems;
+
+                    DataObject data = new DataObject();
+                    data.SetData(DataFormats.Serializable, dragData);
+
+                    DragDrop.DoDragDrop(dataGrid, data, DragDropEffects.Copy | DragDropEffects.Move);
+                }
+            }
+        }
+
+        private void OnPreviewDragOver(object sender, DragEventArgs e)
+        {
+            string[] formats = e.Data.GetFormats();
+            foreach (string format in formats)
+            {
+                ICommand? command = null;
+                if (format == DataFormats.FileDrop)
+                    command = FilesDropCommand;
+                else if (format == DataFormats.UnicodeText)
+                    command = UnicodeTextDropCommand;
+                else if (format == DataFormats.Serializable)
+                    command = SerializableDragCommand;
+                else
+                    command = null;
+
+                if (command != null)
+                {
+                    object data = e.Data.GetData(format);
+                    bool bCan = command.CanExecute(data);
+                    if (bCan)
+                        e.Effects = DragDropEffects.Copy | DragDropEffects.Move;
                     else
+                        e.Effects = DragDropEffects.None;
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void OnPreviewDrop(object s, DragEventArgs e)
+        {
+
+            string[] formats = e.Data.GetFormats();
+            foreach (string format in formats)
+            {
+                if (e.Data.GetDataPresent(format))
+                {
+                    ICommand? command = null;
+                    if (format == DataFormats.FileDrop)
+                        command = FilesDropCommand;
+                    else if (format == DataFormats.UnicodeText)
+                        command = UnicodeTextDropCommand;
+                    else if (format == DataFormats.Serializable)
+                        command = SerializableDragCommand;
+                    else
+                        command = null;
+
+                    if (command != null)
                     {
-                        if (dataGrid.SelectionMode == DataGridSelectionMode.Single)
-                            dataGrid.SelectedItem = null;
-                        else
-                            dataGrid.SelectedItems.Clear();
+                        object data = e.Data.GetData(format);
+                        bool bCan = command.CanExecute(data);
+                        if (bCan)
+                            command.Execute(data);
                     }
-                }
-
-                Type targetType = (dataGrid.SelectionUnit == DataGridSelectionUnit.FullRow) ? typeof(DataGridRow) : typeof(DataGridCell);
-            }
-        }
-
-        private void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            //_mouseLeftButtonUpPosition = e.GetPosition(null);
-            //if (sender is DataGrid dataGrid)
-            //{
-            //    if (Point.Equals(_mouseLeftButtonDownPosition, _mouseLeftButtonUpPosition))
-            //    {
-            //        IInputElement element = dataGrid.InputHitTest(_mouseLeftButtonUpPosition);
-            //
-            //        if (element is DependencyObject target)
-            //        {
-            //            DataGridCell? cell = FindParent<DataGridCell>(target);
-            //            if (cell != null)
-            //            {
-            //                DataGridRow? row = FindParent<DataGridRow>(target);
-            //                if (row != null)
-            //                {
-            //                    if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
-            //                    {
-            //                    }
-            //                    else if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-            //                    {
-            //                    }
-            //                    else if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control | ModifierKeys.Shift))
-            //                    {
-            //                    }
-            //                    else
-            //                    {
-            //                        bool isSelected = cell.IsSelected;
-            //                        if (isSelected)
-            //                        {
-            //                            if (dataGrid.SelectionMode == DataGridSelectionMode.Single)
-            //                                dataGrid.SelectedItem = null;
-            //                            else
-            //                                dataGrid.SelectedItems.Clear();
-            //
-            //                            row.IsSelected = true;
-            //                            row.Focus();
-            //                            cell.Focus();
-            //                        e.Handled = true;
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-        }
-
-        private void OnMouseMove(object sender, MouseEventArgs e)
-        {
-            //if (e.LeftButton == MouseButtonState.Pressed)
-            //{
-            //    Point mousePos = e.GetPosition(null);
-            //    Vector diff = _mouseLeftButtonDownPosition - mousePos;
-            //
-            //    // 마우스가 일정 거리(시스템 설정값) 이상 움직였을 때 드래그 시작
-            //    if (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
-            //        Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance)
-            //    {
-            //        if (sender is DataGrid dataGrid && dataGrid.SelectedItems != null && 0 < dataGrid.SelectedItems.Count)
-            //        {
-            //            // 드래그할 데이터 추출 (FileInfo 객체)
-            //            IList dragData = dataGrid.SelectedItems;
-            //
-            //            // 데이터 패키지 생성
-            //            DataObject data = new DataObject();
-            //            // 1. 객체 자체를 담음
-            //            data.SetData(dragData.GetType(), dragData);
-            //            // 2. 파일 경로가 있다면 문자열로도 담음 (Border 쪽에서 인식하기 쉽게)
-            //            data.SetData(DataFormats.Serializable, dragData);
-            //
-            //            // 드래그 시작
-            //            DragDrop.DoDragDrop(dataGrid, data, DragDropEffects.Copy);
-            //        }
-            //    }
-            //}
-        }
-
-        private void OnDragOver(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop) ||
-                e.Data.GetDataPresent(DataFormats.UnicodeText) ||
-                e.Data.GetDataPresent(DataFormats.Serializable))
-            {
-                e.Effects = DragDropEffects.Copy;
-            }
-            else
-            {
-                e.Effects = DragDropEffects.None;
-            }
-            e.Handled = true;
-        }
-
-        private void OnDrop(object s, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.UnicodeText))
-            {
-                var data = e.Data.GetData(DataFormats.UnicodeText);
-
-                if (UnicodeTextDropCommand != null && UnicodeTextDropCommand.CanExecute(data))
-                {
-                    UnicodeTextDropCommand.Execute(data);
-                }
-            }
-            else if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                var data = e.Data.GetData(DataFormats.FileDrop);
-
-                if (FilesDropCommand != null && FilesDropCommand.CanExecute(data))
-                {
-                    FilesDropCommand.Execute(data);
-                }
-            }
-            else if (e.Data.GetDataPresent(DataFormats.Serializable))
-            {
-                var data = e.Data.GetData(DataFormats.Serializable);
-
-                if (SerializableDragCommand != null && SerializableDragCommand.CanExecute(data))
-                {
-                    SerializableDragCommand.Execute(data);
                 }
             }
         }
