@@ -12,7 +12,7 @@
         Height="450"
         Width="800">
     <Window.Resources>
-        <cvt:StringToBase64Converter x:Key="StringToBase64Converter"/>
+        <cvt:BitmapImageToBase64StringConverter x:Key="BitmapImageToBase64StringConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -58,7 +58,7 @@
                 <b:DragDropBehavior SerializableDragCommand="{Binding ImageFileDropCommand}"/>
             </i:Interaction.Behaviors>
 
-            <Image Source="{Binding Base64String, Converter={StaticResource StringToBase64Converter}}"
+            <Image Source="{Binding Base64String, Converter={StaticResource BitmapImageToBase64StringConverter}}"
                    RenderOptions.BitmapScalingMode="HighQuality"
                    Stretch="Fill"/>
         </Border>

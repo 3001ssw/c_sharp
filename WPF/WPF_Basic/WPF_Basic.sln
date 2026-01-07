@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfBehavior", "WpfBehavior\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfDependencyProperty2", "WpfDependencyProperty2\WpfDependencyProperty2.csproj", "{37B6518B-FF36-4AD0-B867-E7D4C9B495EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfBase64", "WpfBase64\WpfBase64.csproj", "{5F348A72-B27E-482A-A646-05BEBC5FD223}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{37B6518B-FF36-4AD0-B867-E7D4C9B495EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37B6518B-FF36-4AD0-B867-E7D4C9B495EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37B6518B-FF36-4AD0-B867-E7D4C9B495EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F348A72-B27E-482A-A646-05BEBC5FD223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F348A72-B27E-482A-A646-05BEBC5FD223}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F348A72-B27E-482A-A646-05BEBC5FD223}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F348A72-B27E-482A-A646-05BEBC5FD223}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

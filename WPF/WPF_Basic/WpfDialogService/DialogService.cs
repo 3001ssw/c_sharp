@@ -25,10 +25,13 @@ namespace WpfDialogService
             // ViewModel이 RequestClose 이벤트 제공하면 연결
             if (viewModel is IDialogViewModel vm)
             {
-                vm.RequestClose += (s, dialogResult) =>
+                EventHandler<bool?>? handler = null;
+                handler = (s, dialogResult) =>
                 {
+                    vm.RequestClose -= handler; // 이벤트 해제
                     window.Close();
                 };
+                vm.RequestClose += handler;
             }
 
             window.Show();
@@ -48,11 +51,15 @@ namespace WpfDialogService
             // ViewModel이 RequestClose 이벤트 제공하면 연결
             if (viewModel is IDialogViewModel vm)
             {
-                vm.RequestClose += (s, dialogResult) =>
+                EventHandler<bool?>? handler = null;
+                handler = (s, dialogResult) =>
                 {
+                    vm.RequestClose -= handler; // 이벤트 해제
                     window.DialogResult = dialogResult;
                     window.Close();
                 };
+
+                vm.RequestClose += handler;
             }
 
             return window.ShowDialog();

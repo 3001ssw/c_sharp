@@ -13,7 +13,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace WpfDependencyProperty2.Converter
 {
-    public class StringToBase64Converter : IValueConverter
+    public class Base64StringToBitmapImageConverter : IValueConverter
     {
         public object? Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
