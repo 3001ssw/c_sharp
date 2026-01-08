@@ -16,9 +16,9 @@ namespace WpfDialogService
 
         public UserControlViewModel()
         {
-            OkCommand = new DelegateCommand(() => RequestClose?.Invoke(this, true));    // DialogResult = true
+            OkCommand = new DelegateCommand(() => RequestClose?.Invoke(this, true), () => { return true; });    // DialogResult = true
 
-            CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(this, false));   // DialogResult = false
+            CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(this, false), () => {return true; });   // DialogResult = false
         }
     }
 }

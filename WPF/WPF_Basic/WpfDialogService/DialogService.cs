@@ -30,6 +30,7 @@ namespace WpfDialogService
                 {
                     vm.RequestClose -= handler; // 이벤트 해제
                     window.Close();
+                    window.DataContext = null;
                 };
                 vm.RequestClose += handler;
             }
@@ -57,6 +58,7 @@ namespace WpfDialogService
                     vm.RequestClose -= handler; // 이벤트 해제
                     window.DialogResult = dialogResult;
                     window.Close();
+                    window.DataContext = null;
                 };
 
                 vm.RequestClose += handler;
