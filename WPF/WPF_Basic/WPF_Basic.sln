@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfDependencyProperty2", "W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfBase64", "WpfBase64\WpfBase64.csproj", "{5F348A72-B27E-482A-A646-05BEBC5FD223}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfAnimation", "WpfAnimation\WpfAnimation.csproj", "{EBD9851B-23C4-451D-9D43-14AA08A66340}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,10 @@ Global
 		{5F348A72-B27E-482A-A646-05BEBC5FD223}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F348A72-B27E-482A-A646-05BEBC5FD223}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F348A72-B27E-482A-A646-05BEBC5FD223}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBD9851B-23C4-451D-9D43-14AA08A66340}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBD9851B-23C4-451D-9D43-14AA08A66340}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBD9851B-23C4-451D-9D43-14AA08A66340}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBD9851B-23C4-451D-9D43-14AA08A66340}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
