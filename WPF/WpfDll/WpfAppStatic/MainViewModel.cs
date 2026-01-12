@@ -26,7 +26,7 @@ namespace WpfAppStatic
             Calculator c = new Calculator();
 
             int result = c.Add(50, 60);
-            MessageBox.Show($"대리자 호출 결과: {result}");
+            MessageBox.Show($"호출 결과: {result}");
         }
     }
 }
