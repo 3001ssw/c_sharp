@@ -9,16 +9,22 @@ using System.Threading.Tasks;
 namespace WpfMessenger
 {
 
-    public partial class MainWindowViewModel : ObservableObject
+    public partial class MainWindowViewModel : BindableBase
     {
-        [ObservableProperty]
-        private string message = "초기 메시지입니다.";
+        #region fields, properties
+        private SenderViewModel senderVM = new SenderViewModel();
+        public SenderViewModel SenderVM { get => senderVM; set => SetProperty(ref senderVM, value); }
 
-        [RelayCommand]
-        private void ChangeMessage()
+        private ReceiveViewModel receiverVM = new ReceiveViewModel();
+        public ReceiveViewModel ReceiverVM { get => receiverVM; set => SetProperty(ref receiverVM, value); }
+
+        private ReceiveViewModel otherReceiverVM = new ReceiveViewModel();
+        public ReceiveViewModel OtherReceiverVM { get => otherReceiverVM; set => SetProperty(ref otherReceiverVM, value); }
+        #endregion
+
+        public MainWindowViewModel()
         {
-            Message = "버튼 클릭으로 변경되었습니다!";
+            
         }
-
     }
 }
