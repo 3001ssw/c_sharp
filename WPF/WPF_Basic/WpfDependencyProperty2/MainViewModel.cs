@@ -20,7 +20,7 @@ namespace WpfDependencyProperty2
         private ObservableCollection<FileInfo> files = new ObservableCollection<FileInfo>();
         public ObservableCollection<FileInfo> Files { get => files; set => SetProperty(ref files, value); }
 
-        private string base64String;
+        private string base64String = string.Empty;
         public string Base64String { get => base64String; set => SetProperty(ref base64String, value); }
 
         public DelegateCommand<string[]> FilesDropCommand { get; private set; }

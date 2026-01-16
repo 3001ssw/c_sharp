@@ -19,7 +19,6 @@ namespace WpfDependencyProperty2
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
         }
     }
 }
