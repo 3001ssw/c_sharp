@@ -1,0 +1,65 @@
+﻿<Window x:Class="WpfISerializable.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfISerializable"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="400"
+        Width="600">
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal">
+            <Button Content="XML Save"
+                    Width="100"
+                    Margin="5"
+                    Command="{Binding XmlSaveCommand}"/>
+            <Button Content="XML Load"
+                    Width="100"
+                    Margin="5"
+                    Command="{Binding XmlLoadCommand}"/>
+            <Button Content="Json Save"
+                    Width="100"
+                    Margin="5"
+                    Command="{Binding JsonSaveCommand}"/>
+            <Button Content="Json Load"
+                    Width="100"
+                    Margin="5"
+                    Command="{Binding JsonLoadCommand}"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Users}"
+                  IsReadOnly="False"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="True"
+                  HeadersVisibility="Column"
+                  VirtualizingStackPanel.ScrollUnit="Pixel"
+                  VirtualizingStackPanel.VirtualizationMode="Recycling"
+                  ScrollViewer.CanContentScroll="True"
+                  SelectionUnit="FullRow"
+                  Margin="5">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name"
+                                    Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="*"/>
+                <DataGridTextColumn Header="Age"
+                                    Binding="{Binding Age, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="*"/>
+                <DataGridTextColumn Header="Gender"
+                                    Binding="{Binding Gender, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
