@@ -17,7 +17,5 @@ namespace WpfDependencyProperty2
         private string filePath = "";
         public string FilePath { get => filePath; set => SetProperty(ref filePath, value); }
         #endregion
-
-
     }
 }
