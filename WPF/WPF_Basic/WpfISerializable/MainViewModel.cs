@@ -114,7 +114,7 @@ namespace WpfISerializable
                     string jsonString = JsonSerializer.Serialize(Users, options);
                     File.WriteAllText(filePath, jsonString);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }
@@ -143,7 +143,7 @@ namespace WpfISerializable
                         Users = data;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }

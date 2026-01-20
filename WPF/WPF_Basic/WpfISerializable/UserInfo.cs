@@ -19,9 +19,11 @@ namespace WpfISerializable
         public string Name { get => name; set => SetProperty(ref name, value); }
 
         private int age = 0;
+        [XmlIgnore]
         public int Age { get => age; set => SetProperty(ref age, value); }
 
         private string gender = "남";
+        [JsonIgnore]
         public string Gender { get => gender; set => SetProperty(ref gender, value); }
 
         #endregion
