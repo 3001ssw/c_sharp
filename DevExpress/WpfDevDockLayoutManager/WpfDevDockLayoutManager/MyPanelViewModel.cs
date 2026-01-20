@@ -15,6 +15,7 @@ namespace WpfDevDockLayoutManager
     public class MyPanelViewModel : ViewModelBase, IMVVMDockingProperties
     {
         #region fields, properties
+
         private string caption = "";
         public string Caption { get => caption; set => SetValue(ref caption, value); }
 
@@ -31,13 +32,24 @@ namespace WpfDevDockLayoutManager
         private bool isClosed = false;
         public bool IsClosed { get => isClosed; set => SetValue(ref isClosed, value); }
 
-        private Visibility _isPanelVisible = Visibility.Visible;
-        public Visibility IsPanelVisible { get => _isPanelVisible; set => SetValue(ref _isPanelVisible, value); }
+        private Visibility isVisibility = Visibility.Visible;
+        public Visibility IsVisibility { get => isVisibility; set => SetValue(ref isVisibility, value); }
+
+        private bool isActive = false;
+        public bool IsActive { get => isActive; set => SetValue(ref isActive, value); }
+
+        private bool autoHidden = false;
+        public bool AutoHidden { get => autoHidden; set => SetValue(ref autoHidden, value); }
+
         #endregion
+
+        #region command properties
 
         public DelegateCommand PanelClosedCommand { get; private set; }
 
-        public virtual IDocumentManagerService DocumentManagerService { get; set; }
+        #endregion
+
+        #region constructor
 
         public MyPanelViewModel()
         {
@@ -45,12 +57,14 @@ namespace WpfDevDockLayoutManager
 
             Uri uri = new Uri("pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/Business Objects/BO_Skull.svg");
             CaptionImage = WpfSvgRenderer.CreateImageSource(uri);
-
+            AutoHidden = true;
         }
+
+        #endregion
 
         private void OnPanelClosed()
         {
-            IsPanelVisible = Visibility.Collapsed;
+            IsVisibility = Visibility.Collapsed;
         }
 
         private bool CanPanelClosed()

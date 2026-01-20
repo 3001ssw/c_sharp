@@ -39,12 +39,14 @@
             <dxdo:DockLayoutManager.ItemTemplate>
                 <DataTemplate>
                     <dxdo:LayoutPanel Caption="{Binding Caption}"
-                                      BindableName="{Binding TargetName}"
                                       CaptionImage="{Binding CaptionImage}"
-                                      Visibility="{Binding IsPanelVisible}"
+                                      Visibility="{Binding IsVisibility}"
+                                      IsActive="{Binding IsActive}"
+                                      AutoHidden="{Binding AutoHidden}"
                                       CloseCommand="{Binding PanelClosedCommand}"/>
                 </DataTemplate>
             </dxdo:DockLayoutManager.ItemTemplate>
+
             <dxdo:LayoutGroup Name="root"
                               Orientation="Horizontal">
                 <dxdo:LayoutGroup Name="LeftGroup"/>

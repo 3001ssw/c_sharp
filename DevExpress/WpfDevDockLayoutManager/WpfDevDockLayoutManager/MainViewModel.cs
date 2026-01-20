@@ -62,14 +62,16 @@ namespace WpfDevDockLayoutManager
         private void OnTest()
         {
             Debug.WriteLine("test");
-            foreach (MyPanelViewModel vm in Panels)
-            {
-                if (vm.IsPanelVisible == Visibility.Collapsed)
-                {
-                    //vm.IsClosed = false;
-                    vm.IsPanelVisible = Visibility.Visible;
-                }
-            }
+            //foreach (MyPanelViewModel vm in Panels)
+            //{
+            //    vm.IsVisibility = (vm.IsVisibility == Visibility.Collapsed) ? Visibility.Visible : Visibility.Collapsed;
+            //    if (vm.IsVisibility == Visibility.Collapsed)
+            //    {
+            //        //vm.IsClosed = false;
+            //        vm.IsVisibility = Visibility.Visible;
+            //    }
+            //}
+            Panels[0].IsActive = (Panels[0].IsActive == true) ? Panels[0].IsActive = false : Panels[0].IsActive = true;
         }
 
         private bool CanTest()
