@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using WpfDevDockLayoutManager.Panel;
+using WpfDevDockLayoutManager.Panel.ViewModels;
 
 namespace WpfDevDockLayoutManager
 {
@@ -16,8 +18,8 @@ namespace WpfDevDockLayoutManager
     {
         #region fields, properties
 
-        private ObservableCollection<MyPanelViewModel> panels = new ObservableCollection<MyPanelViewModel>();
-        public ObservableCollection<MyPanelViewModel> Panels { get => panels; set => SetValue(ref panels, value); }
+        private ObservableCollection<PanelBaseViewModel> panels = new ObservableCollection<PanelBaseViewModel>();
+        public ObservableCollection<PanelBaseViewModel> Panels { get => panels; set => SetValue(ref panels, value); }
 
         private BaseLayoutItem activePanel = null;
         public BaseLayoutItem ActivePanel { get => activePanel; set => SetValue(ref activePanel, value); }
@@ -42,17 +44,16 @@ namespace WpfDevDockLayoutManager
             MyPanel1ViewModel vm1 = new MyPanel1ViewModel()
             {
                 Caption = "View Model 1",
-                Display = "Display 1",
+                Display = "MyPanel1ViewModel",
             };
-            MyPanel1ViewModel vm2 = new MyPanel1ViewModel()
+            MyPanel2ViewModel vm2 = new MyPanel2ViewModel()
             {
                 Caption = "View Model 2",
-                Display = "Display 2",
             };
             MyPanel1ViewModel vm3 = new MyPanel1ViewModel()
             {
                 Caption = "View Model 3",
-                Display = "Display 3",
+                Display = "MyPanel1ViewModel",
             };
             Panels.Add(vm1);
             Panels.Add(vm2);
@@ -62,7 +63,7 @@ namespace WpfDevDockLayoutManager
         private void OnTest()
         {
             Debug.WriteLine("test");
-            //foreach (MyPanelViewModel vm in Panels)
+            //foreach (PanelBaseViewModel vm in Panels)
             //{
             //    vm.IsVisibility = (vm.IsVisibility == Visibility.Collapsed) ? Visibility.Visible : Visibility.Collapsed;
             //    if (vm.IsVisibility == Visibility.Collapsed)
@@ -81,7 +82,7 @@ namespace WpfDevDockLayoutManager
 
         private void OnLeft()
         {
-            if (ActivePanel?.DataContext is MyPanelViewModel vm)
+            if (ActivePanel?.DataContext is PanelBaseViewModel vm)
             {
                 vm.TargetName = "LeftGroup";
             }
@@ -94,7 +95,7 @@ namespace WpfDevDockLayoutManager
 
         private void OnRight()
         {
-            if (ActivePanel?.DataContext is MyPanelViewModel vm)
+            if (ActivePanel?.DataContext is PanelBaseViewModel vm)
             {
                 vm.TargetName = "RightGroup";
             }

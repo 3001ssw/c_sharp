@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfDevDockLayoutManager
+namespace WpfDevDockLayoutManager.Panel.ViewModels
 {
-    public class MyPanel1ViewModel : MyPanelViewModel
+    public class MyPanel1ViewModel : PanelBaseViewModel
     {
         #region fields, properties
 
@@ -16,7 +16,7 @@ namespace WpfDevDockLayoutManager
 
         public MyPanel1ViewModel()
         {
-
+            TargetName = "LeftGroup";
         }
     }
 }

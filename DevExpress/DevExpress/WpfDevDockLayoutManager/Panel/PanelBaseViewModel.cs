@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
-namespace WpfDevDockLayoutManager
+namespace WpfDevDockLayoutManager.Panel
 {
-    public class MyPanelViewModel : ViewModelBase, IMVVMDockingProperties
+    public class PanelBaseViewModel : ViewModelBase, IMVVMDockingProperties
     {
         #region fields, properties
 
@@ -22,7 +22,7 @@ namespace WpfDevDockLayoutManager
         private ImageSource captionImage;
         public ImageSource CaptionImage { get => captionImage; set => SetValue(ref captionImage, value); }
 
-        private string targetName = "LeftGroup";
+        private string targetName = "";
         public string TargetName
         {
             get => targetName;
@@ -51,13 +51,13 @@ namespace WpfDevDockLayoutManager
 
         #region constructor
 
-        public MyPanelViewModel()
+        public PanelBaseViewModel()
         {
             PanelClosedCommand = new DelegateCommand(OnPanelClosed, CanPanelClosed);
 
             Uri uri = new Uri("pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/Business Objects/BO_Skull.svg");
             CaptionImage = WpfSvgRenderer.CreateImageSource(uri);
-            AutoHidden = true;
+            AutoHidden = false;
         }
 
         #endregion
