@@ -31,6 +31,15 @@ namespace WpfMessenger.ViewModels
                     ReceiveText = m.Value.txt;
                 });
             });
+            WeakReferenceMessenger.Default.Register<MyMessage, string>(this, "channel1", (r, m) =>
+            {
+                // r: 수신자(this), m: 받은 메시지 객체
+                Application.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    SendObject = m.Value.obj;
+                    ReceiveText = $"channel 1: {m.Value.txt}";
+                });
+            });
             //WeakReferenceMessenger.Default.Register<MyMessage>(this, OnMessageReceived);
 
         }

@@ -33,6 +33,7 @@ namespace WpfMessenger.ViewModels
         private void OnInputTextSend()
         {
             WeakReferenceMessenger.Default.Send(new MyMessage((this, InputText)));
+            WeakReferenceMessenger.Default.Send(new MyMessage((this, InputText)), "channel1");
         }
 
         private bool CanInputTextSend()
