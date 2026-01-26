@@ -19,19 +19,6 @@ namespace WpfMessenger.ViewModels
         public string ReceiveText { get => receiveText; set => SetProperty(ref receiveText, value); }
         #endregion
 
-        //public Receiver1ViewModel()
-        //{
-        //    WeakReferenceMessenger.Default.Register<MyMessage>(this, OnMessageReceived);
-        //}
-        //
-        //private void OnMessageReceived(object recipient, MyMessage message)
-        //{
-        //    Application.Current.Dispatcher.BeginInvoke(() =>
-        //    {
-        //        ReceiveText = message.Value;
-        //    });
-        //}
-
         public Receiver1ViewModel()
         {
             WeakReferenceMessenger.Default.RegisterAll(this);

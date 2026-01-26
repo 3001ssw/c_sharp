@@ -31,6 +31,15 @@ namespace WpfMessenger.ViewModels
                     ReceiveText = m.Value.txt;
                 });
             });
+            //WeakReferenceMessenger.Default.Register<MyMessage>(this, OnMessageReceived);
+
         }
+        //private void OnMessageReceived(object recipient, MyMessage message)
+        //{
+        //    Application.Current.Dispatcher.BeginInvoke(() =>
+        //    {
+        //        ReceiveText = message.Value.txt;
+        //    });
+        //}
     }
 }
