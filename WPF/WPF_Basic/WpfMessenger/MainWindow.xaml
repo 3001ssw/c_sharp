@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfMessenger"
+        xmlns:views="clr-namespace:WpfMessenger.Views"
+        xmlns:vms="clr-namespace:WpfMessenger.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
@@ -12,14 +14,14 @@
         <local:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <DataTemplate DataType="{x:Type local:SenderViewModel}">
-            <local:SenderView/>
+        <DataTemplate DataType="{x:Type vms:SenderViewModel}">
+            <views:SenderView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type local:ReceiveViewModel}">
-            <local:ReceiverView/>
+        <DataTemplate DataType="{x:Type vms:Receiver1ViewModel}">
+            <views:Receiver1View/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type local:OtherReceiverViewModel}">
-            <local:OtherReceiverView/>
+        <DataTemplate DataType="{x:Type vms:Receiver2ViewModel}">
+            <views:Receiver2View/>
         </DataTemplate>
     </Window.Resources>
     <Grid>
@@ -30,13 +32,16 @@
         </Grid.ColumnDefinitions>
 
         <ContentControl Grid.Column="0"
+                        Margin="5"
                         Content="{Binding SenderVM}"/>
 
         <ContentControl Grid.Column="1"
-                        Content="{Binding ReceiverVM}"/>
+                        Margin="5"
+                        Content="{Binding Receiver1VM}"/>
 
         <ContentControl Grid.Column="2"
-                        Content="{Binding OtherReceiverVM}"/>
+                        Margin="5"
+                        Content="{Binding Receiver2VM}"/>
     </Grid>
 
 </Window>

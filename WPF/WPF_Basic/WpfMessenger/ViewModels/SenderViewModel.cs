@@ -1,13 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
-using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
+using WpfMessenger.Message;
 
-namespace WpfMessenger
+namespace WpfMessenger.ViewModels
 {
     public class SenderViewModel : BindableBase
     {
@@ -33,7 +32,7 @@ namespace WpfMessenger
 
         private void OnInputTextSend()
         {
-            WeakReferenceMessenger.Default.Send(new MyMessage(InputText));
+            WeakReferenceMessenger.Default.Send(new MyMessage((this, InputText)));
         }
 
         private bool CanInputTextSend()

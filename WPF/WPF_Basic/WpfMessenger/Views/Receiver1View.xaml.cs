@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WpfMessenger
+namespace WpfMessenger.Views
 {
     /// <summary>
-    /// OtherReceiverView.xaml에 대한 상호 작용 논리
+    /// Receiver1View.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class OtherReceiverView : UserControl
+    public partial class Receiver1View : UserControl
     {
-        public OtherReceiverView()
+        public Receiver1View()
         {
             InitializeComponent();
         }

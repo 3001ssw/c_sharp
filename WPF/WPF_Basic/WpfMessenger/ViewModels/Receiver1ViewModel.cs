@@ -5,17 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using WpfMessenger.Message;
 
-namespace WpfMessenger
+namespace WpfMessenger.ViewModels
 {
-    public class ReceiveViewModel : BindableBase, IRecipient<MyMessage>
+    public class Receiver1ViewModel : BindableBase, IRecipient<MyMessage>
     {
         #region fields, properties
+        private object sendObject = null;
+        public object SendObject { get => sendObject; set => SetProperty(ref sendObject, value); }
+
         private string receiveText = "";
         public string ReceiveText { get => receiveText; set => SetProperty(ref receiveText, value); }
         #endregion
 
-        //public ReceiveViewModel()
+        //public Receiver1ViewModel()
         //{
         //    WeakReferenceMessenger.Default.Register<MyMessage>(this, OnMessageReceived);
         //}
@@ -28,7 +32,7 @@ namespace WpfMessenger
         //    });
         //}
 
-        public ReceiveViewModel()
+        public Receiver1ViewModel()
         {
             WeakReferenceMessenger.Default.RegisterAll(this);
         }
@@ -37,7 +41,8 @@ namespace WpfMessenger
         {
             Application.Current.Dispatcher.BeginInvoke(() =>
             {
-                ReceiveText = message.Value;
+                SendObject = message.Value.obj;
+                ReceiveText = message.Value.txt;
             });
         }
     }

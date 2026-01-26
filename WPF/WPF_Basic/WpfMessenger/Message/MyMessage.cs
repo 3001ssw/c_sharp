@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfMessenger
+namespace WpfMessenger.Message
 {
-    public class MyMessage : ValueChangedMessage<string>
+    public class MyMessage : ValueChangedMessage<(object obj, string txt)>
     {
-        public MyMessage(string value) : base(value)
+        public MyMessage((object obj, string txt) value) : base(value)
         {
         }
     }
