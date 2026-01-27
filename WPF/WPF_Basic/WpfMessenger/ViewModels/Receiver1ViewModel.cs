@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows;
 using WpfMessenger.Message;
 
 namespace WpfMessenger.ViewModels
 {
-    public class Receiver1ViewModel : BindableBase, IRecipient<MyMessage>
+    public class Receiver1ViewModel : BindableBase
     {
         #region fields, properties
         private object sendObject = null;
@@ -21,10 +22,20 @@ namespace WpfMessenger.ViewModels
 
         public Receiver1ViewModel()
         {
-            WeakReferenceMessenger.Default.RegisterAll(this);
+            //WeakReferenceMessenger.Default.RegisterAll(this); // IRecipient<MyMessage> 해줘야함
+            WeakReferenceMessenger.Default.Register<MyMessage>(this, OnReceive); // IRecipient<MyMessage> 없어도 됨
         }
 
-        public void Receive(MyMessage message)
+        //public void Receive(MyMessage message)
+        //{
+        //    Application.Current.Dispatcher.BeginInvoke(() =>
+        //    {
+        //        SendObject = message.Object;
+        //        ReceiveText = message.Text;
+        //    });
+        //}
+
+        private void OnReceive(object recipient, MyMessage message)
         {
             Application.Current.Dispatcher.BeginInvoke(() =>
             {
