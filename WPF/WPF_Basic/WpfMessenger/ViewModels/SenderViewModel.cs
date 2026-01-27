@@ -11,6 +11,9 @@ namespace WpfMessenger.ViewModels
     public class SenderViewModel : BindableBase
     {
         #region fields, properties
+        private string channel = "Channel 1";
+        public string Channel { get => channel; set => SetProperty(ref channel, value); }
+
         private string inputText = "";
         public string InputText
         {
@@ -18,30 +21,47 @@ namespace WpfMessenger.ViewModels
             set
             {
                 SetProperty(ref inputText, value);
-                InputTextSendCommand.RaiseCanExecuteChanged();
+                SendCommand.RaiseCanExecuteChanged();
+                SendAllCommand.RaiseCanExecuteChanged();
             }
         }
-
-        public DelegateCommand InputTextSendCommand { get; private set; }
         #endregion
 
-        public SenderViewModel()
+        #region commands
+        public DelegateCommand SendCommand { get; private set; }
+        public DelegateCommand SendAllCommand { get; private set; }
+
+        private void OnSend()
         {
-            InputTextSendCommand = new DelegateCommand(OnInputTextSend, CanInputTextSend);
+            WeakReferenceMessenger.Default.Send(new MyMessage((this, InputText)), Channel);
         }
 
-        private void OnInputTextSend()
+        private bool CanSend()
+        {
+            if (string.IsNullOrEmpty(InputText) || string.IsNullOrEmpty(Channel))
+                return false;
+            else
+                return true;
+        }
+
+        private void OnSendAll()
         {
             WeakReferenceMessenger.Default.Send(new MyMessage((this, InputText)));
-            WeakReferenceMessenger.Default.Send(new MyMessage((this, InputText)), "channel1");
         }
 
-        private bool CanInputTextSend()
+        private bool CanSendAll()
         {
             if (string.IsNullOrEmpty(InputText))
                 return false;
             else
                 return true;
+        }
+        #endregion
+
+        public SenderViewModel()
+        {
+            SendCommand = new DelegateCommand(OnSend, CanSend);
+            SendAllCommand = new DelegateCommand(OnSendAll, CanSendAll);
         }
     }
 }

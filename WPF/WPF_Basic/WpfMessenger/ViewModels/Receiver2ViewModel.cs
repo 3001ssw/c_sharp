@@ -13,6 +13,17 @@ namespace WpfMessenger.ViewModels
     {
 
         #region fields, properties
+        private string channel = "Channel 1";
+        public string Channel
+        {
+            get => channel;
+            set
+            {
+                SetProperty(ref channel, value);
+                SetChannelCommand.RaiseCanExecuteChanged();
+            }
+        }
+
         private object sendObject = null;
         public object SendObject { get => sendObject; set => SetProperty(ref sendObject, value); }
 
@@ -20,35 +31,47 @@ namespace WpfMessenger.ViewModels
         public string ReceiveText { get => receiveText; set => SetProperty(ref receiveText, value); }
         #endregion
 
+        #region commans
+        public DelegateCommand SetChannelCommand { get; private set; }
+
+        private string _currentChannel = "";
+        private void OnSetChannel()
+        {
+            if (string.IsNullOrEmpty(_currentChannel) == false)
+            {
+                WeakReferenceMessenger.Default.Unregister<MyMessage, string>(this, _currentChannel);
+                _currentChannel = "";
+            }
+
+            WeakReferenceMessenger.Default.Register<MyMessage, string>(this, Channel, OnMessageReceived);
+            _currentChannel = Channel;
+        }
+
+        private bool CanSetChannel()
+        {
+            if (string.IsNullOrEmpty(Channel))
+                return false;
+
+            return true;
+        }
+        #endregion
+
+        #region constructor
         public Receiver2ViewModel()
         {
-            WeakReferenceMessenger.Default.Register<MyMessage>(this, (r, m) =>
-            {
-                // r: 수신자(this), m: 받은 메시지 객체
-                Application.Current.Dispatcher.BeginInvoke(() =>
-                {
-                    SendObject = m.Value.obj;
-                    ReceiveText = m.Value.txt;
-                });
-            });
-            WeakReferenceMessenger.Default.Register<MyMessage, string>(this, "channel1", (r, m) =>
-            {
-                // r: 수신자(this), m: 받은 메시지 객체
-                Application.Current.Dispatcher.BeginInvoke(() =>
-                {
-                    SendObject = m.Value.obj;
-                    ReceiveText = $"channel 1: {m.Value.txt}";
-                });
-            });
-            //WeakReferenceMessenger.Default.Register<MyMessage>(this, OnMessageReceived);
-
+            SetChannelCommand = new DelegateCommand(OnSetChannel, CanSetChannel);
+            OnSetChannel();
         }
-        //private void OnMessageReceived(object recipient, MyMessage message)
-        //{
-        //    Application.Current.Dispatcher.BeginInvoke(() =>
-        //    {
-        //        ReceiveText = message.Value.txt;
-        //    });
-        //}
+        #endregion
+
+
+        private void OnMessageReceived(object recipient, MyMessage message)
+        {
+            Application.Current.Dispatcher.BeginInvoke(() =>
+            {
+                SendObject = message.Object;
+                ReceiveText = message.Text;
+            });
+        }
     }
 }

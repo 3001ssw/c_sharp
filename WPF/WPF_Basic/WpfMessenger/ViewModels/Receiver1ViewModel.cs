@@ -28,8 +28,8 @@ namespace WpfMessenger.ViewModels
         {
             Application.Current.Dispatcher.BeginInvoke(() =>
             {
-                SendObject = message.Value.obj;
-                ReceiveText = message.Value.txt;
+                SendObject = message.Object;
+                ReceiveText = message.Text;
             });
         }
     }

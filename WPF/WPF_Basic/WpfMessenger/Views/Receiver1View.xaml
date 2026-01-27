@@ -17,20 +17,22 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
+        <!--#region Sender-->
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
                    Text="Sender"/>
-
         <TextBlock Grid.Row="0"
                    Grid.Column="1"
                    Text="{Binding SendObject, UpdateSourceTrigger=PropertyChanged}"/>
+        <!--#endregion-->
 
+        <!--#region Receive Text-->
         <TextBlock Grid.Row="1"
                    Grid.Column="0"
                    Text="Message"/>
-
         <TextBox Grid.Row="1"
                  Grid.Column="1"
                  Text="{Binding ReceiveText, UpdateSourceTrigger=PropertyChanged}"/>
+        <!--#endregion-->
     </Grid>
 </UserControl>

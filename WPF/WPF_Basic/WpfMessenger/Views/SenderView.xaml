@@ -7,9 +7,53 @@
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
-    <StackPanel Orientation="Vertical">
-        <TextBox Text="{Binding InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Content="Send"
-                Command="{Binding InputTextSendCommand}"/>
-    </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="1*"/>
+
+        </Grid.ColumnDefinitions>
+        <!--#region Channel-->
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Text="Channel"/>
+        <TextBox Grid.Row="0"
+                 Grid.Column="1"
+                 Text="{Binding Channel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <!--#endregion-->
+
+        <!--#region Text-->
+        <TextBlock Grid.Row="1"
+                   Grid.Column="0"
+                   Text="Text"/>
+        <TextBox Grid.Row="1"
+                 Grid.Column="1"
+                 Text="{Binding InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <!--#endregion-->
+
+        <!--#region Button-->
+        <Button Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Content="Send"
+                Command="{Binding SendCommand}"/>
+        <!--#endregion-->
+
+        <!--#region Button-->
+        <Button Grid.Row="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Content="Send All"
+                Command="{Binding SendAllCommand}"/>
+        <!--#endregion-->
+
+    </Grid>
+
 </UserControl>
