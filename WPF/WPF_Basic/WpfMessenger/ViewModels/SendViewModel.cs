@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,17 @@ namespace WpfMessenger.ViewModels
     public class SendViewModel : BindableBase
     {
         #region Fields, Properties
+        private string sendValue = "";
+        public string SendValue
+        {
+            get => sendValue;
+            set
+            {
+                SetProperty(ref sendValue, value);
+                SendValueCommand.RaiseCanExecuteChanged();
+            }
+        }
+
         private string sendString = string.Empty;
         public string SendString
         {
@@ -57,14 +69,28 @@ namespace WpfMessenger.ViewModels
         #endregion
 
         #region Commands
+        public DelegateCommand SendValueCommand { get; private set; }
         public DelegateCommand SendStringCommand { get; private set; }
         public DelegateCommand SendIntegerCommand { get; private set; }
         public DelegateCommand SendTextChannelCommand { get; private set; }
         #endregion
 
         #region Command Methods
+        // ValueChangedMessage
+        private void OnSendValue()
+        {
+            ValueChangedMessage<string> message = new ValueChangedMessage<string>(SendValue);
+            WeakReferenceMessenger.Default.Send(message);
+        }
 
-        // 1. String 전송 로직
+        private bool CanSendValue()
+        {
+            if (string.IsNullOrEmpty(SendValue))
+                return false;
+            return true;
+        }
+
+        // String 전송 로직
         private void OnSendString()
         {
             // TODO: 메시지 전송 로직 구현
@@ -78,25 +104,25 @@ namespace WpfMessenger.ViewModels
             return true;
         }
 
-        // 2. Integer 전송 로직
+        // Integer 전송 로직
         private void OnSendInteger()
         {
             // TODO: 메시지 전송 로직 구현
-            if (int.TryParse(SendInteger, out int value))
-                WeakReferenceMessenger.Default.Send(new IntMessage((this, value)));
+            if (int.TryParse(SendInteger, out int integer))
+                WeakReferenceMessenger.Default.Send(new IntMessage((this, integer)));
         }
 
         private bool CanSendInteger()
         {
             if (string.IsNullOrEmpty(SendInteger))
                 return false;
-            if (int.TryParse(SendInteger, out int value) == false)
+            if (int.TryParse(SendInteger, out int integer) == false)
                 return false;
 
             return true;
         }
 
-        // 3. Channel & Text 전송 로직
+        // Channel & Text 전송 로직
         private void OnSendTextChannel()
         {
             // TODO: 채널을 이용한 메시지 전송 로직 구현
@@ -115,6 +141,7 @@ namespace WpfMessenger.ViewModels
         public SendViewModel()
         {
             // 커맨드 초기화
+            SendValueCommand = new DelegateCommand(OnSendValue, CanSendValue);
             SendStringCommand = new DelegateCommand(OnSendString, CanSendString);
             SendIntegerCommand = new DelegateCommand(OnSendInteger, CanSendInteger);
             SendTextChannelCommand = new DelegateCommand(OnSendTextChannel, CanSendTextChannel);

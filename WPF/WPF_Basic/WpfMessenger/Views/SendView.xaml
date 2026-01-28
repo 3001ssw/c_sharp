@@ -18,6 +18,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="80"/>
@@ -30,15 +31,33 @@
                 <!--#region Send String-->
                 <TextBlock Grid.Row="0"
                            Grid.Column="0"
-                           Text="String"
+                           Text="Send"
                            TextAlignment="Center"
                            Margin="3"/>
                 <TextBox Grid.Row="0"
                          Grid.Column="1"
                          Grid.ColumnSpan="3"
-                         Text="{Binding SendString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding SendValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Margin="3"/>
                 <Button Grid.Row="0"
+                        Grid.Column="4"
+                        Content="Send"
+                        Command="{Binding SendValueCommand}"
+                        Margin="3"/>
+                <!--#endregion-->
+
+                <!--#region Send String-->
+                <TextBlock Grid.Row="1"
+                           Grid.Column="0"
+                           Text="String"
+                           TextAlignment="Center"
+                           Margin="3"/>
+                <TextBox Grid.Row="1"
+                         Grid.Column="1"
+                         Grid.ColumnSpan="3"
+                         Text="{Binding SendString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="3"/>
+                <Button Grid.Row="1"
                         Grid.Column="4"
                         Content="Send"
                         Command="{Binding SendStringCommand}"
@@ -46,17 +65,17 @@
                 <!--#endregion-->
 
                 <!--#region Send Integer-->
-                <TextBlock Grid.Row="1"
+                <TextBlock Grid.Row="2"
                            Grid.Column="0"
                            Text="Integer"
                            TextAlignment="Center"
                            Margin="3"/>
-                <TextBox Grid.Row="1"
+                <TextBox Grid.Row="2"
                          Grid.Column="1"
                          Grid.ColumnSpan="3"
                          Text="{Binding SendInteger, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Margin="3"/>
-                <Button Grid.Row="1"
+                <Button Grid.Row="2"
                         Grid.Column="4"
                         Content="Send"
                         Command="{Binding SendIntegerCommand}"
@@ -64,25 +83,25 @@
                 <!--#endregion-->
 
                 <!--#region Send Text through Channel-->
-                <TextBlock Grid.Row="2"
+                <TextBlock Grid.Row="3"
                            Grid.Column="0"
                            Text="Channel"
                            TextAlignment="Center"
                            Margin="3"/>
-                <TextBox Grid.Row="2"
+                <TextBox Grid.Row="3"
                          Grid.Column="1"
                          Text="{Binding Channel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Margin="3"/>
-                <TextBlock Grid.Row="2"
+                <TextBlock Grid.Row="3"
                            Grid.Column="2"
                            Text="Text"
                            TextAlignment="Center"
                            Margin="3"/>
-                <TextBox Grid.Row="2"
+                <TextBox Grid.Row="3"
                          Grid.Column="3"
                          Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Margin="3"/>
-                <Button Grid.Row="2"
+                <Button Grid.Row="3"
                         Grid.Column="4"
                         Content="Send"
                         Command="{Binding SendTextChannelCommand}"
