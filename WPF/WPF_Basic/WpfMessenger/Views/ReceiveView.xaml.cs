@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace WpfMessenger.Views
 {
     /// <summary>
-    /// Receiver2View.xaml에 대한 상호 작용 논리
+    /// ReceiveView.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class Receiver2View : UserControl
+    public partial class ReceiveView : UserControl
     {
-        public Receiver2View()
+        public ReceiveView()
         {
             InitializeComponent();
         }

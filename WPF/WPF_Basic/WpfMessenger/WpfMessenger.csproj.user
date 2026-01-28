@@ -2,16 +2,10 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <Compile Update="Views\MessageView.xaml.cs">
+    <Compile Update="Views\ReceiveView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Receiver1View.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\Receiver2View.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\SenderView.xaml.cs">
+    <Compile Update="Views\SendView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

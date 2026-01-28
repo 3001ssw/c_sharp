@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace WpfMessenger.Views
 {
     /// <summary>
-    /// MessageView.xaml에 대한 상호 작용 논리
+    /// SendView.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class MessageView : UserControl
+    public partial class SendView : UserControl
     {
-        public MessageView()
+        public SendView()
         {
             InitializeComponent();
         }
