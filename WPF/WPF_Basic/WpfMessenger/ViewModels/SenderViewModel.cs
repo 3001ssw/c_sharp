@@ -33,7 +33,7 @@ namespace WpfMessenger.ViewModels
 
         private void OnSend()
         {
-            WeakReferenceMessenger.Default.Send(new MyMessage((this, InputText)), Channel);
+            WeakReferenceMessenger.Default.Send(new StringMessage((this, InputText)), Channel);
         }
 
         private bool CanSend()
@@ -46,7 +46,7 @@ namespace WpfMessenger.ViewModels
 
         private void OnSendAll()
         {
-            WeakReferenceMessenger.Default.Send(new MyMessage((this, InputText)));
+            WeakReferenceMessenger.Default.Send(new StringMessage((this, InputText)));
         }
 
         private bool CanSendAll()

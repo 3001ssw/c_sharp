@@ -22,11 +22,11 @@ namespace WpfMessenger.ViewModels
 
         public Receiver1ViewModel()
         {
-            //WeakReferenceMessenger.Default.RegisterAll(this); // IRecipient<MyMessage> 해줘야함
-            WeakReferenceMessenger.Default.Register<MyMessage>(this, OnReceive); // IRecipient<MyMessage> 없어도 됨
+            //WeakReferenceMessenger.Default.RegisterAll(this); // IRecipient<StringMessage> 해줘야함
+            WeakReferenceMessenger.Default.Register<StringMessage>(this, OnReceive); // IRecipient<StringMessage> 없어도 됨
         }
 
-        //public void Receive(MyMessage message)
+        //public void Receive(StringMessage message)
         //{
         //    Application.Current.Dispatcher.BeginInvoke(() =>
         //    {
@@ -35,12 +35,12 @@ namespace WpfMessenger.ViewModels
         //    });
         //}
 
-        private void OnReceive(object recipient, MyMessage message)
+        private void OnReceive(object recipient, StringMessage message)
         {
             Application.Current.Dispatcher.BeginInvoke(() =>
             {
                 SendObject = message.Object;
-                ReceiveText = message.Text;
+                ReceiveText = message.String;
             });
         }
     }

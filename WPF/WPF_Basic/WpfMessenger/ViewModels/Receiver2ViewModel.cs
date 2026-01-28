@@ -39,11 +39,11 @@ namespace WpfMessenger.ViewModels
         {
             if (string.IsNullOrEmpty(_currentChannel) == false)
             {
-                WeakReferenceMessenger.Default.Unregister<MyMessage, string>(this, _currentChannel);
+                WeakReferenceMessenger.Default.Unregister<StringMessage, string>(this, _currentChannel);
                 _currentChannel = "";
             }
 
-            WeakReferenceMessenger.Default.Register<MyMessage, string>(this, Channel, OnMessageReceived);
+            WeakReferenceMessenger.Default.Register<StringMessage, string>(this, Channel, OnMessageReceived);
             _currentChannel = Channel;
         }
 
@@ -65,12 +65,12 @@ namespace WpfMessenger.ViewModels
         #endregion
 
 
-        private void OnMessageReceived(object recipient, MyMessage message)
+        private void OnMessageReceived(object recipient, StringMessage message)
         {
             Application.Current.Dispatcher.BeginInvoke(() =>
             {
                 SendObject = message.Object;
-                ReceiveText = message.Text;
+                ReceiveText = message.String;
             });
         }
     }

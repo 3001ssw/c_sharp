@@ -7,14 +7,19 @@ using System.Threading.Tasks;
 
 namespace WpfMessenger.Message
 {
-    public class MyMessage : ValueChangedMessage<(object obj, string txt)>
+    public class StringMessage : ValueChangedMessage<(object obj, string str)>
     {
+        #region properties
+
         public object Object { get; set; }
-        public string Text { get; set; }
-        public MyMessage((object obj, string txt) value) : base(value)
+        public string String { get; set; }
+
+        #endregion
+
+        public StringMessage((object obj, string str) value) : base(value)
         {
             Object = value.obj;
-            Text = value.txt;
+            String = value.str;
         }
     }
 }
