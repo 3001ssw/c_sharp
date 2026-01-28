@@ -23,6 +23,20 @@ namespace WpfMessenger.ViewModels
             }
         }
 
+        private string messageToken = "";
+        public string MessageToken { get => messageToken; set => SetProperty(ref messageToken, value); }
+
+        private string message = "";
+        public string Message
+        {
+            get => message;
+            set
+            {
+                SetProperty(ref message, value);
+                SendMessageTokenCommand.RaiseCanExecuteChanged();
+            }
+        }
+
         private string sendString = string.Empty;
         public string SendString
         {
@@ -45,14 +59,14 @@ namespace WpfMessenger.ViewModels
             }
         }
 
-        private string channel = string.Empty;
-        public string Channel
+        private string token = string.Empty;
+        public string Token
         {
-            get => channel;
+            get => token;
             set
             {
-                SetProperty(ref channel, value);
-                SendTextChannelCommand.RaiseCanExecuteChanged();
+                SetProperty(ref token, value);
+                SendTextTokenCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -63,16 +77,17 @@ namespace WpfMessenger.ViewModels
             set
             {
                 SetProperty(ref _text, value);
-                SendTextChannelCommand.RaiseCanExecuteChanged();
+                SendTextTokenCommand.RaiseCanExecuteChanged();
             }
         }
         #endregion
 
         #region Commands
         public DelegateCommand SendValueCommand { get; private set; }
+        public DelegateCommand SendMessageTokenCommand { get; private set; }
         public DelegateCommand SendStringCommand { get; private set; }
         public DelegateCommand SendIntegerCommand { get; private set; }
-        public DelegateCommand SendTextChannelCommand { get; private set; }
+        public DelegateCommand SendTextTokenCommand { get; private set; }
         #endregion
 
         #region Command Methods
@@ -86,6 +101,18 @@ namespace WpfMessenger.ViewModels
         private bool CanSendValue()
         {
             if (string.IsNullOrEmpty(SendValue))
+                return false;
+            return true;
+        }
+        // ValueChangedMessage By Token
+        private void OnSendMessageToken()
+        {
+            WeakReferenceMessenger.Default.Send(new ValueChangedMessage<string>(Message), MessageToken);
+        }
+
+        private bool CanSendMessageToken()
+        {
+            if (string.IsNullOrEmpty(Message))
                 return false;
             return true;
         }
@@ -122,14 +149,13 @@ namespace WpfMessenger.ViewModels
             return true;
         }
 
-        // Channel & Text 전송 로직
-        private void OnSendTextChannel()
+        // Token & Text 전송 로직
+        private void OnSendTextToken()
         {
-            // TODO: 채널을 이용한 메시지 전송 로직 구현
-            WeakReferenceMessenger.Default.Send(new ChannelMessage((Channel, this, Text)), Channel);
+            WeakReferenceMessenger.Default.Send(new TokenMessage((Token, this, Text)), Token);
         }
 
-        private bool CanSendTextChannel()
+        private bool CanSendTextToken()
         {
             if (string.IsNullOrEmpty(Text))
                 return false;
@@ -142,9 +168,10 @@ namespace WpfMessenger.ViewModels
         {
             // 커맨드 초기화
             SendValueCommand = new DelegateCommand(OnSendValue, CanSendValue);
+            SendMessageTokenCommand = new DelegateCommand(OnSendMessageToken, CanSendMessageToken);
             SendStringCommand = new DelegateCommand(OnSendString, CanSendString);
             SendIntegerCommand = new DelegateCommand(OnSendInteger, CanSendInteger);
-            SendTextChannelCommand = new DelegateCommand(OnSendTextChannel, CanSendTextChannel);
+            SendTextTokenCommand = new DelegateCommand(OnSendTextToken, CanSendTextToken);
         }
     }
 }

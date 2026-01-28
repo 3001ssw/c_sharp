@@ -16,8 +16,8 @@ namespace WpfMessenger.Message
         private string messageType = string.Empty;
         public string MessageType { get => messageType; set => SetProperty(ref messageType, value); }
 
-        private string channel = string.Empty;
-        public string Channel { get => channel; set => SetProperty(ref channel, value); }
+        private string token = string.Empty;
+        public string Token { get => token; set => SetProperty(ref token, value); }
 
         private object obj = null;
         public object Object { get => obj; set => SetProperty(ref obj, value); }
@@ -45,12 +45,12 @@ namespace WpfMessenger.Message
             }
         }
 
-        public ChannelMessage ChannelMessage
+        public TokenMessage ChannelMessage
         {
             set
             {
                 MessageType = value.GetType().ToString();
-                Channel = value.Channel;
+                Token = value.Channel;
                 Object = value.Object;
                 Message = value.String;
             }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WpfMessenger.Message
 {
-    public class ChannelMessage : ValueChangedMessage<(string ch, object obj, string str)>
+    public class TokenMessage : ValueChangedMessage<(string ch, object obj, string str)>
     {
         #region properties
         public string Channel { get; set; }
@@ -15,7 +15,7 @@ namespace WpfMessenger.Message
         public string String { get; set; }
 
         #endregion
-        public ChannelMessage((string ch, object obj, string str) value) : base(value)
+        public TokenMessage((string ch, object obj, string str) value) : base(value)
         {
             Channel = value.ch;
             Object = value.obj;

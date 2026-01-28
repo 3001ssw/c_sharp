@@ -56,20 +56,20 @@
             <StackPanel Grid.Row="1"
                         Grid.Column="0"
                         Orientation="Horizontal">
-                <TextBlock Text="Channel"
+                <TextBlock Text="Token"
                            Width="100"/>
-                <TextBox Text="{Binding Channel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                <TextBox Text="{Binding Token, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Width="200"/>
                 <Button Content="Set"
                         Width="100"
-                        Command="{Binding SetChannelCommand}"/>
+                        Command="{Binding SetTokenCommand}"/>
 
-                <TextBlock Text="{Binding CurrentChannel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}    현재 채널 명: [{0}]'}"
+                <TextBlock Text="{Binding CurrentToken, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}    현재 Token: [{0}]'}"
                            Width="150"/>
             </StackPanel>
             <DataGrid Grid.Row="2"
                       Grid.Column="0"
-                      ItemsSource="{Binding ChannelMessages}"
+                      ItemsSource="{Binding TokenMessages}"
                       AutoGenerateColumns="False"
                       HeadersVisibility="Column"
                       CanUserAddRows="False"
@@ -91,8 +91,8 @@
                     <DataGridTextColumn Header="Type"
                                         Binding="{Binding MessageType, UpdateSourceTrigger=PropertyChanged}"
                                         Width="250"/>
-                    <DataGridTextColumn Header="Channel"
-                                        Binding="{Binding Channel, UpdateSourceTrigger=PropertyChanged}"
+                    <DataGridTextColumn Header="Token"
+                                        Binding="{Binding Token, UpdateSourceTrigger=PropertyChanged}"
                                         Width="100"/>
                     <DataGridTextColumn Header="Object"
                                         Binding="{Binding Object, UpdateSourceTrigger=PropertyChanged}"

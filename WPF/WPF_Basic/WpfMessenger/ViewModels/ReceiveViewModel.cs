@@ -14,50 +14,52 @@ namespace WpfMessenger.ViewModels
 {
     public class ReceiveViewModel
         : BindableBase
-        , IRecipient<ValueChangedMessage<string>>
-        , IRecipient<StringMessage>
-        , IRecipient<IntMessage>
-        , IRecipient<ChannelMessage>
+        //, IRecipient<ValueChangedMessage<string>>
+        //, IRecipient<StringMessage>
+        //, IRecipient<IntMessage>
     {
         #region fields, properties
 
         private ObservableCollection<MessageViewModel> messages = new ObservableCollection<MessageViewModel>();
         public ObservableCollection<MessageViewModel> Messages { get => messages; set => SetProperty(ref messages, value); }
 
-        private string channel = string.Empty;
-        public string Channel
+        private string token = string.Empty;
+        public string Token
         {
-            get => channel;
+            get => token;
             set
             {
-                SetProperty(ref channel, value);
-                SetChannelCommand.RaiseCanExecuteChanged();
+                SetProperty(ref token, value);
+                SetTokenCommand.RaiseCanExecuteChanged();
             }
         }
 
-        private string currentChannel = string.Empty;
-        public string CurrentChannel { get => currentChannel; set => SetProperty(ref currentChannel, value); }
+        private string currentToken = string.Empty;
+        public string CurrentToken { get => currentToken; set => SetProperty(ref currentToken, value); }
 
 
-        private ObservableCollection<MessageViewModel> channelMessages = new ObservableCollection<MessageViewModel>();
-        public ObservableCollection<MessageViewModel> ChannelMessages { get => channelMessages; set => SetProperty(ref channelMessages, value); }
+        private ObservableCollection<MessageViewModel> tokenMessage = new ObservableCollection<MessageViewModel>();
+        public ObservableCollection<MessageViewModel> TokenMessages { get => tokenMessage; set => SetProperty(ref tokenMessage, value); }
 
         #endregion
 
         #region commands
-        public DelegateCommand SetChannelCommand { get; private set; }
+        public DelegateCommand SetTokenCommand { get; private set; }
 
         #endregion
 
         #region command methods
-        private void OnSetChannel()
+        private void OnSetToken()
         {
-            WeakReferenceMessenger.Default.Unregister<ChannelMessage, string>(this, CurrentChannel);
-            WeakReferenceMessenger.Default.Register<ChannelMessage, string>(this, Channel, OnReceiveChannelMessage);
-            CurrentChannel = Channel;
+            WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<string>, string>(this, CurrentToken);
+            WeakReferenceMessenger.Default.Register<ValueChangedMessage<string>, string>(this, Token, OnReceiveMessageByToken);
+
+            WeakReferenceMessenger.Default.Unregister<TokenMessage, string>(this, CurrentToken);
+            WeakReferenceMessenger.Default.Register<TokenMessage, string>(this, Token, OnReceiveTokenMessage);
+            CurrentToken = Token;
         }
 
-        private bool CanSetChannel()
+        private bool CanSetToken()
         {
             return true;
         }
@@ -66,17 +68,21 @@ namespace WpfMessenger.ViewModels
         #region constructor
         public ReceiveViewModel()
         {
-            WeakReferenceMessenger.Default.RegisterAll(this); // IRecipient 해줘야함
-            //WeakReferenceMessenger.Default.Register<ValueChangedMessage<string>>(this, OnReceiveTypeMessage);
-            //WeakReferenceMessenger.Default.Register<StringMessage>(this, OnReceiveStringMessage);
-            //WeakReferenceMessenger.Default.Register<IntMessage>(this, OnReceiveIntMessage);
-            //WeakReferenceMessenger.Default.Register<ChannelMessage, string>(this, Channel, OnReceiveChannelMessage);
+            //WeakReferenceMessenger.Default.RegisterAll(this); // IRecipient 해줘야함
 
-            SetChannelCommand = new DelegateCommand(OnSetChannel, CanSetChannel);
+            WeakReferenceMessenger.Default.Register<ValueChangedMessage<string>>(this, OnReceiveMessage);
+            WeakReferenceMessenger.Default.Register<ValueChangedMessage<string>, string>(this, Token, OnReceiveMessageByToken);
+
+            WeakReferenceMessenger.Default.Register<StringMessage>(this, OnReceiveStringMessage);
+            WeakReferenceMessenger.Default.Register<IntMessage>(this, OnReceiveIntMessage);
+            WeakReferenceMessenger.Default.Register<TokenMessage, string>(this, Token, OnReceiveTokenMessage);
+
+            SetTokenCommand = new DelegateCommand(OnSetToken, CanSetToken);
         }
         #endregion
 
-        #region functions
+
+        #region IRecipient Commands
 
         public void Receive(ValueChangedMessage<string> message)
         {
@@ -93,7 +99,7 @@ namespace WpfMessenger.ViewModels
                 StringMessage = message,
             });
         }
-        
+
         public void Receive(IntMessage message)
         {
             Messages.Add(new MessageViewModel()
@@ -101,16 +107,19 @@ namespace WpfMessenger.ViewModels
                 IntMessage = message,
             });
         }
+        #endregion
 
-        public void Receive(ChannelMessage message)
+        #region WeakReferenceMessenger.Default.Register
+
+        private void OnReceiveMessage(object recipient, ValueChangedMessage<string> message)
         {
-            ChannelMessages.Add(new MessageViewModel()
-            {
-                ChannelMessage = message,
-            });
+            MessageViewModel msgVM = new MessageViewModel();
+            msgVM.MessageType = message.GetType().ToString();
+            msgVM.Message = message.Value;
+            Messages.Add(msgVM);
         }
 
-        private void OnReceiveTypeMessage(object recipient, ValueChangedMessage<string> message)
+        private void OnReceiveMessageByToken(object recipient, ValueChangedMessage<string> message)
         {
             MessageViewModel msgVM = new MessageViewModel();
             msgVM.MessageType = message.GetType().ToString();
@@ -125,7 +134,7 @@ namespace WpfMessenger.ViewModels
                 StringMessage = message,
             });
         }
-        
+
         private void OnReceiveIntMessage(object recipient, IntMessage message)
         {
             Messages.Add(new MessageViewModel()
@@ -134,9 +143,9 @@ namespace WpfMessenger.ViewModels
             });
         }
 
-        private void OnReceiveChannelMessage(object recipient, ChannelMessage message)
+        private void OnReceiveTokenMessage(object recipient, TokenMessage message)
         {
-            ChannelMessages.Add(new MessageViewModel()
+            TokenMessages.Add(new MessageViewModel()
             {
                 ChannelMessage = message,
             });
