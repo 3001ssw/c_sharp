@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfISerializable", "WpfISer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfAction", "WpfAction\WpfAction.csproj", "{7D9FEF20-8A42-48BC-962F-24349E9AA897}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfFunction", "WpfFunction\WpfFunction.csproj", "{C89BE4F1-A02C-471A-AEAC-4327194D561A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,10 @@ Global
 		{7D9FEF20-8A42-48BC-962F-24349E9AA897}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D9FEF20-8A42-48BC-962F-24349E9AA897}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D9FEF20-8A42-48BC-962F-24349E9AA897}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C89BE4F1-A02C-471A-AEAC-4327194D561A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C89BE4F1-A02C-471A-AEAC-4327194D561A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C89BE4F1-A02C-471A-AEAC-4327194D561A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C89BE4F1-A02C-471A-AEAC-4327194D561A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
