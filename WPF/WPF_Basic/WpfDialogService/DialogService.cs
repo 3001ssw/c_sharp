@@ -11,7 +11,7 @@ namespace WpfDialogService
 {
     public class DialogService : IDialogService
     {
-        public void Show<T>(object viewModel) where T : Window
+        public void Show<T>(object viewModel, Action<IDialogViewModel, bool?>? onResult = null) where T : Window
         {
             Window? window = Activator.CreateInstance<T>() as Window;
             if (window == null)
@@ -22,17 +22,23 @@ namespace WpfDialogService
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.ShowInTaskbar = false;
 
-            // ViewModel이 RequestClose 이벤트 제공하면 연결
+            // IDialogViewModel 이면
             if (viewModel is IDialogViewModel vm)
             {
-                EventHandler<bool?>? handler = null;
-                handler = (s, dialogResult) =>
+                vm.DoCloseAction = (dialogResult) =>
                 {
-                    vm.RequestClose -= handler; // 이벤트 해제
-                    window.Close();
-                    window.DataContext = null;
+                    onResult?.Invoke(vm, dialogResult);
+                    onResult = null;
+                    window.Close(); // Closed 호출 됨
                 };
-                vm.RequestClose += handler;
+
+                // x, Alt+F4 누르면 Close 호출된 뒤 수행 함
+                window.Closed += (s, e) =>
+                {
+                    onResult?.Invoke(vm, false);
+                    window.DataContext = null;
+                    vm.DoCloseAction = null;
+                };
             }
 
             window.Show();
@@ -49,19 +55,21 @@ namespace WpfDialogService
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.ShowInTaskbar = false;
 
-            // ViewModel이 RequestClose 이벤트 제공하면 연결
+            // IDialogViewModel 이면
             if (viewModel is IDialogViewModel vm)
             {
-                EventHandler<bool?>? handler = null;
-                handler = (s, dialogResult) =>
+                vm.DoCloseAction = (dialogResult) =>
                 {
-                    vm.RequestClose -= handler; // 이벤트 해제
-                    window.DialogResult = dialogResult;
-                    window.Close();
-                    window.DataContext = null;
+                    window.DialogResult = dialogResult; // 여기서 내부적으로 window.Close() 호출
+                    //window.Close();
                 };
 
-                vm.RequestClose += handler;
+                // x, Alt+F4 누르면 Close 호출된 뒤 수행 함
+                window.Closed += (s, e) =>
+                {
+                    window.DataContext = null;
+                    vm.DoCloseAction = null;
+                };
             }
 
             return window.ShowDialog();
@@ -104,10 +112,17 @@ namespace WpfDialogService
             // ViewModel이 RequestClose 이벤트 제공하면 연결
             if (viewModel is IDialogViewModel vm)
             {
-                vm.RequestClose += (s, dialogResult) =>
+                vm.DoCloseAction = (dialogResult) =>
                 {
-                    window.DialogResult = dialogResult;
-                    window.Close();
+                    window.DialogResult = dialogResult; // 여기서 내부적으로 window.Close() 호출
+                    //window.Close();
+                };
+
+                // x, Alt+F4 누르면 Close 호출된 뒤 수행 함
+                window.Closed += (s, e) =>
+                {
+                    window.DataContext = null;
+                    vm.DoCloseAction = null;
                 };
             }
 
@@ -117,6 +132,12 @@ namespace WpfDialogService
         public bool? ShowDialogDataTemplate(object viewModel)
         {
             // 이방식으로 만들어진 xaml은 Window가 아니여야함
+            /* 어딘가엔 
+             * 이렇게 되어있어야함
+             * < DataTemplate DataType = "{x:Type local:UserControlViewModel}" >
+             *     < local:UserControlView />
+             * </ DataTemplate >
+            */
             Window? owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
             Window window = new Window
             {
@@ -128,13 +149,20 @@ namespace WpfDialogService
                 ShowInTaskbar = false,
             };
 
-            // RequestClose 지원
+            // IDialogViewModel 이면
             if (viewModel is IDialogViewModel vm)
             {
-                vm.RequestClose += (s, dialogResult) =>
+                vm.DoCloseAction = (dialogResult) =>
                 {
-                    window.DialogResult = dialogResult;
-                    window.Close();
+                    window.DialogResult = dialogResult; // 여기서 내부적으로 window.Close() 호출
+                    //window.Close();
+                };
+
+                // x, Alt+F4 누르면 Close 호출된 뒤 수행 함
+                window.Closed += (s, e) =>
+                {
+                    window.DataContext = null;
+                    vm.DoCloseAction = null;
                 };
             }
 
@@ -147,7 +175,7 @@ namespace WpfDialogService
     /// </summary>
     public interface IDialogService
     {
-        void Show<T>(object viewModel) where T : Window;
+        void Show<T>(object viewModel, Action<IDialogViewModel, bool?>? onClosed = null) where T : Window;
         bool? ShowDialog<T>(object viewModel) where T : Window;
         bool? ShowDialogActivator(object viewModel);
         bool? ShowDialogDataTemplate(object viewModel);
@@ -158,6 +186,6 @@ namespace WpfDialogService
     /// </summary>
     public interface IDialogViewModel
     {
-        event EventHandler<bool?> RequestClose;
+        Action<bool?>? DoCloseAction { get; set; }
     }
 }

@@ -10,16 +10,16 @@ namespace WpfDialogService
 {
     public class UserDialogViewModel : BindableBase, IDialogViewModel
     {
-        public event EventHandler<bool?>? RequestClose;
+        public Action<bool?>? DoCloseAction { get; set; }
 
         public ICommand OkCommand { get; }
         public ICommand CancelCommand { get; }
 
         public UserDialogViewModel()
         {
-            OkCommand = new DelegateCommand(() => RequestClose?.Invoke(this, true), () => { return true; });    // DialogResult = true
+            OkCommand = new DelegateCommand(() => DoCloseAction?.Invoke(true), () => { return true; });    // DialogResult = true
 
-            CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(this, false), () => { return true; });   // DialogResult = false
+            CancelCommand = new DelegateCommand(() => DoCloseAction?.Invoke(false), () => { return true; });   // DialogResult = false
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Prism.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -56,7 +57,47 @@ namespace WpfAction.Interfaces
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.ShowInTaskbar = false;
 
-            // ViewModel이 RequestClose 이벤트 제공하면 연결
+            // IDialogViewModel 이면
+            if (viewModel is IDialogViewModel vm)
+            {
+                vm.DoCloseAction = (dialogResult) =>
+                {
+                    window.DialogResult = dialogResult; // 여기서 내부적으로 window.Close() 호출
+                    //window.Close();
+                };
+
+                // x, Alt+F4 누르면 Close 호출된 뒤 수행 함
+                window.Closed += (s, e) =>
+                {
+                    window.DataContext = null;
+                    vm.DoCloseAction = null;
+                };
+            }
+
+            return window.ShowDialog();
+        }
+
+        public bool? ShowDialogDataTemplate(object viewModel)
+        {
+            // 이방식으로 만들어진 xaml은 Window가 아니여야함
+            /* 어딘가엔 
+             * 이렇게 되어있어야함
+             * < DataTemplate DataType = "{x:Type local:UserControlViewModel}" >
+             *     < local:UserControlView />
+             * </ DataTemplate >
+            */
+            Window? owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
+            Window window = new Window
+            {
+                Content = viewModel,
+                Owner = owner,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize,
+                ShowInTaskbar = false,
+            };
+
+            // IDialogViewModel 이면
             if (viewModel is IDialogViewModel vm)
             {
                 vm.DoCloseAction = (dialogResult) =>
@@ -84,6 +125,7 @@ namespace WpfAction.Interfaces
     {
         void Show<T>(object viewModel, Action<IDialogViewModel, bool?>? onClosed = null) where T : Window;
         bool? ShowDialog<T>(object viewModel) where T : Window;
+        bool? ShowDialogDataTemplate(object viewModel);
     }
 
     /// <summary>
