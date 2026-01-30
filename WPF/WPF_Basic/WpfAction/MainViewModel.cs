@@ -5,61 +5,66 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WpfAction.Interfaces;
-using WpfAction.Popup.ViewModels;
-using WpfAction.Popup.Views;
+using static WpfAction.DirectEnumToBoolConverter;
 
 namespace WpfAction
 {
     public class MainViewModel : BindableBase
     {
         #region fields, properties
-        private DialogService _dialogService = new DialogService();
+        private DirectType selectedDirect = DirectType.Top;
+        public DirectType SelectedDirect
+        {
+            get => selectedDirect;
+            set
+            {
+                SetProperty(ref selectedDirect, value);
+                UpdateMoveAction();
+            }
+        }
+
+        private PointXY point = new PointXY();
+        public PointXY Point { get => point; set => SetProperty(ref point, value); }
 
         private ObservableCollection<MessageViewModel> messages = new ObservableCollection<MessageViewModel>();
         public ObservableCollection<MessageViewModel> Messages { get => messages; set => SetProperty(ref messages, value); }
+
+        private Action? DoMove = null;
         #endregion
 
+
+
         #region commands
-        public DelegateCommand ShowCommand { get; private set; }
-        public DelegateCommand ShowDialogCommand { get; private set; }
+        public DelegateCommand MoveCommand { get; private set; }
         #endregion
 
         #region command methods
-        private void OnShow()
+        private void OnMove()
         {
-            ShowViewModel vm = new ShowViewModel();
-            AddMessage($"[{vm.GetType()}]이 생성되었습니다.");
-            _dialogService.Show<ShowView>(vm, OnResultShow);
+            DoMove?.Invoke();
         }
 
-        private void OnResultShow(IDialogViewModel vm, bool? result)
-        {
-            AddMessage($"[{vm.GetType()}]이 종료되었습니다.(result: {result})");
-        }
-
-        private bool CanShow()
+        private bool CanMove()
         {
             return true;
         }
-        private void OnShowDialog()
-        {
-            ShowDialogViewModel vm = new ShowDialogViewModel();
-            AddMessage($"[{vm.GetType()}]이 생성되었습니다.");
-            bool? result = _dialogService.ShowDialog<ShowDialogView>(vm);
-            AddMessage($"[{vm.GetType()}]이 종료되었습니다.(result: {result})");
 
-        }
-
-        private bool CanShowDialog()
-        {
-            return true;
-        }
         #endregion
 
         #region functions
-        private void AddMessage(string msg)
+        private void UpdateMoveAction()
         {
+            switch (SelectedDirect)
+            {
+                case DirectType.Top: DoMove = Point.MoveTop; break;
+                case DirectType.Left: DoMove = Point.MoveLeft; break;
+                case DirectType.Right: DoMove = Point.MoveRight; break;
+                case DirectType.Bottom: DoMove = Point.MoveBottom; break;
+            }
+        }
+        private void AddMessage(int x, int y)
+        {
+            string msg = $"({x}, {y}) 좌표로 이동하였습니다.";
             Messages.Add(new MessageViewModel()
             {
                 Message = msg,
@@ -68,14 +73,12 @@ namespace WpfAction
 
         #endregion
 
-
-
-
         #region constructor
         public MainViewModel()
         {
-            ShowCommand = new DelegateCommand(OnShow, CanShow);
-            ShowDialogCommand = new DelegateCommand(OnShowDialog, CanShowDialog);
+            MoveCommand = new DelegateCommand(OnMove, CanMove);
+            Point.SetMoveResultAction(AddMessage);
+            UpdateMoveAction();
         }
         #endregion
     }

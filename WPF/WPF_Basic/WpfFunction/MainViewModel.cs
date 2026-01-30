@@ -89,7 +89,7 @@ namespace WpfFunction
             GetPassCommand = new DelegateCommand(OnGetPass, CanGetPass);
             GetFailCommand = new DelegateCommand(OnGetFail, CanGetFail);
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 20; i++)
             {
                 Students.Add(new Student());
             }
