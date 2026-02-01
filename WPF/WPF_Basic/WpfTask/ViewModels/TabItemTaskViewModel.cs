@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using WpfTask.Util;
 
 namespace WpfTask.ViewModels
 {
@@ -15,7 +16,9 @@ namespace WpfTask.ViewModels
         #region fields, properties
 
         // 메시지 표시용 ListBox
-        public ObservableCollection<string> Logs { get; } = new();
+        private ObservableCollection<Log> logs = new ObservableCollection<Log>();
+        public ObservableCollection<Log> Logs { get => logs; set => SetProperty(ref logs, value); }
+
         private object _lockLogs = new object();
 
         // 백그라운드에서 실행되는 작업(Task)
@@ -62,22 +65,21 @@ namespace WpfTask.ViewModels
                 _workTask = Task.Run(async () =>
                 {
                     int i = 0;
-                    Logs.Add("Start");
-                    while (i < 10)
+                    Logs.Add(new Log("Start"));
+                    while (_cts.IsCancellationRequested == false)
                     {
-                        // 취소 요청 시 즉시 종료
-                        _cts.Token.ThrowIfCancellationRequested();
-
                         // 일시정지 상태라면 Resume 신호가 들어올 때까지 대기
                         if (_resumeSignal != null)
                             await _resumeSignal.Task;
 
                         // 숫자를 Items에 추가 (UI에 표시됨)
-                        Logs.Add($"{i}");
+                        Logs.Add(new Log($"{i}"));
                         i++;
 
                         // 1초 대기
-                        await Task.Delay(1000, _cts.Token);
+                        await Task.Delay(100, _cts.Token);
+                        // 취소 요청 시 즉시 종료
+                        _cts.Token.ThrowIfCancellationRequested();
                     }
 
                     return i;
@@ -87,11 +89,11 @@ namespace WpfTask.ViewModels
             }
             catch (OperationCanceledException)
             {
-                Logs.Add("catch OperationCanceledException");
+                Logs.Add(new Log("catch OperationCanceledException"));
             }
             catch (Exception e)
             {
-                Logs.Add($"catch Exception: {e.Message}");
+                Logs.Add(new Log($"catch Exception: {e.Message}"));
             }
             finally
             {
@@ -102,7 +104,7 @@ namespace WpfTask.ViewModels
                 _workTask = null;
                 UpdateUi();
 
-                Logs.Add(string.Format($"Task result {i}"));
+                Logs.Add(new Log($"Task result {i}"));
             }
         }
 

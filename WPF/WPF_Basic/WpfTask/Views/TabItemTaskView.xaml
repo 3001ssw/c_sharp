@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:WpfTask.Views"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:b="clr-namespace:WpfTask.Behaviors"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
@@ -41,8 +43,30 @@
                     Width="70"/>
         </StackPanel>
 
-        <ListBox Grid.Row="2"
-                 ItemsSource="{Binding Logs}"
-                 Margin="5"/>
+        <DataGrid Grid.Row="2"
+                  Margin="5"
+                  ItemsSource="{Binding Logs}"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="Column"
+                  IsReadOnly="True"
+                  SelectionMode="Extended"
+                  SelectionUnit="FullRow"
+                  GridLinesVisibility="All"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  VirtualizingStackPanel.ScrollUnit="Pixel"
+                  VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <i:Interaction.Behaviors>
+                <b:DataGridBehavior IsAutoScroll="True"/>
+            </i:Interaction.Behaviors>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Time"
+                                    Binding="{Binding Time, StringFormat='{}HH:mm:ss.fff'}"
+                                    Width="150"/>
+                <DataGridTextColumn Header="Message"
+                                    Binding="{Binding Message}"
+                                    Width="1*"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

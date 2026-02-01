@@ -15,9 +15,9 @@ namespace WpfTask.Util
         public string Message { get => message; set => SetProperty(ref message, value); }
 
         #region constructor
-        public Log()
+        public Log(string msg = "")
         {
-
+            Message = msg;
         }
         #endregion
     }
