@@ -4,46 +4,47 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfTask"
+        xmlns:vms="clr-namespace:WpfTask.ViewModels"
+        xmlns:views="clr-namespace:WpfTask.Views"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
         Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vms:TabItemSimpleTaskViewModel}">
+            <views:TabItemSimpleTaskView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vms:TabItemTaskViewModel}">
+            <views:TabItemTaskView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vms:TabItemFuncTaskViewModel}">
+            <views:TabItemFuncTaskView/>
+        </DataTemplate>
+    </Window.Resources>
+    <TabControl ItemsSource="{Binding Tabs}"
+                SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
 
-        <TextBlock Grid.Row="0"
-                   Text="1초마다 1~10 출력"
-                   FontSize="16"
-                   FontWeight="SemiBold"
-                   Margin="5"/>
-
-        <StackPanel Grid.Row="1"
-                    Orientation="Horizontal"
-                    Margin="5">
-            <Button Content="Start"
-                    Command="{Binding StartCommand}"
-                    Width="70"
-                    Margin="0,0,8,0"/>
-            <Button Content="Pause"
-                    Command="{Binding PauseCommand}"
-                    Width="70"
-                    Margin="0,0,8,0"/>
-            <Button Content="Resume"
-                    Command="{Binding ResumeCommand}"
-                    Width="70"
-                    Margin="0,0,8,0"/>
-            <Button Content="Stop"
-                    Command="{Binding StopCommand}"
-                    Width="70"/>
-        </StackPanel>
-
-        <ListBox Grid.Row="2"
-                 ItemsSource="{Binding Logs}"
-                 Margin="5"/>
-    </Grid>
+        <!--#region 헤더 정의-->
+        <TabControl.ItemTemplate>
+            <DataTemplate>
+                <TextBlock Text="{Binding Header}"/>
+            </DataTemplate>
+        </TabControl.ItemTemplate>
+        <!--#endregion-->
+        <!--#region 하단 본문 정의-->
+        <TabControl.ContentTemplate>
+            <DataTemplate>
+                <Border BorderBrush="DarkGray"
+                        BorderThickness="2"
+                        CornerRadius="3"
+                        Margin="5">
+                    <ContentControl Content="{Binding}"/>
+                </Border>
+            </DataTemplate>
+        </TabControl.ContentTemplate>
+        <!--#endregion-->
+    </TabControl>
 </Window>
