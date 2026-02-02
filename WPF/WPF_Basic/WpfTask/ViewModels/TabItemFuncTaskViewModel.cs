@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using WpfTask.Util;
 
 namespace WpfTask.ViewModels
@@ -73,10 +74,54 @@ namespace WpfTask.ViewModels
         //    }
         //}
 
+        #region command methods
+
+        public DelegateCommand Test01Command { get; private set; }
+        public DelegateCommand Test02Command { get; private set; }
+        public DelegateCommand Test03Command { get; private set; }
+
+        private void OnTest01()
+        {
+
+        }
+
+        private bool CanTest01()
+        {
+            return true;
+        }
+
+        private void OnTest02()
+        {
+
+        }
+
+        private bool CanTest02()
+        {
+            return true;
+        }
+
+        private void OnTest03()
+        {
+
+        }
+
+        private bool CanTest03()
+        {
+            return true;
+        }
+
+        #endregion
+
+
         #region constructor
         public TabItemFuncTaskViewModel()
         {
             Header = "Func Task";
+
+            BindingOperations.EnableCollectionSynchronization(Logs, _lockLogs);
+            Test01Command = new DelegateCommand(OnTest01, CanTest01);
+            Test02Command = new DelegateCommand(OnTest02, CanTest02);
+            Test03Command = new DelegateCommand(OnTest03, CanTest03);
         }
         #endregion
     }
