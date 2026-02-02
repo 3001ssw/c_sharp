@@ -146,9 +146,9 @@ namespace WpfTask.ViewModels
             try
             {
                 _taskIntResult = Task.Run(async () =>
-                    {
-                        // 바깥 Count 속성 사용
-                        for (int i = 0; i < Count; i++)
+                {
+                    // 바깥 Count 속성 사용
+                    for (int i = 0; i < Count; i++)
                         {
                             Logs.Add(new Log()
                             {
@@ -157,7 +157,7 @@ namespace WpfTask.ViewModels
                             await Task.Delay(100);
                         }
                         return Count;
-                    });
+                });
                 UpdateAllButton();
                 res = await _taskIntResult;
             }

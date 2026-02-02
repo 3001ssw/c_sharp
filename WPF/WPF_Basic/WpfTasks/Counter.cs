@@ -20,7 +20,7 @@ namespace WpfTasks
         public Counter()
         {
             Random random = new Random();
-            Sleep = random.Next(100, 3000);
+            Sleep = random.Next(10, 1000);
         }
     }
 }

@@ -43,13 +43,13 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id"
                                     Binding="{Binding Id}"
-                                    Width="100"/>
+                                    Width="Auto"/>
                 <DataGridTextColumn Header="Count"
                                     Binding="{Binding Count}"
                                     Width="100"/>
                 <DataGridTextColumn Header="Sleep"
                                     Binding="{Binding Sleep}"
-                                    Width="100"/>
+                                    Width="1*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

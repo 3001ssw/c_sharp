@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,7 +44,6 @@ namespace WpfTasks
         private async void OnStartCommand()
         {
             cts = new CancellationTokenSource();
-            CancellationToken token = cts.Token;
             StartCommand.RaiseCanExecuteChanged();
             StopCommand.RaiseCanExecuteChanged();
 
@@ -55,22 +55,39 @@ namespace WpfTasks
 
             try
             {
-                var ret = await Task.WhenAll(Counters.Select(counter => RunCounter(counter, token)));
+                //var ret = await Task.WhenAll(Counters.Select(counter => RunCounter(counter, token)));
+                var ret = await Task.WhenAll(Counters.Select(counter =>
+                Task.Run(async () =>
+                {
+                    while (!cts.Token.IsCancellationRequested)
+                    {
+                        counter.Count++;
+                        await Task.Delay(counter.Sleep);
+                        //Thread.Sleep(counter.Sleep);
+                    }
+                    cts.Token.ThrowIfCancellationRequested();
+
+                    return counter.Count;
+                }, cts.Token)));
             }
             catch (OperationCanceledException)
             {
-                // 취소 처리
             }
-
-            cts?.Dispose();
-            cts = null;
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                cts?.Dispose();
+                cts = null;
+            }
             StartCommand.RaiseCanExecuteChanged();
             StopCommand.RaiseCanExecuteChanged();
         }
 
         private bool CanStartCommand()
         {
-            if (cts == null && 0 < Count)
+            if (0 < Count && cts == null)
                 return true;
             else
                 return false;
