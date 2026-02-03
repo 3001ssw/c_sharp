@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0"
-                   Text="1초마다 1~10 출력"
+                   Text="Start, Pause, Resume, Stop"
                    FontSize="16"
                    FontWeight="SemiBold"
                    Margin="5"/>

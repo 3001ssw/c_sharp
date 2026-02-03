@@ -68,13 +68,13 @@ namespace WpfTask.ViewModels
                     Logs.Add(new Log("Start"));
                     while (_cts.IsCancellationRequested == false)
                     {
-                        // 일시정지 상태라면 Resume 신호가 들어올 때까지 대기
-                        if (_resumeSignal != null)
-                            await _resumeSignal.Task;
-
                         // 숫자를 Items에 추가 (UI에 표시됨)
                         Logs.Add(new Log($"{i}"));
                         i++;
+
+                        // 일시정지 상태라면 Resume 신호가 들어올 때까지 대기
+                        if (_resumeSignal != null)
+                            await _resumeSignal.Task;
 
                         // 1초 대기
                         await Task.Delay(100, _cts.Token);
@@ -146,6 +146,7 @@ namespace WpfTask.ViewModels
             if (_workTask == null || _workTask.IsCompleted is true)
                 return;
 
+            _resumeSignal?.TrySetResult(true);
             // 취소 신호 전달
             _cts?.Cancel();
             UpdateUi();
