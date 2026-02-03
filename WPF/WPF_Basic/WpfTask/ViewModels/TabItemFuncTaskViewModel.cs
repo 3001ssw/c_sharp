@@ -4,17 +4,24 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
+using WpfTask.Converters;
 using WpfTask.Util;
 
 namespace WpfTask.ViewModels
 {
     public class TabItemFuncTaskViewModel : TabItemBaseViewModel
     {
+        private FunctionType selectedFunctionType = FunctionType.Func1;
+        public FunctionType SelectedFunctionType { get => selectedFunctionType; set => SetProperty(ref selectedFunctionType, value); }
+
         private object _lockLogs = new object(); // 동기화를 위한 자물쇠
 
-        private ObservableCollection<Log> logs = new ObservableCollection<Log>();
-        public ObservableCollection<Log> Logs { get => logs; set => SetProperty(ref logs, value); }
+        private ObservableCollection<string> logs = new ObservableCollection<string>();
+        public ObservableCollection<string> Logs { get => logs; set => SetProperty(ref logs, value); }
+
+        private Task? _task = null;
 
         public Func<Task?> _func1
         {
@@ -22,10 +29,7 @@ namespace WpfTask.ViewModels
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    Logs.Add(new Log()
-                    {
-                        Message = $"{i}",
-                    });
+                    Logs.Add($"{i}");
                     await Task.Delay(100);
                 }
             };
@@ -35,79 +39,53 @@ namespace WpfTask.ViewModels
         {
             get => async () =>
             {
-                for (int i = 10; i < 20; i++)
+                for (int i = 100; i < 110; i++)
                 {
-                    Logs.Add(new Log()
-                    {
-                        Message = $"{i}",
-                    });
+                    Logs.Add($"{i}");
                     await Task.Delay(100);
                 }
             };
         }
 
-        //private void temp ()
-        //{
-        //    Logs.Clear();
-        //    try
-        //    {
-        //        if (bTrigger)
-        //            _task2 = Task.Run(_func1);
-        //        else
-        //            _task2 = Task.Run(_func2);
-        //        bTrigger = !bTrigger;
-        //
-        //        Test02Command.RaiseCanExecuteChanged();
-        //        Test03Command.RaiseCanExecuteChanged();
-        //        await _task2;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // 에러가 났을 때 로그를 남기는 등 예외 처리 가능
-        //        Logs.Add(new Log() { Message = $"에러 발생: {ex.Message}" });
-        //    }
-        //    finally
-        //    {
-        //        Test02Command.RaiseCanExecuteChanged();
-        //        Test03Command.RaiseCanExecuteChanged();
-        //        _task2 = null;
-        //    }
-        //}
-
         #region command methods
 
         public DelegateCommand Test01Command { get; private set; }
-        public DelegateCommand Test02Command { get; private set; }
-        public DelegateCommand Test03Command { get; private set; }
 
-        private void OnTest01()
+        private async void OnTest01()
         {
+            Func<Task?> fnGet = null;
+            if (SelectedFunctionType == FunctionType.Func1)
+                fnGet = _func1;
+            else
+                fnGet = _func2;
+
+                Logs.Clear();
+            try
+            {
+                _task = Task.Run(fnGet);
+                UpdateUi();
+                await _task;
+            }
+            catch (Exception ex)
+            {
+                // 에러가 났을 때 로그를 남기는 등 예외 처리 가능
+                Logs.Add($"에러 발생: {ex.Message}");
+            }
+            finally
+            {
+                _task = null;
+                UpdateUi();
+            }
+
 
         }
 
         private bool CanTest01()
         {
-            return true;
-        }
+            if (_task == null || _task?.IsCanceled == true || _task?.IsCompleted == true)
+                return true;
 
-        private void OnTest02()
-        {
-
-        }
-
-        private bool CanTest02()
-        {
-            return true;
-        }
-
-        private void OnTest03()
-        {
-
-        }
-
-        private bool CanTest03()
-        {
-            return true;
+            return false;
         }
 
         #endregion
@@ -120,9 +98,16 @@ namespace WpfTask.ViewModels
 
             BindingOperations.EnableCollectionSynchronization(Logs, _lockLogs);
             Test01Command = new DelegateCommand(OnTest01, CanTest01);
-            Test02Command = new DelegateCommand(OnTest02, CanTest02);
-            Test03Command = new DelegateCommand(OnTest03, CanTest03);
         }
+        #endregion
+
+        #region functions
+
+        private void UpdateUi()
+        {
+            Test01Command.RaiseCanExecuteChanged();
+        }
+
         #endregion
     }
 }
