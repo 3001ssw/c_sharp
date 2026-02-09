@@ -8,27 +8,38 @@
         Title="MainWindow"
         Height="200"
         Width="300">
+    <!--#region MainViewModel-->
     <Window.DataContext>
         <local:MainViewModel/>
     </Window.DataContext>
+    <!--#endregion-->
+
+    <!--#region Converter-->
     <Window.Resources>
         <local:FruitEnumToBoolConverter x:Key="FruitEnumToBoolConverter"/>
     </Window.Resources>
+    <!--#endregion-->
     <StackPanel Orientation="Horizontal"
                 Margin="5">
+
+        <!--#region 선택한 라디오버튼 값 표시-->
         <TextBlock Text="{Binding SelectedFruit}"
                    Width="50"/>
+        <!--#endregion-->
+
+        <!--#region 라디오 버튼-->
         <RadioButton GroupName="Fruit"
                      Content="사과"
                      Margin="5"
                      IsChecked="{Binding SelectedFruit, Converter={StaticResource FruitEnumToBoolConverter}, ConverterParameter=Apple}"/>
         <RadioButton GroupName="Fruit"
-                     Content="오랜지"
+                     Content="오렌지"
                      Margin="5"
                      IsChecked="{Binding SelectedFruit, Converter={StaticResource FruitEnumToBoolConverter}, ConverterParameter=Orange}"/>
         <RadioButton GroupName="Fruit"
                      Content="포도"
                      Margin="5"
                      IsChecked="{Binding SelectedFruit, Converter={StaticResource FruitEnumToBoolConverter}, ConverterParameter=Grape}"/>
+        <!--#endregion-->
     </StackPanel>
 </Window>

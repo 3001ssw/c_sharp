@@ -17,10 +17,7 @@ namespace WpfRadioButton
         public FruitType SelectedFruit
         {
             get => selectedFruit;
-            set
-            {
-                SetProperty(ref selectedFruit, value);
-            }
+            set => SetProperty(ref selectedFruit, value);
         }
 
         #endregion

@@ -23,6 +23,7 @@ namespace WpfRadioButton
             return Binding.DoNothing;
         }
 
+
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is bool check)
