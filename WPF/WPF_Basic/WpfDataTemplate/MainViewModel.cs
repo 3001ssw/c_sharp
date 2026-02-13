@@ -22,12 +22,12 @@ namespace WpfDataTemplate
             Messages.Add(new ChatMessage()
             {
                 Text = "hi",
-                IsMe = true,
+                IsMe = false,
             });
             Messages.Add(new ChatMessage()
             {
                 Text = "hi",
-                IsMe = false,
+                IsMe = true,
             });
         }
         #endregion

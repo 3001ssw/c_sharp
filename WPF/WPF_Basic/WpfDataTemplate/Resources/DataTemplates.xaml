@@ -2,10 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:chat="clr-namespace:WpfDataTemplate.Chat">
 
-    <DataTemplate DataType="{x:Type chat:ChatMessage}">
+    <DataTemplate x:Key="YourChatMessage"
+                  DataType="{x:Type chat:ChatMessage}">
         <Border Background="LightGray"
                 CornerRadius="10"
                 Padding="10"
+                HorizontalAlignment="Left"
                 Margin="5">
             <StackPanel>
                 <TextBlock Text="{Binding Text}"
@@ -16,4 +18,25 @@
             </StackPanel>
         </Border>
     </DataTemplate>
+
+    <DataTemplate x:Key="MyChatMessage"
+                  DataType="{x:Type chat:ChatMessage}">
+        <Border Background="Yellow"
+                CornerRadius="10"
+                Padding="10"
+                HorizontalAlignment="Right"
+                Margin="5">
+            <StackPanel>
+                <TextBlock Text="{Binding Text}"
+                           FontSize="14"/>
+                <TextBlock Text="{Binding Time, StringFormat=t}"
+                           FontSize="10"
+                           Foreground="Gray"/>
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+
+    <chat:ChatMessageSelector x:Key="ChatMessageSelector"
+                              MyTemplate="{StaticResource MyChatMessage}"
+                              YourTemplate="{StaticResource YourChatMessage}"/>
 </ResourceDictionary>

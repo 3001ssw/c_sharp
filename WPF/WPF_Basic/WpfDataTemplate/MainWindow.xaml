@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfDataTemplate"
-        xmlns:chat="clr-namespace:WpfDataTemplate.Chat"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
@@ -23,7 +22,8 @@
 
         <ListBox Grid.Row="0"
                  Grid.Column="0"
-                 ItemsSource="{Binding Messages}">
+                 ItemsSource="{Binding Messages}"
+                 ItemTemplateSelector="{StaticResource ChatMessageSelector}">
         </ListBox>
     </Grid>
 </Window>
