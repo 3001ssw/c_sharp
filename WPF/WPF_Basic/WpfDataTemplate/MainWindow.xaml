@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfDataTemplate"
+        xmlns:chat="clr-namespace:WpfDataTemplate.Chat"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
@@ -11,6 +12,23 @@
     <Window.DataContext>
         <local:MainViewModel/>
     </Window.DataContext>
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type chat:ChatMessage}">
+            <Border Background="LightGray"
+                    CornerRadius="10"
+                    Padding="10"
+                    Margin="5">
+                <StackPanel>
+                    <TextBlock Text="{Binding Text}"
+                               FontSize="14"/>
+                    <TextBlock Text="{Binding Time, StringFormat=t}"
+                               FontSize="10"
+                               Foreground="Gray"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -20,10 +38,15 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
+        <!--
+        <ListBox Grid.Row="0"
+                 Grid.Column="0"
+                 ItemsSource="{Binding Messages}"/>
+        -->
+
         <ListBox Grid.Row="0"
                  Grid.Column="0"
                  ItemsSource="{Binding Messages}"
-                 ItemTemplateSelector="{StaticResource ChatMessageSelector}">
-        </ListBox>
+                 ItemTemplateSelector="{StaticResource ChatMessageSelector}"/>
     </Grid>
 </Window>

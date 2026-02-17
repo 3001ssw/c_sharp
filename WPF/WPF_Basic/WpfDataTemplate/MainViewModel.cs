@@ -14,8 +14,6 @@ namespace WpfDataTemplate
         private ObservableCollection<ChatMessage> messages = new ObservableCollection<ChatMessage>();
         public ObservableCollection<ChatMessage> Messages { get => messages; set => SetProperty(ref messages, value); }
 
-
-
         #region constructor
         public MainViewModel()
         {
@@ -26,7 +24,7 @@ namespace WpfDataTemplate
             });
             Messages.Add(new ChatMessage()
             {
-                Text = "hi",
+                Text = "nice too meet you",
                 IsMe = true,
             });
         }

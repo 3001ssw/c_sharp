@@ -10,10 +10,10 @@ namespace WpfDataTemplate.Chat
 {
     public class ChatMessageSelector : DataTemplateSelector
     {
-        public DataTemplate? MyTemplate { get; set; }
-        public DataTemplate? YourTemplate { get; set; }
+        public DataTemplate? MyTemplate { get; set; } = null;
+        public DataTemplate? YourTemplate { get; set; } = null;
 
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
             // item은 현재 그려질 데이터 하나 (Message 객체)
             if (item is ChatMessage message)

@@ -7,7 +7,6 @@
         <Border Background="LightGray"
                 CornerRadius="10"
                 Padding="10"
-                HorizontalAlignment="Left"
                 Margin="5">
             <StackPanel>
                 <TextBlock Text="{Binding Text}"
@@ -24,7 +23,6 @@
         <Border Background="Yellow"
                 CornerRadius="10"
                 Padding="10"
-                HorizontalAlignment="Right"
                 Margin="5">
             <StackPanel>
                 <TextBlock Text="{Binding Text}"
