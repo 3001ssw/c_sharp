@@ -7,31 +7,52 @@
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
-        Width="800">
+        Width="1000">
     <Window.DataContext>
         <local:MainViewModel/>
     </Window.DataContext>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
+    <StackPanel>
         <!--#region Create Database-->
-        <TextBox Grid.Row="0"
-                 Grid.Column="0"
-                 Text="{Binding CreateDbPath}"/>
-        <TextBlock Grid.Row="0"
-                   Grid.Column="1"
-                   Text="{Binding CreateDbStatus}"/>
-        <Button Grid.Row="0"
-                Grid.Column="2"
-                Content="Create Database"
-                Command="{Binding CreateDbCommand}"/>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Margin="5"
+                       TextAlignment="Right"
+                       Text="Status: "/>
+            <TextBlock Margin="5"
+                       Width="100"
+                       Text="{Binding Status}"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Margin="5"
+                       TextAlignment="Right"
+                       Text="Path: "/>
+            <TextBox Margin="5"
+                     Width="500"
+                     Text="{Binding CreateDbPath}"/>
+            <TextBlock Margin="5"
+                       TextAlignment="Right"
+                       Text="Name: "/>
+            <TextBox Margin="5"
+                     Width="100"
+                     Text="{Binding CreateDbName}"/>
+            <Button Margin="5"
+                    Width="100"
+                    Content="Create Database"
+                    Command="{Binding CreateDbCommand}"/>
+        </StackPanel>
         <!--#endregion-->
-    </Grid>
+        <!--#region Create Database-->
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Margin="5"
+                       TextAlignment="Right"
+                       Text="Connection Db File Path: "/>
+            <TextBox Margin="5"
+                     Width="500"
+                     Text="{Binding ConnectionDbFilePath}"/>
+            <Button Margin="5"
+                    Width="100"
+                    Content="Connection Database"
+                    Command="{Binding ConnectionDbFilePathCommand}"/>
+        </StackPanel>
+        <!--#endregion-->
+    </StackPanel>
 </Window>
