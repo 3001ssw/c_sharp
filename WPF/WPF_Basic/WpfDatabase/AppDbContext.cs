@@ -18,29 +18,23 @@ namespace WpfDatabase
         public string Name { get; set; } = "";
     }
 
-    public class Grade
-    {
-        [Key]
-        public int Id { get; set; }
-
-        public string Name { get; set; } = "";
-    }
-
     public class AppDbContext : DbContext
     {
-        private SqliteConnectionStringBuilder _sqliteBuilder = null;
+        private SqliteConnectionStringBuilder? _sqliteBuilder = null;
         public DbSet<Student> Students { get; set; }
-        public DbSet<Grade> Grades { get; set; }
 
         // 생성자: 화면에서 선택한 DB 종류와 주소를 받아옵니다.
-        public AppDbContext(SqliteConnectionStringBuilder sqliteBuilder)
+        public AppDbContext(string dataSource)
         {
+            SqliteConnectionStringBuilder sqliteBuilder = new SqliteConnectionStringBuilder();
+            sqliteBuilder.DataSource = dataSource;
+            sqliteBuilder.Mode = SqliteOpenMode.ReadWriteCreate;
             _sqliteBuilder = sqliteBuilder;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(_sqliteBuilder.ToString());
+            optionsBuilder.UseSqlite(_sqliteBuilder?.ToString());
         }
     }
 }

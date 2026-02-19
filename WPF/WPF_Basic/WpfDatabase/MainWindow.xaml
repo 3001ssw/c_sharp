@@ -30,10 +30,69 @@
                      Width="600"
                      Text="{Binding ConnectionDbFilePath}"/>
             <Button Margin="5"
-                    Width="150"
-                    Content="Connection Database"
+                    Width="100"
+                    Content="Connection"
                     Command="{Binding ConnectionDbFilePathCommand}"/>
+            <Button Margin="5"
+                    Width="100"
+                    Content="Close"
+                    Command="{Binding CloseDbFilePathCommand}"/>
+        </StackPanel>
+        <!--  Add Student  -->
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Margin="5"
+                       TextAlignment="Right"
+                       Text="Student Name: "/>
+            <TextBox Margin="5"
+                     Width="600"
+                     Text="{Binding StudentName, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Margin="5"
+                    Width="100"
+                    Content="Add"
+                    Command="{Binding AddStudentCommand}"/>
         </StackPanel>
         <!--    -->
+
+        <!--  Delete Student  -->
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Margin="5"
+                       TextAlignment="Right"
+                       Text="Delete Student ID: "/>
+            <TextBox Margin="5"
+                     Width="600"
+                     Text="{Binding DeleteID, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Margin="5"
+                    Width="100"
+                    Content="Delete"
+                    Command="{Binding DeleteStudentCommand}"/>
+        </StackPanel>
+        <!--    -->
+
+        <!--  Save  -->
+        <StackPanel Orientation="Horizontal">
+            <Button Margin="5"
+                    Width="100"
+                    Content="Save"
+                    Command="{Binding SaveStudentCommand}"/>
+        </StackPanel>
+        <!--    -->
+
+        <DataGrid ItemsSource="{Binding Students}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  SelectionUnit="FullRow"
+                  HeadersVisibility="Column"
+                  VirtualizingStackPanel.ScrollUnit="Pixel"
+                  VirtualizingStackPanel.VirtualizationMode="Recycling"
+                  ScrollViewer.CanContentScroll="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id"
+                                    Width="100"
+                                    Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Name"
+                                    Width="200"
+                                    Binding="{Binding Name}"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </StackPanel>
 </Window>
