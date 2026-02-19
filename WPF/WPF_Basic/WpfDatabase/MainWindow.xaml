@@ -12,7 +12,7 @@
         <local:MainViewModel/>
     </Window.DataContext>
     <StackPanel>
-        <!--#region Create Database-->
+        <!--#region status-->
         <StackPanel Orientation="Horizontal">
             <TextBlock Margin="5"
                        TextAlignment="Right"
@@ -21,38 +21,19 @@
                        Width="100"
                        Text="{Binding Status}"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Margin="5"
-                       TextAlignment="Right"
-                       Text="Path: "/>
-            <TextBox Margin="5"
-                     Width="500"
-                     Text="{Binding CreateDbPath}"/>
-            <TextBlock Margin="5"
-                       TextAlignment="Right"
-                       Text="Name: "/>
-            <TextBox Margin="5"
-                     Width="100"
-                     Text="{Binding CreateDbName}"/>
-            <Button Margin="5"
-                    Width="100"
-                    Content="Create Database"
-                    Command="{Binding CreateDbCommand}"/>
-        </StackPanel>
-        <!--#endregion-->
-        <!--#region Create Database-->
+        <!--  connection database  -->
         <StackPanel Orientation="Horizontal">
             <TextBlock Margin="5"
                        TextAlignment="Right"
                        Text="Connection Db File Path: "/>
             <TextBox Margin="5"
-                     Width="500"
+                     Width="600"
                      Text="{Binding ConnectionDbFilePath}"/>
             <Button Margin="5"
-                    Width="100"
+                    Width="150"
                     Content="Connection Database"
                     Command="{Binding ConnectionDbFilePathCommand}"/>
         </StackPanel>
-        <!--#endregion-->
+        <!--    -->
     </StackPanel>
 </Window>

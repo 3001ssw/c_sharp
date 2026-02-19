@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
@@ -27,19 +28,19 @@ namespace WpfDatabase
 
     public class AppDbContext : DbContext
     {
-        public string ConnectionString { get; set; } = "";
+        private SqliteConnectionStringBuilder _sqliteBuilder = null;
         public DbSet<Student> Students { get; set; }
         public DbSet<Grade> Grades { get; set; }
 
         // 생성자: 화면에서 선택한 DB 종류와 주소를 받아옵니다.
-        public AppDbContext(string connectionString)
+        public AppDbContext(SqliteConnectionStringBuilder sqliteBuilder)
         {
-            ConnectionString = connectionString;
+            _sqliteBuilder = sqliteBuilder;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(ConnectionString);
+            optionsBuilder.UseSqlite(_sqliteBuilder.ToString());
         }
     }
 }
