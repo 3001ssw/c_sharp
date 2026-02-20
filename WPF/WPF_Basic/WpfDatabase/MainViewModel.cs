@@ -46,8 +46,7 @@ namespace WpfDatabase
             {
                 DatabaseContext = new AppDbContext();
                 DatabaseContext.ConnectSqlite(DbFilePath);
-                DatabaseContext.Database.EnsureCreated();
-                DatabaseContext.Students.Load();
+
                 Students = DatabaseContext.Students.Local.ToObservableCollection();
                 Status = "Connect Database";
             }
@@ -76,10 +75,7 @@ namespace WpfDatabase
 
         private void OnCloseDbFilePath()
         {
-            var connection = DatabaseContext?.Database.GetDbConnection() as SqliteConnection;
-            if (connection != null)
-                SqliteConnection.ClearPool(connection);
-            
+            DatabaseContext?.CloseSqlite();
             DatabaseContext?.Dispose();
             DatabaseContext = null;
             Status = "Close Database";

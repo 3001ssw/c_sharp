@@ -32,18 +32,28 @@ namespace WpfDatabase.Database
         {
         }
 
-        public void ConnectSqlite(string dbFilePath)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (_sqliteBuilder != null)
+                optionsBuilder.UseSqlite(_sqliteBuilder?.ToString());
+        }
+
+        public void ConnectSqlite(string dbFilePath, SqliteOpenMode mode = SqliteOpenMode.ReadWriteCreate)
         {
             SqliteConnectionStringBuilder sqliteBuilder = new SqliteConnectionStringBuilder();
             sqliteBuilder.DataSource = dbFilePath;
-            sqliteBuilder.Mode = SqliteOpenMode.ReadWriteCreate;
-            //sqliteBuilder.Pooling = false;
+            sqliteBuilder.Mode = mode;
             _sqliteBuilder = sqliteBuilder;
+
+            Database.EnsureCreated();
+            Students.Load();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public void CloseSqlite()
         {
-            optionsBuilder.UseSqlite(_sqliteBuilder?.ToString());
+            var connection = Database.GetDbConnection() as SqliteConnection;
+            if (connection != null)
+                SqliteConnection.ClearPool(connection);
         }
     }
 }
