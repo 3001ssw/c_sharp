@@ -7,28 +7,37 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WpfDatabase.Database.Tables;
 
-namespace WpfDatabase
+namespace WpfDatabase.Database
 {
-    public class Student
-    {
-        [Key]
-        public int Id { get; set; }
-
-        public string Name { get; set; } = "";
-    }
-
     public class AppDbContext : DbContext
     {
-        private SqliteConnectionStringBuilder? _sqliteBuilder = null;
+        #region fields
+
+        private SqliteConnectionStringBuilder? _sqliteBuilder = null; // sqlite
+
+        #endregion
+
+
+        #region Tables
+
         public DbSet<Student> Students { get; set; }
 
-        // 생성자: 화면에서 선택한 DB 종류와 주소를 받아옵니다.
-        public AppDbContext(string dataSource)
+
+        #endregion
+
+
+        public AppDbContext()
+        {
+        }
+
+        public void ConnectSqlite(string dbFilePath)
         {
             SqliteConnectionStringBuilder sqliteBuilder = new SqliteConnectionStringBuilder();
-            sqliteBuilder.DataSource = dataSource;
+            sqliteBuilder.DataSource = dbFilePath;
             sqliteBuilder.Mode = SqliteOpenMode.ReadWriteCreate;
+            //sqliteBuilder.Pooling = false;
             _sqliteBuilder = sqliteBuilder;
         }
 

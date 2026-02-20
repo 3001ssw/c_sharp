@@ -11,88 +11,84 @@
     <Window.DataContext>
         <local:MainViewModel/>
     </Window.DataContext>
-    <StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
         <!--#region status-->
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Margin="5"
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       Margin="5"
                        TextAlignment="Right"
                        Text="Status: "/>
-            <TextBlock Margin="5"
-                       Width="100"
+            <TextBlock Grid.Column="1"
+                       Margin="5"
                        Text="{Binding Status}"/>
-        </StackPanel>
+        </Grid>
         <!--  connection database  -->
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Margin="5"
+        <Grid Grid.Row="1">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       Margin="5"
                        TextAlignment="Right"
-                       Text="Connection Db File Path: "/>
-            <TextBox Margin="5"
-                     Width="600"
-                     Text="{Binding ConnectionDbFilePath}"/>
-            <Button Margin="5"
-                    Width="100"
+                       Text="Db File Path: "/>
+            <TextBox Grid.Column="1"
+                     Margin="5"
+                     Text="{Binding DbFilePath}"/>
+            <Button Grid.Column="2"
+                    Margin="5"
                     Content="Connection"
-                    Command="{Binding ConnectionDbFilePathCommand}"/>
-            <Button Margin="5"
-                    Width="100"
+                    Command="{Binding ConnectDbFilePathCommand}"/>
+            <Button Grid.Column="3"
+                    Margin="5"
                     Content="Close"
                     Command="{Binding CloseDbFilePathCommand}"/>
-        </StackPanel>
-        <!--  Add Student  -->
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Margin="5"
-                       TextAlignment="Right"
-                       Text="Student Name: "/>
-            <TextBox Margin="5"
-                     Width="600"
-                     Text="{Binding StudentName, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Margin="5"
-                    Width="100"
-                    Content="Add"
-                    Command="{Binding AddStudentCommand}"/>
-        </StackPanel>
-        <!--    -->
-
-        <!--  Delete Student  -->
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Margin="5"
-                       TextAlignment="Right"
-                       Text="Delete Student ID: "/>
-            <TextBox Margin="5"
-                     Width="600"
-                     Text="{Binding DeleteID, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Margin="5"
-                    Width="100"
-                    Content="Delete"
-                    Command="{Binding DeleteStudentCommand}"/>
-        </StackPanel>
-        <!--    -->
-
-        <!--  Save  -->
-        <StackPanel Orientation="Horizontal">
-            <Button Margin="5"
-                    Width="100"
+            <Button Grid.Column="4"
+                    Margin="5"
                     Content="Save"
                     Command="{Binding SaveStudentCommand}"/>
-        </StackPanel>
+        </Grid>
         <!--    -->
 
-        <DataGrid ItemsSource="{Binding Students}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  SelectionUnit="FullRow"
-                  HeadersVisibility="Column"
-                  VirtualizingStackPanel.ScrollUnit="Pixel"
-                  VirtualizingStackPanel.VirtualizationMode="Recycling"
-                  ScrollViewer.CanContentScroll="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Id"
-                                    Width="100"
-                                    Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Name"
-                                    Width="200"
-                                    Binding="{Binding Name}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-    </StackPanel>
+        <GroupBox Grid.Row="2"
+                  Margin="5"
+                  Header="Students">
+            <DataGrid Margin="5"
+                      ItemsSource="{Binding Students}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="False"
+                      CanUserAddRows="True"
+                      SelectionUnit="FullRow"
+                      HeadersVisibility="Column"
+                      VirtualizingStackPanel.ScrollUnit="Pixel"
+                      VirtualizingStackPanel.VirtualizationMode="Recycling"
+                      ScrollViewer.CanContentScroll="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id"
+                                        Width="Auto"
+                                        IsReadOnly="True"
+                                        Binding="{Binding Id}"/>
+                    <DataGridTextColumn Header="Name"
+                                        Width="1*"
+                                        Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Grade"
+                                        Width="1*"
+                                        Binding="{Binding Grade}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+    </Grid>
 </Window>
