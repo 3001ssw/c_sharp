@@ -29,7 +29,6 @@ namespace WpfDatabase
         private string dbFilePath = "";
         public string DbFilePath { get => dbFilePath; set => SetProperty(ref dbFilePath, value); }
 
-
         private ObservableCollection<Student>? students = null;
         public ObservableCollection<Student>? Students { get => students; set => SetProperty(ref students, value); }
         #endregion
@@ -105,8 +104,6 @@ namespace WpfDatabase
             return true;
         }
         #endregion
-
-
 
         #region constructor
         public MainViewModel()

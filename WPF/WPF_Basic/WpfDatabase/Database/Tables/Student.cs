@@ -26,7 +26,7 @@ namespace WpfDatabase.Database.Tables
         [Column("col_grade")]
         public int Grade { get; set; } = 0;
 
-        [NotMapped] // db에는 안생김
+        [NotMapped] // 테이블에 칼럼 생기지 않음 안생김
         public string NotMapped { get; set; } = "";
     }
 }

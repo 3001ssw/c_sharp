@@ -14,19 +14,12 @@ namespace WpfDatabase.Database
     public class AppDbContext : DbContext
     {
         #region fields
-
         private SqliteConnectionStringBuilder? _sqliteBuilder = null; // sqlite
-
         #endregion
-
 
         #region Tables
-
         public DbSet<Student> Students { get; set; }
-
-
         #endregion
-
 
         public AppDbContext()
         {
@@ -34,6 +27,7 @@ namespace WpfDatabase.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            // 데이터베이스를 구성하기 위해 메서드 재정의
             if (_sqliteBuilder != null)
                 optionsBuilder.UseSqlite(_sqliteBuilder?.ToString());
         }
