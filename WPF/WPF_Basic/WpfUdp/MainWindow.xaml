@@ -19,21 +19,20 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0"
                     Orientation="Horizontal">
-            <TextBlock Width="50"
+            <TextBlock Width="80"
                        Margin="5"
                        TextAlignment="Right"
-                       Text="IP: "/>
+                       Text="My IP: "/>
             <TextBox Width="100"
                      Margin="5"
-                     Text="{Binding UdpIp}"/>
-            <TextBlock Width="50"
+                     Text="{Binding MyIp}"/>
+            <TextBlock Width="80"
                        Margin="5"
                        TextAlignment="Right"
-                       Text="PORT: "/>
+                       Text="My Port: "/>
             <TextBox Width="100"
                      Margin="5"
-                     Text="{Binding UdpPort}"/>
-
+                     Text="{Binding MyPort}"/>
             <Button Width="100"
                     Margin="5"
                     Content="Open"
@@ -43,14 +42,26 @@
                     Content="Close"
                     Command="{Binding UdpCloseCommand}"/>
         </StackPanel>
+
         <StackPanel Grid.Row="1"
                     Orientation="Horizontal">
-            <TextBox Width="500"
+            <TextBlock Width="80"
+                       Margin="5"
+                       TextAlignment="Right"
+                       Text="Target IP: "/>
+            <TextBox Width="100"
                      Margin="5"
-                     Text="{Binding SendData}"/>
+                     Text="{Binding TargetIp}"/>
+            <TextBlock Width="80"
+                       Margin="5"
+                       TextAlignment="Right"
+                       Text="Target Port: "/>
             <TextBox Width="100"
                      Margin="5"
                      Text="{Binding TargetPort}"/>
+            <TextBox Width="200"
+                     Margin="5"
+                     Text="{Binding SendData}"/>
             <Button Width=" 100"
                     Margin="5"
                     Content="Send"
@@ -74,6 +85,10 @@
                                     Width="100"
                                     IsReadOnly="True"
                                     Binding="{Binding Time}"/>
+                <DataGridTextColumn Header="Tx, Rx"
+                                    Width="100"
+                                    IsReadOnly="True"
+                                    Binding="{Binding TxRx}"/>
                 <DataGridTextColumn Header="IP"
                                     Width="100"
                                     IsReadOnly="True"
