@@ -27,7 +27,8 @@ namespace WpfUdp.UDP
                 _listener = new UdpClient(port);
                 _isRunning = true;
 
-                _receiveThread = new Thread(ReceiveLoop)
+                //수신 쓰레드 실행
+                _receiveThread = new Thread(ThreadReceive)
                 {
                     IsBackground = true
                 };
@@ -50,7 +51,49 @@ namespace WpfUdp.UDP
             }
         }
 
-        private void ReceiveLoop()
+        public void StopListening()
+        {
+            _isRunning = false;
+
+            _listener?.Close();
+            _listener = null;
+
+            MessageReceived?.Invoke(this, new UdpMessage
+            {
+                TxRx = "",
+                Message = "Stop Listening"
+            });
+        }
+
+        public int Send(string targetIp, string targetPort, string message)
+        {
+            int sendLen = 0;
+            if (_isRunning == false || _listener == null)
+                return sendLen;
+
+            if (!int.TryParse(targetPort, out int port))
+                return sendLen;
+
+            byte[] data = Encoding.UTF8.GetBytes(message);
+
+            MessageReceived?.Invoke(this, new UdpMessage
+            {
+                TxRx = "Tx",
+                Ip = targetIp,
+                Port = targetPort,
+                Message = message
+            });
+            sendLen = _listener.Send(data, data.Length, targetIp, port);
+
+            return sendLen;
+        }
+
+        public bool IsOpen()
+        {
+            return _isRunning;
+        }
+
+        private void ThreadReceive()
         {
             try
             {
@@ -83,51 +126,6 @@ namespace WpfUdp.UDP
             {
                 System.Diagnostics.Debug.WriteLine($"ReceiveLoop Error: {ex.Message}");
             }
-        }
-
-        public void StopListening()
-        {
-            _isRunning = false;
-
-            _listener?.Close();
-            _listener = null;
-
-
-
-            MessageReceived?.Invoke(this, new UdpMessage
-            {
-                TxRx = "",
-                Message = "Stop Listening"
-            });
-        }
-
-        public int Send(string targetIp, string targetPort, string message)
-        {
-            int sendLen = 0;
-            if (_isRunning == false || _listener == null)
-                return sendLen;
-
-            if (!int.TryParse(targetPort, out int port))
-                return sendLen;
-
-
-            byte[] data = Encoding.UTF8.GetBytes(message);
-
-            MessageReceived?.Invoke(this, new UdpMessage
-            {
-                TxRx = "Tx",
-                Ip = targetIp,
-                Port = targetPort,
-                Message = message
-            });
-            sendLen = _listener.Send(data, data.Length, targetIp, port);
-
-            return sendLen;
-        }
-
-        public bool IsOpen()
-        {
-            return _isRunning;
         }
     }
 }
