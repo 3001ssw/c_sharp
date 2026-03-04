@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -54,6 +55,7 @@ namespace WpfUdp.UDP
         public void StopListening()
         {
             _isRunning = false;
+            _receiveThread?.Join();
 
             _listener?.Close();
             _listener = null;
@@ -101,19 +103,26 @@ namespace WpfUdp.UDP
 
                 while (_isRunning && _listener != null)
                 {
-                    byte[] buffer = _listener.Receive(ref remoteEndPoint);
-
-                    string message = Encoding.UTF8.GetString(buffer);
-                    string senderIp = remoteEndPoint.Address.ToString();
-                    string senderPort = remoteEndPoint.Port.ToString();
-
-                    MessageReceived?.Invoke(this, new UdpMessage
+                    if (0 < _listener.Available)
                     {
-                        TxRx = "Rx",
-                        Ip = senderIp,
-                        Port = senderPort,
-                        Message = message
-                    });
+                        byte[] buffer = _listener.Receive(ref remoteEndPoint);
+
+                        string message = Encoding.UTF8.GetString(buffer);
+                        string senderIp = remoteEndPoint.Address.ToString();
+                        string senderPort = remoteEndPoint.Port.ToString();
+
+                        MessageReceived?.Invoke(this, new UdpMessage
+                        {
+                            TxRx = "Rx",
+                            Ip = senderIp,
+                            Port = senderPort,
+                            Message = message
+                        });
+
+                        Thread.Sleep(10);
+                    }
+                    else
+                        Thread.Sleep(100);
                 }
             }
             catch (SocketException ex) when (ex.SocketErrorCode == SocketError.Interrupted || ex.SocketErrorCode == SocketError.OperationAborted)
@@ -125,6 +134,13 @@ namespace WpfUdp.UDP
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"ReceiveLoop Error: {ex.Message}");
+            }
+            finally
+            {
+                MessageReceived?.Invoke(this, new UdpMessage
+                {
+                    Message = "Stop Receive Thread",
+                });
             }
         }
     }

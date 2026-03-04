@@ -18,9 +18,6 @@ namespace WpfUdp
 
         private UdpManager _udpManager = new UdpManager();
 
-        private string myIp = "127.0.0.1";
-        public string MyIp { get => myIp; set => SetProperty(ref myIp, value); }
-
         private string myPort = "8080";
         public string MyPort { get => myPort; set => SetProperty(ref myPort, value); }
 

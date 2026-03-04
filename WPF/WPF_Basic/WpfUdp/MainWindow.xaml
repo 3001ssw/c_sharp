@@ -22,13 +22,6 @@
             <TextBlock Width="80"
                        Margin="5"
                        TextAlignment="Right"
-                       Text="My IP: "/>
-            <TextBox Width="100"
-                     Margin="5"
-                     Text="{Binding MyIp}"/>
-            <TextBlock Width="80"
-                       Margin="5"
-                       TextAlignment="Right"
                        Text="My Port: "/>
             <TextBox Width="100"
                      Margin="5"
