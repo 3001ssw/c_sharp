@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfDatabase", "WpfDatabase\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfUdp", "WpfUdp\WpfUdp.csproj", "{F5F2269F-ED49-4DE2-A3FC-7B6E0720E16C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTcp", "WpfTcp\WpfTcp.csproj", "{202A8C62-516C-496A-9B33-9C4D5AB54A3F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +155,10 @@ Global
 		{F5F2269F-ED49-4DE2-A3FC-7B6E0720E16C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5F2269F-ED49-4DE2-A3FC-7B6E0720E16C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5F2269F-ED49-4DE2-A3FC-7B6E0720E16C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{202A8C62-516C-496A-9B33-9C4D5AB54A3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{202A8C62-516C-496A-9B33-9C4D5AB54A3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{202A8C62-516C-496A-9B33-9C4D5AB54A3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{202A8C62-516C-496A-9B33-9C4D5AB54A3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
