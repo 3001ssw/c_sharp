@@ -5,8 +5,118 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfTcpServer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"
+        Height="450"
+        Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
 
+        <Grid Grid.Row="0"
+              Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <DataGrid Grid.Row="0"
+                      Grid.Column="0"
+                      Margin="5"
+                      ItemsSource="{Binding AccepClients}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      IsReadOnly="True"
+                      SelectionUnit="FullRow"
+                      HeadersVisibility="Column"
+                      VirtualizingStackPanel.ScrollUnit="Pixel"
+                      VirtualizingStackPanel.VirtualizationMode="Recycling">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="IP"
+                                        Width="100"
+                                        IsReadOnly="True"
+                                        Binding="{Binding IP}"/>
+                    <DataGridTextColumn Header="Port"
+                                        Width="100"
+                                        IsReadOnly="True"
+                                        Binding="{Binding Port}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <StackPanel Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="5"
+                        Orientation="Horizontal">
+
+                <Button Content="Close"
+                        Width="100"
+                        Command="{Binding CloseClientCommand}"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="0"
+              Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+
+            <DataGrid Grid.Row="0"
+                      Grid.Column="0"
+                      Margin="5"
+                      ItemsSource="{Binding Messages}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      IsReadOnly="True"
+                      SelectionUnit="FullRow"
+                      HeadersVisibility="Column"
+                      VirtualizingStackPanel.ScrollUnit="Pixel"
+                      VirtualizingStackPanel.VirtualizationMode="Recycling">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Time"
+                                        Width="100"
+                                        IsReadOnly="True"
+                                        Binding="{Binding Time}"/>
+                    <DataGridTextColumn Header="IP"
+                                        Width="100"
+                                        IsReadOnly="True"
+                                        Binding="{Binding IP}"/>
+                    <DataGridTextColumn Header="Port"
+                                        Width="100"
+                                        IsReadOnly="True"
+                                        Binding="{Binding Port}"/>
+                    <DataGridTextColumn Header="Message"
+                                        Width="1*"
+                                        IsReadOnly="True"
+                                        Binding="{Binding Message}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Grid Grid.Row="1"
+                  Grid.Column="0"
+                  Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Row="0"
+                         Grid.Column="0"
+                         Text="{Binding SendMessage}"/>
+
+                <Button Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="5,0"
+                        Content="Send"
+                        Command="{Binding SendMessageCommand}"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
