@@ -57,11 +57,12 @@
                   CanUserDeleteRows="False"
                   SelectionUnit="FullRow"
                   SelectionMode="Single"
+                  AutoGenerateColumns="False"
                   HeadersVisibility="Column">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Time"
-                                    Width="100"
-                                    Binding="{Binding Time}"/>
+                                    Width="200"
+                                    Binding="{Binding Time, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}"/>
                 <DataGridTextColumn Header="IP"
                                     Width="100"
                                     Binding="{Binding IP}"/>
@@ -83,7 +84,7 @@
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0"
                      Margin="5"
-                     Text="{Binding SendMessage}"/>
+                     Text="{Binding SendMessage, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Grid.Column="1"
                     Margin="5"
                     Content="Send Message"
