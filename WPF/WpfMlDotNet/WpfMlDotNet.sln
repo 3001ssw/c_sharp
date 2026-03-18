@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37027.9 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfClassification", "WpfClassification\WpfClassification.csproj", "{1AE55AD8-9A41-469B-BFF7-178F751D9749}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfRanking", "WpfRanking\WpfRanking.csproj", "{93B6B8D4-2A3A-477A-AFA5-BEBA3D885128}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1AE55AD8-9A41-469B-BFF7-178F751D9749}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AE55AD8-9A41-469B-BFF7-178F751D9749}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AE55AD8-9A41-469B-BFF7-178F751D9749}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AE55AD8-9A41-469B-BFF7-178F751D9749}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93B6B8D4-2A3A-477A-AFA5-BEBA3D885128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93B6B8D4-2A3A-477A-AFA5-BEBA3D885128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93B6B8D4-2A3A-477A-AFA5-BEBA3D885128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93B6B8D4-2A3A-477A-AFA5-BEBA3D885128}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BD74A7D5-BEF2-43E2-A4EB-057DAB345EF1}
+	EndGlobalSection
+EndGlobal
