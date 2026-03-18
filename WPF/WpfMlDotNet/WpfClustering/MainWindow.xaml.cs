@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WpfTcpServer
+namespace WpfClustering
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -20,6 +20,5 @@ namespace WpfTcpServer
         {
             InitializeComponent();
         }
-
     }
 }

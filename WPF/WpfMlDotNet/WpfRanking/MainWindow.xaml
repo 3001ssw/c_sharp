@@ -13,7 +13,7 @@
         <local:MainViewModel/>
     </Window.DataContext>
 
-    <Grid Margin="15">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -21,21 +21,16 @@
 
         <StackPanel Grid.Row="0"
                     Orientation="Horizontal"
-                    Margin="0,0,0,15">
+                    Margin="5">
             <TextBox Width="270"
                      Height="30"
                      VerticalContentAlignment="Center"
-                     Padding="5,0"
-                     FontSize="14"
                      Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"/>
 
             <Button Content="검색"
                     Width="80"
                     Height="30"
-                    Margin="10,0,0,0"
-                    Background="#FF0078D7"
-                    Foreground="White"
-                    FontWeight="Bold"
+                    Margin="5"
                     Command="{Binding SearchCommand}"/>
         </StackPanel>
 
@@ -45,17 +40,12 @@
                  ItemsSource="{Binding SearchResults}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="#EEEEEE"
-                            BorderThickness="0,0,0,1"
-                            Padding="10">
+                    <Border>
                         <StackPanel>
                             <TextBlock Text="{Binding Title}"
-                                       FontWeight="Bold"
-                                       FontSize="16"
-                                       Margin="0,0,0,5"
+                                       Margin="5"
                                        TextWrapping="Wrap"/>
                             <TextBlock Text="{Binding RankScore, StringFormat='모델 평가 점수: {0:F4}'}"
-                                       Foreground="#FF666666"
                                        FontSize="12"/>
                         </StackPanel>
                     </Border>

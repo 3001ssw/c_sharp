@@ -74,10 +74,12 @@ namespace WpfRanking
         // 검색 커맨드 실행 로직
         private void ExecuteSearch()
         {
-            if (string.IsNullOrWhiteSpace(SearchQuery)) return;
+            if (string.IsNullOrWhiteSpace(SearchQuery))
+                return;
+
             SearchResults.Clear();
             uint currentSessionGroupId = (uint)DateTime.Now.Ticks;
-            List<Document> candidateDocs = GetCandidateDocumentsFromDB(SearchQuery);
+            List<Document> candidateDocs = GetCandidateDocumentsFromDB();
 
             var searchDataList = new List<SearchData>();
             foreach (var doc in candidateDocs)
@@ -114,7 +116,7 @@ namespace WpfRanking
         }
 
         // 가상 데이터 제공 메서드
-        private List<Document> GetCandidateDocumentsFromDB(string query)
+        private List<Document> GetCandidateDocumentsFromDB()
         {
             var now = DateTime.Now;
             return new List<Document>
