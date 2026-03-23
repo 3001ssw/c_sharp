@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfRanking", "WpfRanking\Wp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfClustering", "WpfClustering\WpfClustering.csproj", "{9B71D76E-3B0B-4769-9DCF-34EBC2F28DF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfML", "WpfML\WpfML.csproj", "{F647B3D3-C1E9-4D48-B9F2-256345698A0A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{9B71D76E-3B0B-4769-9DCF-34EBC2F28DF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B71D76E-3B0B-4769-9DCF-34EBC2F28DF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B71D76E-3B0B-4769-9DCF-34EBC2F28DF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F647B3D3-C1E9-4D48-B9F2-256345698A0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F647B3D3-C1E9-4D48-B9F2-256345698A0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F647B3D3-C1E9-4D48-B9F2-256345698A0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F647B3D3-C1E9-4D48-B9F2-256345698A0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
