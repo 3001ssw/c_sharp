@@ -50,7 +50,8 @@ namespace WpfML
                     // 4. 결과를 UI에 바인딩된 ResultText에 업데이트
                     ResultText = $"[분류 완료]\n" +
                                  $"선택한 파일: {Path.GetFileName(selectedFilePath)}\n" +
-                                 $"예측된 결과: {result.PredictedLabel}";
+                                 $"예측된 결과: {result.PredictedLabel}\n" +
+                                 $"확률: {result.Score.Max()}";
                 }
                 catch (Exception ex)
                 {
