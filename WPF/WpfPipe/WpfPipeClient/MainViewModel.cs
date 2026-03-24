@@ -14,16 +14,20 @@ namespace WpfPipeClient
     public class MainViewModel : BindableBase
     {
         #region fields, properties
-        private Thread? threadPipeClient = null;
-        private CancellationTokenSource? csThreadPipeClient = null;
+        private CancellationTokenSource? cs = null;
+        //public CancellationTokenSource? cs { get => cs; set => SetProperty(ref cs, value); }
+
         private NamedPipeClientStream? clientStream = null;
+        public NamedPipeClientStream? ClientStream { get => clientStream; set => SetProperty(ref clientStream, value); }
 
 
         private string pipeName = "testpipe";
         public string PipeName { get => pipeName; set => SetProperty(ref pipeName, value); }
 
+
         private string sendMessage = "";
         public string SendMessage { get => sendMessage; set => SetProperty(ref sendMessage, value); }
+
 
         private ObservableCollection<PipeMessage> messages = new ObservableCollection<PipeMessage>();
         public ObservableCollection<PipeMessage> Messages { get => messages; set => SetProperty(ref messages, value); }
@@ -34,107 +38,112 @@ namespace WpfPipeClient
 
         #region command methods
 
-        public DelegateCommand NamedPipeClientConnectCommand { get; private set; }
-        public DelegateCommand NamedPipeClientCloseCommand { get; private set; }
+        public DelegateCommand PipeClientConnectCommand { get; private set; }
+        public DelegateCommand PipeClientCloseCommand { get; private set; }
         public DelegateCommand SendMessageCommand { get; private set; }
 
-        private void OnNamedPipeClientConnect()
+        public MainViewModel()
         {
-            csThreadPipeClient = new CancellationTokenSource();
-            threadPipeClient = new Thread(() => ThreadNamedPipeClient(csThreadPipeClient.Token));
-            threadPipeClient.IsBackground = true;
-            threadPipeClient.Start();
+            PipeClientConnectCommand = new DelegateCommand(OnPipeClientConnect, CanPipeClientConnect).ObservesProperty(() => ClientStream);
+            PipeClientCloseCommand = new DelegateCommand(OnPipeClientClose, CanPipeClientClose).ObservesProperty(() => ClientStream);
+            SendMessageCommand = new DelegateCommand(OnSendMessage, CanSendMessage).ObservesProperty(() => ClientStream).ObservesProperty(() => SendMessage);
+
+            BindingOperations.EnableCollectionSynchronization(Messages, lockMessages);
         }
 
-        private bool CanNamedPipeClientConnect()
+        private void OnPipeClientConnect()
         {
+            cs = new CancellationTokenSource();
+            Task.Run(() => PipeClientStartTask(cs.Token));
+        }
+
+        private bool CanPipeClientConnect()
+        {
+            if (ClientStream != null)
+                return false;
+
             return true;
         }
 
-        private void OnNamedPipeClientClose()
+        private void OnPipeClientClose()
         {
-            csThreadPipeClient?.Cancel();
-            clientStream?.Close();
-            threadPipeClient?.Join();
-            threadPipeClient = null;
-            csThreadPipeClient = null;
+            cs?.Cancel();
+            cs = null;
         }
 
-        private bool CanNamedPipeClientClose()
+        private bool CanPipeClientClose()
         {
+            if (ClientStream == null)
+                return false;
+
             return true;
         }
 
         private void OnSendMessage()
         {
-            StreamWriter writer = new StreamWriter(clientStream, Encoding.UTF8)
+            StreamWriter writer = new StreamWriter(ClientStream, Encoding.UTF8)
             {
                 AutoFlush = true,
             };
             writer.WriteLine(SendMessage);
-            AddMessage($"Send: {SendMessage}");
+            AddMessage($"write message: {SendMessage}");
             SendMessage = "";
         }
 
         private bool CanSendMessage()
         {
+            if (cs == null || string.IsNullOrEmpty(SendMessage))
+                return false;
+
             return true;
         }
 
         #endregion
 
-        public MainViewModel()
+        private void PipeClientStartTask(CancellationToken token)
         {
-            NamedPipeClientConnectCommand = new DelegateCommand(OnNamedPipeClientConnect, CanNamedPipeClientConnect);
-            NamedPipeClientCloseCommand = new DelegateCommand(OnNamedPipeClientClose, CanNamedPipeClientClose);
-            SendMessageCommand = new DelegateCommand(OnSendMessage, CanSendMessage);
+            AddMessage("Task Start");
 
-            BindingOperations.EnableCollectionSynchronization(Messages, lockMessages);
-        }
-
-        private void ThreadNamedPipeClient(CancellationToken token)
-        {
-            AddMessage("Thread Start");
-
-            clientStream = new NamedPipeClientStream(".", PipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
-
-            clientStream.Connect();
-
-            AddMessage("Connect complete");
-
-            Thread threadRecv = new Thread(() => ThreadNamedPipeClientRecv(token))
+            try
             {
-                IsBackground = true,
-            };
-            threadRecv.Start();
-            threadRecv.Join();
+                ClientStream = new NamedPipeClientStream(".", PipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
 
-            AddMessage("");
+                ClientStream.ConnectAsync(token).Wait();
 
-            clientStream.Close();
-            clientStream = null;
+                AddMessage("Connect complete");
 
-            AddMessage("Thread Close");
-        }
+                StreamReader reader = new StreamReader(ClientStream, Encoding.UTF8);
 
-        private void ThreadNamedPipeClientRecv(CancellationToken token)
-        {
-            StreamReader reader = new StreamReader(clientStream, Encoding.UTF8, true, 1024, leaveOpen: true);
-
-            while (!token.IsCancellationRequested)
-            {
-                string? msg = reader.ReadLine();
-                if (msg != null)
+                using (token.Register(() => ClientStream.Close()))
                 {
-                    AddMessage(msg);
-                    token.WaitHandle.WaitOne(100);
-                }
-                else
-                {
-                    AddMessage("msg is null");
-                    break;
+                    while (!token.IsCancellationRequested)
+                    {
+                        string? msg = reader.ReadLine();
+                        if (msg != null)
+                        {
+                            AddMessage($"read message: {msg}");
+
+                            token.WaitHandle.WaitOne(100);
+                        }
+                        else
+                        {
+                            AddMessage("Server Close");
+                            break;
+                        }
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                AddMessage($"Exception: {e.Message}");
+            }
+            finally
+            {
+                ClientStream?.Close();
+                ClientStream = null;
+            }
+
+            AddMessage("Task Close");
         }
 
         private void AddMessage(string message)

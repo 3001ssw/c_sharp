@@ -16,9 +16,8 @@ namespace WpfPipeServer
     public class MainViewModel : BindableBase
     {
         #region fields, properties
-        private Thread? threadPipeServer = null;
-        private CancellationTokenSource? csThreadPipeServer = null;
-        private NamedPipeServerStream? serverStream = null;
+        private CancellationTokenSource? cs = null;
+        public CancellationTokenSource? Cs { get => cs; set => SetProperty(ref cs, value); }
 
         private string pipeName = "testpipe";
         public string PipeName { get => pipeName; set => SetProperty(ref pipeName, value); }
@@ -32,101 +31,48 @@ namespace WpfPipeServer
 
         #region command methods
 
-        public DelegateCommand NamedPipeServerCreateCommand { get; private set; }
-        public DelegateCommand NamedPipeServerCloseCommand { get; private set; }
+        public DelegateCommand PipeServerStartCommand { get; private set; }
+        public DelegateCommand PipeServerCloseCommand { get; private set; }
 
-        private void OnNamedPipeServerCreate()
-        {
-            csThreadPipeServer = new CancellationTokenSource();
-            threadPipeServer = new Thread(() => ThreadServerCreate(csThreadPipeServer.Token))
-            {
-                IsBackground = true,
-            };
-            threadPipeServer?.Start();
-        }
-
-        private bool CanNamedPipeServerCreate()
-        {
-            return true;
-        }
-
-        private void OnNamedPipeServerClose()
-        {
-            csThreadPipeServer?.Cancel();
-            serverStream?.Close();
-            threadPipeServer?.Join();
-            threadPipeServer = null;
-            csThreadPipeServer = null;
-        }
-
-        private bool CanNamedPipeServerClose()
-        {
-            return true;
-        }
-
-        #endregion
 
         public MainViewModel()
         {
-            NamedPipeServerCreateCommand = new DelegateCommand(OnNamedPipeServerCreate, CanNamedPipeServerCreate);
-            NamedPipeServerCloseCommand = new DelegateCommand(OnNamedPipeServerClose, CanNamedPipeServerClose);
+            PipeServerStartCommand = new DelegateCommand(OnPipeServerStart, CanPipeServerStart).ObservesProperty(() => Cs);
+            PipeServerCloseCommand = new DelegateCommand(OnPipeServerClose, CanPipeServerClose).ObservesProperty(() => Cs);
 
             BindingOperations.EnableCollectionSynchronization(Messages, lockMessages);
         }
 
-        #region Thread
-        private void ThreadServerCreate(CancellationToken token)
+        private void OnPipeServerStart()
         {
-            AddMessage("Thread Start");
-            serverStream = new NamedPipeServerStream("testpipe",
-                PipeDirection.InOut,
-                NamedPipeServerStream.MaxAllowedServerInstances,
-                PipeTransmissionMode.Byte,
-                PipeOptions.Asynchronous);
-
-            serverStream.WaitForConnection();
-            AddMessage("Client Connect");
-
-            Thread threadRecv = new Thread(() => ThreadPipeServerRecv(serverStream, token))
-            {
-                IsBackground = true,
-            };
-            threadRecv.Start();
-            threadRecv.Join();
-
-            serverStream?.Close();
-            serverStream = null;
-            AddMessage("Close Thread");
+            Cs = new CancellationTokenSource();
+            Task.Run(() => PipeServerStartTask(Cs.Token));
         }
 
-        private void ThreadPipeServerRecv(NamedPipeServerStream serverStream, CancellationToken token)
+        private bool CanPipeServerStart()
         {
-            StreamReader reader = new StreamReader(serverStream, Encoding.UTF8, true, 1024, leaveOpen: true);
-            try
-            {
-                while (!token.IsCancellationRequested)
-                {
-                    string? msg = reader.ReadLine();
-                    if (msg != null)
-                    {
-                        AddMessage(msg);
-                        StreamWriter writer = new StreamWriter(serverStream) { AutoFlush = true };
-                        writer.WriteLine(msg);
-                        token.WaitHandle.WaitOne(100);
-                    }
-                    else
-                    {
-                        AddMessage("msg is null");
-                        break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                AddMessage($"Exception: {ex.Message}");
-            }
+            if (Cs != null)
+                return false;
+
+            return true;
         }
+
+        private void OnPipeServerClose()
+        {
+            Cs?.Cancel();
+            Cs = null;
+        }
+
+        private bool CanPipeServerClose()
+        {
+            if (Cs == null)
+                return false;
+
+            return true;
+        }
+
         #endregion
+
 
         private void AddMessage(string message)
         {
@@ -136,5 +82,82 @@ namespace WpfPipeServer
             });
         }
 
+
+        #region Task
+
+        private void PipeServerStartTask(CancellationToken token)
+        {
+            AddMessage("Start Task");
+
+            while (!token.IsCancellationRequested)
+            {
+                NamedPipeServerStream serverStream = new NamedPipeServerStream("testpipe",
+                    PipeDirection.InOut,
+                    NamedPipeServerStream.MaxAllowedServerInstances,
+                    PipeTransmissionMode.Byte,
+                    PipeOptions.Asynchronous);
+
+                try
+                {
+                    serverStream.WaitForConnectionAsync(token).Wait();
+                    AddMessage("Client Connect");
+
+                    Task.Run(() => PipeServerRecvTask(serverStream, token));
+
+                    token.WaitHandle.WaitOne(100);
+                }
+                catch (Exception e)
+                {
+                    AddMessage($"Exception: {e.Message}");
+                }
+                finally
+                {
+                    if (token.IsCancellationRequested)
+                        serverStream?.Close();
+
+                }
+            }
+
+            AddMessage("End Task");
+        }
+
+        private void PipeServerRecvTask(NamedPipeServerStream serverStream, CancellationToken token)
+        {
+            StreamReader reader = new StreamReader(serverStream, Encoding.UTF8, true, 1024, leaveOpen: true);
+            try
+            {
+                using (token.Register(() => serverStream.Close()))
+                {
+                    while (!token.IsCancellationRequested)
+                    {
+                        string? msg = reader.ReadLine();
+                        if (msg != null)
+                        {
+                            AddMessage($"read message: {msg}");
+                            StreamWriter writer = new StreamWriter(serverStream, Encoding.UTF8) { AutoFlush = true };
+
+                            AddMessage($"write message: {msg}");
+                            writer.WriteLine(msg);
+                            token.WaitHandle.WaitOne(100);
+                        }
+                        else
+                        {
+                            AddMessage("Client Close");
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AddMessage($"Exception: {ex.Message}");
+            }
+            finally
+            {
+                serverStream.Close();
+            }
+        }
+
+        #endregion
     }
 }
