@@ -97,24 +97,26 @@ namespace WpfPipeServer
                     PipeTransmissionMode.Byte,
                     PipeOptions.Asynchronous);
 
-                try
+                using (token.Register(() => serverStream?.Close()))
                 {
-                    serverStream.WaitForConnectionAsync(token).Wait();
-                    AddMessage("Client Connect");
+                    try
+                    {
+                        serverStream.WaitForConnection();
+                        //serverStream.WaitForConnectionAsync(token).Wait();
+                        AddMessage("Client Connect");
 
-                    Task.Run(() => PipeServerRecvTask(serverStream, token));
+                        Task.Run(() => PipeServerRecvTask(serverStream, token));
 
-                    token.WaitHandle.WaitOne(100);
-                }
-                catch (Exception e)
-                {
-                    AddMessage($"Exception: {e.Message}");
-                }
-                finally
-                {
-                    if (token.IsCancellationRequested)
+                        token.WaitHandle.WaitOne(100);
+                    }
+                    catch (Exception e)
+                    {
+                        AddMessage($"Exception: {e.Message}");
+                    }
+                    finally
+                    {
                         serverStream?.Close();
-
+                    }
                 }
             }
 
@@ -124,9 +126,9 @@ namespace WpfPipeServer
         private void PipeServerRecvTask(NamedPipeServerStream serverStream, CancellationToken token)
         {
             StreamReader reader = new StreamReader(serverStream, Encoding.UTF8);
-            try
+            using (token.Register(() => serverStream.Close()))
             {
-                using (token.Register(() => serverStream.Close()))
+                try
                 {
                     while (!token.IsCancellationRequested)
                     {
@@ -147,14 +149,14 @@ namespace WpfPipeServer
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                AddMessage($"Exception: {ex.Message}");
-            }
-            finally
-            {
-                serverStream.Close();
+                catch (Exception ex)
+                {
+                    AddMessage($"Exception: {ex.Message}");
+                }
+                finally
+                {
+                    serverStream.Close();
+                }
             }
         }
 
