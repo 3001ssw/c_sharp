@@ -123,7 +123,7 @@ namespace WpfPipeServer
 
         private void PipeServerRecvTask(NamedPipeServerStream serverStream, CancellationToken token)
         {
-            StreamReader reader = new StreamReader(serverStream, Encoding.UTF8, true, 1024, leaveOpen: true);
+            StreamReader reader = new StreamReader(serverStream, Encoding.UTF8);
             try
             {
                 using (token.Register(() => serverStream.Close()))
