@@ -115,7 +115,8 @@ namespace WpfPipeServer
                     }
                     finally
                     {
-                        serverStream?.Close();
+                        if (token.IsCancellationRequested)
+                            serverStream?.Close();
                     }
                 }
             }
