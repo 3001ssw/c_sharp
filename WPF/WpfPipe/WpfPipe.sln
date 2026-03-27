@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36915.13 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfPipeServer", "WpfPipeServer\WpfPipeServer.csproj", "{D06307D8-4C46-41C2-BEB8-0AC5BDCD18AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfPipeClient", "WpfPipeClient\WpfPipeClient.csproj", "{475F8B93-0D34-4F7D-B063-EB9B171873A9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D06307D8-4C46-41C2-BEB8-0AC5BDCD18AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D06307D8-4C46-41C2-BEB8-0AC5BDCD18AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D06307D8-4C46-41C2-BEB8-0AC5BDCD18AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D06307D8-4C46-41C2-BEB8-0AC5BDCD18AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{475F8B93-0D34-4F7D-B063-EB9B171873A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{475F8B93-0D34-4F7D-B063-EB9B171873A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{475F8B93-0D34-4F7D-B063-EB9B171873A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{475F8B93-0D34-4F7D-B063-EB9B171873A9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {05B2C668-E828-4D8A-981B-9A19DE42AF88}
+	EndGlobalSection
+EndGlobal

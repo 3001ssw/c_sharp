@@ -16,10 +16,10 @@ namespace WpfTcpServer
     public class MainViewModel : BindableBase
     {
         #region fields, properties
-        private TcpListener? _server = null;
-        private Thread? serverAcceptThread = null;
-        private CancellationTokenSource? acceptCts = null;
+        private CancellationTokenSource? cs = null;
 
+        private TcpListener? chatServer = null;
+        public TcpListener? ChatServer { get => chatServer; set => SetProperty(ref chatServer, value); }
 
         private int serverPort = 7000;
         public int ServerPort { get => serverPort; set => SetProperty(ref serverPort, value); }
@@ -27,10 +27,11 @@ namespace WpfTcpServer
 
         private ObservableCollection<ClientModel> clients = new ObservableCollection<ClientModel>();
         public ObservableCollection<ClientModel> Clients { get => clients; set => SetProperty(ref clients, value); }
-        private object serverLock = new object();
+        private object clientLock = new object();
 
         private ObservableCollection<ChatMessage> chatMessages = new ObservableCollection<ChatMessage>();
         public ObservableCollection<ChatMessage> ChatMessages { get => chatMessages; set => SetProperty(ref chatMessages, value); }
+
         private object chatMessageLock = new object();
 
         private string sendMessage = "";
@@ -43,40 +44,28 @@ namespace WpfTcpServer
         public DelegateCommand CloseServerCommand { get; private set; }
         public DelegateCommand SendMessageCommand { get; private set; }
 
+
+        #region constructor
+        public MainViewModel()
+        {
+            OpenServerCommand = new DelegateCommand(OnOpenServer, CanOpenServer).ObservesProperty(() => ChatServer);
+            CloseServerCommand = new DelegateCommand(OnCloseServer, CanCloseServer).ObservesProperty(() => ChatServer);
+            SendMessageCommand = new DelegateCommand(OnSendMessage, CanSendMessage).ObservesProperty(() => ChatServer).ObservesProperty(() => SendMessage);
+
+            BindingOperations.EnableCollectionSynchronization(Clients, clientLock);
+            BindingOperations.EnableCollectionSynchronization(ChatMessages, chatMessageLock);
+        }
+        #endregion
+
         private void OnOpenServer()
         {
-            if (_server != null)
-                return;
-
-            try
-            {
-                _server = new TcpListener(IPAddress.Any, ServerPort); // 7000번 포트 열기
-                _server.Start();
-
-                acceptCts = new CancellationTokenSource();
-                serverAcceptThread = new Thread(() => ThreadAccept(acceptCts.Token))
-                {
-                    IsBackground = true,
-                };
-                serverAcceptThread.Start();
-            }
-            catch (Exception ex)
-            {
-                acceptCts?.Cancel();
-                serverAcceptThread?.Join(3000);
-
-                _server?.Dispose();
-                _server = null;
-                serverAcceptThread = null;
-                acceptCts = null;
-            }
-
-            AllRaiseCanExecuteChanged();
+            cs = new CancellationTokenSource();
+            Task.Run(() => AcceptTask(cs.Token));
         }
 
         private bool CanOpenServer()
         {
-            if (_server != null)
+            if (ChatServer != null)
                 return false;
 
             return true;
@@ -84,24 +73,13 @@ namespace WpfTcpServer
 
         private void OnCloseServer()
         {
-            acceptCts?.Cancel();
-            serverAcceptThread?.Join(3000);
-
-            _server?.Stop();
-            foreach (var client in Clients)
-            {
-                client.ClientSocket?.Close();
-            }
-            _server = null;
-            serverAcceptThread = null;
-            acceptCts = null;
-
-            AllRaiseCanExecuteChanged();
+            cs?.Cancel();
+            cs = null;
         }
 
         private bool CanCloseServer()
         {
-            if (_server == null)
+            if (ChatServer == null)
                 return false;
 
             return true;
@@ -109,25 +87,28 @@ namespace WpfTcpServer
 
         private void OnSendMessage()
         {
-            foreach (ClientModel client in Clients)
+            lock (Clients)
             {
-                TcpClient clientSocket = client.ClientSocket;
+                foreach (ClientModel client in Clients)
+                {
+                    TcpClient clientSocket = client.ClientSocket;
 
-                NetworkStream stream = clientSocket.GetStream();
+                    NetworkStream stream = clientSocket.GetStream();
 
-                byte[] data = Encoding.UTF8.GetBytes(SendMessage);
-                stream.Write(data, 0, data.Length);
+                    byte[] data = Encoding.UTF8.GetBytes(SendMessage);
+                    stream.Write(data, 0, data.Length);
+                }
+                ChatMessages.Add(new ChatMessage()
+                {
+                    IP = "All",
+                    Message = SendMessage,
+                });
             }
-            ChatMessages.Add(new ChatMessage()
-            {
-                IP = "All",
-                Message = SendMessage,
-            });
         }
 
         private bool CanSendMessage()
         {
-            if (_server == null)
+            if (ChatServer == null)
                 return false;
 
             if (Clients.Count <= 0)
@@ -142,46 +123,24 @@ namespace WpfTcpServer
         #endregion
 
 
-        #region constructor
-        public MainViewModel()
-        {
-            OpenServerCommand = new DelegateCommand(OnOpenServer, CanOpenServer);
-            CloseServerCommand = new DelegateCommand(OnCloseServer, CanCloseServer);
-            SendMessageCommand = new DelegateCommand(OnSendMessage, CanSendMessage).ObservesProperty(() => SendMessage);
-
-            BindingOperations.EnableCollectionSynchronization(Clients, serverLock);
-            BindingOperations.EnableCollectionSynchronization(ChatMessages, chatMessageLock);
-
-            AllRaiseCanExecuteChanged();
-        }
-        #endregion
-
-        private void AllRaiseCanExecuteChanged()
-        {
-            OpenServerCommand.RaiseCanExecuteChanged();
-            CloseServerCommand.RaiseCanExecuteChanged();
-        }
-
-        private void ThreadAccept(CancellationToken token)
+        private void AcceptTask(CancellationToken token)
         {
             try
             {
-                while (token.IsCancellationRequested == false)
+                ChatServer = new TcpListener(IPAddress.Any, ServerPort); // 7000번 포트 열기
+                ChatServer.Start();
+
+                while (!token.IsCancellationRequested)
                 {
-                    if (_server != null && _server.Pending())
+                    if (ChatServer != null && ChatServer.Pending())
                     {
-                        TcpClient newClient = _server.AcceptTcpClient();
+                        TcpClient newClient = ChatServer.AcceptTcpClient();
                         ClientModel newClientModel = new ClientModel()
                         {
                             ClientSocket = newClient
                         };
-                        Clients.Add(newClientModel);
 
-                        Thread clientThread = new Thread(() => HandleClient(newClientModel, token))
-                        {
-                            IsBackground = true // 메인 창 닫히면 같이 죽도록 반드시 설정!
-                        };
-                        clientThread.Start();
+                        Task.Run(() => ClientTask(newClientModel, token));
 
                         token.WaitHandle.WaitOne(100);
                     }
@@ -196,10 +155,18 @@ namespace WpfTcpServer
             catch (Exception e)
             {
             }
+            finally
+            {
+                ChatServer?.Dispose();
+                ChatServer = null;
+            }
         }
 
-        private void HandleClient(ClientModel clientModel, CancellationToken token)
+        private void ClientTask(ClientModel clientModel, CancellationToken token)
         {
+            lock (Clients)
+                Clients.Add(clientModel);
+
             TcpClient clientSocket = clientModel.ClientSocket;
 
             try
@@ -247,9 +214,12 @@ namespace WpfTcpServer
             }
             finally
             {
-                clientSocket?.Close();
 
-                Clients.Remove(clientModel);
+                lock (Clients)
+                {
+                    clientSocket?.Close();
+                    Clients.Remove(clientModel);
+                }
             }
         }
     }

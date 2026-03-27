@@ -20,22 +20,23 @@ namespace WpfTcpClient
     public class MainViewModel : BindableBase
     {
         #region fields, properties
-        private TcpClient? _client = null;
-        private Thread? _threadReceive = null;
-        private CancellationTokenSource? _cancellationTokenSource = null;
+        private CancellationTokenSource? _cs = null;
 
-        private string _serverIP = "127.0.0.1";
-        public string ServerIP { get => _serverIP; set => SetProperty(ref _serverIP, value); }
+        private TcpClient? chatClient = null;
+        public TcpClient? ChatClient { get => chatClient; set => SetProperty(ref chatClient, value); }
 
-        private int _serverPort = 7000;
-        public int ServerPort { get => _serverPort; set => SetProperty(ref _serverPort, value); }
+
+        private string serverIP = "127.0.0.1";
+        public string ServerIP { get => serverIP; set => SetProperty(ref serverIP, value); }
+
+        private int serverPort = 7000;
+        public int ServerPort { get => serverPort; set => SetProperty(ref serverPort, value); }
 
         public ObservableCollection<ChatMessage> ChatMessages { get; set; } = new ObservableCollection<ChatMessage>();
         private object _lockChatMessages = new object();
 
-        private string _sendMessage = "";
-        public string SendMessage { get => _sendMessage; set => SetProperty(ref _sendMessage, value); }
-
+        private string sendMessage = "";
+        public string SendMessage { get => sendMessage; set => SetProperty(ref sendMessage, value); }
 
         #endregion
 
@@ -44,32 +45,27 @@ namespace WpfTcpClient
         public DelegateCommand SendMessageCommand { get; private set; }
         public DelegateCommand CloseCommand { get; private set; }
 
+
+        public MainViewModel()
+        {
+            ConnectServerCommand = new DelegateCommand(OnConnectServer, CanConnectServer).ObservesProperty(() => ChatClient);
+            DisconnectServerCommand = new DelegateCommand(OnDisconnectServer, CanDisconnectServer).ObservesProperty(() => ChatClient);
+            SendMessageCommand = new DelegateCommand(OnSendMessage, CanSendMessage).ObservesProperty(() => ChatClient).ObservesProperty(() => SendMessage);
+            CloseCommand = new DelegateCommand(OnClose, CanClose);
+
+            BindingOperations.EnableCollectionSynchronization(ChatMessages, _lockChatMessages);
+        }
+
+
         private void OnConnectServer()
         {
-            try
-            {
-                _client = new TcpClient();
-                _client.Connect(hostname: ServerIP, port: ServerPort);
-
-                _cancellationTokenSource = new CancellationTokenSource();
-                _threadReceive = new Thread(() => ReceiveThread(_cancellationTokenSource.Token));
-                _threadReceive.IsBackground = true;
-                _threadReceive.Start();
-            }
-            catch (Exception ex)
-            {
-                _client?.Dispose();
-                _client = null;
-            }
-            finally
-            {
-                RaiseAllCanExecuteChanged();
-            }
+            _cs = new CancellationTokenSource();
+            Task.Run(() => ChatClientTask(_cs.Token));
         }
 
         private bool CanConnectServer()
         {
-            if (_client != null)
+            if (ChatClient != null)
                 return false;
 
             return true;
@@ -77,18 +73,12 @@ namespace WpfTcpClient
 
         private void OnDisconnectServer()
         {
-            _cancellationTokenSource?.Cancel();
-            _threadReceive?.Join(3000);
-            _client?.Dispose();
-            _client = null;
-            _threadReceive = null;
-
-            RaiseAllCanExecuteChanged();
+            _cs?.Cancel();
         }
 
         private bool CanDisconnectServer()
         {
-            if (_client == null)
+            if (ChatClient == null)
                 return false;
 
             return true;
@@ -96,10 +86,10 @@ namespace WpfTcpClient
 
         private void OnSendMessage()
         {
-            if (_client == null)
+            if (ChatClient == null)
                 return;
 
-            NetworkStream stream = _client.GetStream();
+            NetworkStream stream = ChatClient.GetStream();
             byte[] data = Encoding.UTF8.GetBytes(SendMessage);
             stream.Write(data, 0, data.Length);
 
@@ -113,7 +103,7 @@ namespace WpfTcpClient
 
         private bool CanSendMessage()
         {
-            if (_client == null)
+            if (ChatClient == null)
                 return false;
 
             if (string.IsNullOrEmpty(SendMessage))
@@ -133,83 +123,55 @@ namespace WpfTcpClient
         }
 
 
-        public MainViewModel()
-        {
-            ConnectServerCommand = new DelegateCommand(OnConnectServer, CanConnectServer);
-            DisconnectServerCommand = new DelegateCommand(OnDisconnectServer, CanDisconnectServer);
-            SendMessageCommand = new DelegateCommand(OnSendMessage, CanSendMessage).ObservesProperty(() => SendMessage);
-            CloseCommand = new DelegateCommand(OnClose, CanClose);
-
-            BindingOperations.EnableCollectionSynchronization(ChatMessages, _lockChatMessages);
-
-            RaiseAllCanExecuteChanged();
-        }
-
-        private void RaiseAllCanExecuteChanged()
-        {
-            ConnectServerCommand.RaiseCanExecuteChanged();
-            DisconnectServerCommand.RaiseCanExecuteChanged();
-            SendMessageCommand.RaiseCanExecuteChanged();
-            CloseCommand.RaiseCanExecuteChanged();
-        }
-
-        private void ReceiveThread(CancellationToken token)
+        private void ChatClientTask(CancellationToken token)
         {
             try
             {
-                while (token.IsCancellationRequested == false)
+                ChatClient = new TcpClient();
+                ChatClient.Connect(hostname: ServerIP, port: ServerPort);
+
+                while (!token.IsCancellationRequested)
                 {
-                    if (_client!= null)
+                    if (0 < ChatClient.Available)
                     {
-                        if (0 < _client.Available)
+                        byte[] receiveData = new byte[4096];
+                        NetworkStream stream = ChatClient.GetStream();
+                        int bytesRead = stream.Read(receiveData, 0, receiveData.Length);
+                        if (0 < bytesRead)
                         {
-                            byte[] receiveData = new byte[4096];
-                            NetworkStream stream = _client.GetStream();
-                            int bytesRead = stream.Read(receiveData, 0, receiveData.Length);
-                            if (0 < bytesRead)
+                            if (ChatClient.Client.RemoteEndPoint is IPEndPoint endPoint)
                             {
-                                if (_client.Client.RemoteEndPoint is IPEndPoint endPoint)
+                                string serverIP = endPoint.Address.MapToIPv4().ToString();
+                                int serverPort = endPoint.Port;
+                                string message = Encoding.UTF8.GetString(receiveData, 0, bytesRead);
+                                ChatMessages.Add(new ChatMessage()
                                 {
-                                    string serverIP = endPoint.Address.MapToIPv4().ToString();
-                                    int serverPort = endPoint.Port;
-                                    string message = Encoding.UTF8.GetString(receiveData, 0, bytesRead);
-                                    ChatMessages.Add(new ChatMessage()
-                                    {
-                                        IP = serverIP,
-                                        Port = serverPort,
-                                        Message = message,
-                                    });
-                                }
-                                token.WaitHandle.WaitOne(100);
+                                    IP = serverIP,
+                                    Port = serverPort,
+                                    Message = message,
+                                });
+                            }
+                            token.WaitHandle.WaitOne(100);
+                        }
+                    }
+                    else
+                    {
+                        if (ChatClient.Client.Poll(1000, SelectMode.SelectRead))
+                        {
+                            if (ChatClient.Client.Available == 0)
+                            {
+                                ChatMessages.Add(new ChatMessage() { Message = "Server Closed" });
+
+                                break;
                             }
                         }
-                        else
-                        {
-                            if (_client.Client.Poll(1000, SelectMode.SelectRead))
-                            {
-                                if (_client.Client.Available == 0)
-                                {
-                                    ChatMessages.Add(new ChatMessage() { Message = "Server Closed" });
-
-                                    // 연결 상태 초기화 (UI 커맨드 버튼 상태 변경을 위해)
-                                    _client?.Dispose();
-                                    _client = null;
-
-                                    // UI 업데이트를 위해 커맨드 상태 갱신 (선택 사항)
-                                    RaiseAllCanExecuteChanged();
-
-                                    break; // 루프 탈출
-                                }
-                            }
-                            //token.WaitHandle.WaitOne(1000); // poll에서 대기하니까 주석 처리
-                        }
-
+                        //token.WaitHandle.WaitOne(1000); // poll에서 대기하니까 주석 처리
                     }
                 }
             }
             catch (Exception ex)
             {
-                if (_client.Client.RemoteEndPoint is IPEndPoint endPoint)
+                if (ChatClient.Client.RemoteEndPoint is IPEndPoint endPoint)
                 {
                     string serverIP = endPoint.Address.MapToIPv4().ToString();
                     int serverPort = endPoint.Port;
@@ -221,6 +183,11 @@ namespace WpfTcpClient
                         Message = message,
                     });
                 }
+            }
+            finally
+            {
+                ChatClient?.Dispose();
+                ChatClient = null;
             }
         }
     }
