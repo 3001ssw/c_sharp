@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using Chat;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,21 +10,23 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
-using WpfTcpClient.Chat;
+using System.Xml.Linq;
 
 namespace WpfTcpClient
 {
     public class MainViewModel : BindableBase
     {
         #region fields, properties
+        private Guid Id = Guid.NewGuid();
         private CancellationTokenSource? _cs = null;
 
-        private TcpClient? chatClient = null;
-        public TcpClient? ChatClient { get => chatClient; set => SetProperty(ref chatClient, value); }
+        private TcpClient? client = null;
+        public TcpClient? Client { get => client; set => SetProperty(ref client, value); }
 
 
         private string serverIP = "127.0.0.1";
@@ -31,6 +34,9 @@ namespace WpfTcpClient
 
         private int serverPort = 7000;
         public int ServerPort { get => serverPort; set => SetProperty(ref serverPort, value); }
+
+        private string name = "User";
+        public string Name { get => name; set => SetProperty(ref name, value); }
 
         public ObservableCollection<ChatMessage> ChatMessages { get; set; } = new ObservableCollection<ChatMessage>();
         private object _lockChatMessages = new object();
@@ -45,13 +51,16 @@ namespace WpfTcpClient
         public DelegateCommand SendMessageCommand { get; private set; }
         public DelegateCommand CloseCommand { get; private set; }
 
+        public DelegateCommand OkCommand { get; private set; }
+
 
         public MainViewModel()
         {
-            ConnectServerCommand = new DelegateCommand(OnConnectServer, CanConnectServer).ObservesProperty(() => ChatClient);
-            DisconnectServerCommand = new DelegateCommand(OnDisconnectServer, CanDisconnectServer).ObservesProperty(() => ChatClient);
-            SendMessageCommand = new DelegateCommand(OnSendMessage, CanSendMessage).ObservesProperty(() => ChatClient).ObservesProperty(() => SendMessage);
+            ConnectServerCommand = new DelegateCommand(OnConnectServer, CanConnectServer).ObservesProperty(() => Client);
+            DisconnectServerCommand = new DelegateCommand(OnDisconnectServer, CanDisconnectServer).ObservesProperty(() => Client);
+            SendMessageCommand = new DelegateCommand(OnSendMessage, CanSendMessage).ObservesProperty(() => Client).ObservesProperty(() => SendMessage);
             CloseCommand = new DelegateCommand(OnClose, CanClose);
+            OkCommand = new DelegateCommand(OnOk, CanOk);
 
             BindingOperations.EnableCollectionSynchronization(ChatMessages, _lockChatMessages);
         }
@@ -65,7 +74,7 @@ namespace WpfTcpClient
 
         private bool CanConnectServer()
         {
-            if (ChatClient != null)
+            if (Client != null)
                 return false;
 
             return true;
@@ -78,7 +87,7 @@ namespace WpfTcpClient
 
         private bool CanDisconnectServer()
         {
-            if (ChatClient == null)
+            if (Client == null)
                 return false;
 
             return true;
@@ -86,24 +95,30 @@ namespace WpfTcpClient
 
         private void OnSendMessage()
         {
-            if (ChatClient == null)
+            if (Client == null)
                 return;
 
-            NetworkStream stream = ChatClient.GetStream();
-            byte[] data = Encoding.UTF8.GetBytes(SendMessage);
-            stream.Write(data, 0, data.Length);
-
-            ChatMessages.Add(new ChatMessage()
+            JsonPacket data = new JsonPacket()
             {
-                Message = SendMessage,
-            });
-
+                Message = new ChatMessage()
+                {
+                    Id = Id,
+                    Name = Name,
+                    Message = SendMessage,
+                }
+            };
+            string jsonString = JsonSerializer.Serialize(data);
+            using (StreamWriter writer = new StreamWriter(stream: Client.GetStream(), encoding: new UTF8Encoding(false), leaveOpen: true))
+            {
+                writer.AutoFlush = true;
+                writer.WriteLine(jsonString);
+            }
             SendMessage = "";
         }
 
         private bool CanSendMessage()
         {
-            if (ChatClient == null)
+            if (Client == null)
                 return false;
 
             if (string.IsNullOrEmpty(SendMessage))
@@ -122,46 +137,88 @@ namespace WpfTcpClient
             return true;
         }
 
+        private void OnOk()
+        {
+            SendMessageCommand.Execute();
+        }
+
+        private bool CanOk()
+        {
+            return SendMessageCommand.CanExecute();
+        }
+
 
         private void ChatClientTask(CancellationToken token)
         {
             try
             {
-                ChatClient = new TcpClient();
-                ChatClient.Connect(hostname: ServerIP, port: ServerPort);
+                Client = new TcpClient();
+                Client.Connect(hostname: ServerIP, port: ServerPort);
 
+                // 접속 정보 날리기
+                JsonPacket clientInfo = new JsonPacket()
+                {
+                    User = new UserInfo()
+                    {
+                        Id = Id,
+                        Name = Name,
+                    }
+                };
+                string jsonClientInfo = JsonSerializer.Serialize(clientInfo);
+                using (StreamWriter writer = new StreamWriter(stream: Client.GetStream(), encoding: new UTF8Encoding(false), leaveOpen: true))
+                {
+                    writer.AutoFlush = true;
+                    writer.WriteLine(jsonClientInfo);
+                }
+
+                // 메시지 읽기
                 while (!token.IsCancellationRequested)
                 {
-                    if (0 < ChatClient.Available)
+                    if (0 < Client.Available)
                     {
-                        byte[] receiveData = new byte[4096];
-                        NetworkStream stream = ChatClient.GetStream();
-                        int bytesRead = stream.Read(receiveData, 0, receiveData.Length);
-                        if (0 < bytesRead)
+                        using (StreamReader reader = new StreamReader(stream: Client.GetStream(), encoding: new UTF8Encoding(false), detectEncodingFromByteOrderMarks:true, leaveOpen: true))
                         {
-                            if (ChatClient.Client.RemoteEndPoint is IPEndPoint endPoint)
+                            string? jsonString = reader.ReadLine();
+                            if (string.IsNullOrEmpty(jsonString) == false)
                             {
-                                string serverIP = endPoint.Address.MapToIPv4().ToString();
-                                int serverPort = endPoint.Port;
-                                string message = Encoding.UTF8.GetString(receiveData, 0, bytesRead);
-                                ChatMessages.Add(new ChatMessage()
+                                JsonPacket? data = JsonSerializer.Deserialize<JsonPacket>(jsonString);
+                                if (data?.Type == nameof(ChatMessage) && data.Message != null)
                                 {
-                                    IP = serverIP,
-                                    Port = serverPort,
-                                    Message = message,
-                                });
+                                    ChatMessages.Add(data.Message);
+                                }
+                                if (data?.Type == nameof(UserInfo) && data.User != null)
+                                {
+                                    if (Id == data.User.Id)
+                                    {
+                                        ChatMessages.Add(new ChatMessage()
+                                        {
+                                            Id = data.User.Id,
+                                            Name = data.User.Name,
+                                            Message = "접속 하였습니다.",
+                                        });
+                                    }
+                                    else
+                                    {
+                                        ChatMessages.Add(new ChatMessage()
+                                        {
+                                            Id = data.User.Id,
+                                            Name = data.User.Name,
+                                            Message = $"사용자({data.User.Name})가 접속 하였습니다.",
+                                        });
+                                    }
+                                }
                             }
                             token.WaitHandle.WaitOne(100);
                         }
                     }
                     else
                     {
-                        if (ChatClient.Client.Poll(1000, SelectMode.SelectRead))
+                        // 읽을게 있는데
+                        if (Client.Client.Poll(1000000, SelectMode.SelectRead))
                         {
-                            if (ChatClient.Client.Available == 0)
+                            // 사용할 수없는 경우엔 소켓이 종료된 상황
+                            if (Client.Client.Available == 0)
                             {
-                                ChatMessages.Add(new ChatMessage() { Message = "Server Closed" });
-
                                 break;
                             }
                         }
@@ -171,23 +228,28 @@ namespace WpfTcpClient
             }
             catch (Exception ex)
             {
-                if (ChatClient.Client.RemoteEndPoint is IPEndPoint endPoint)
+                if (Client?.Client.RemoteEndPoint is IPEndPoint endPoint)
                 {
                     string serverIP = endPoint.Address.MapToIPv4().ToString();
                     int serverPort = endPoint.Port;
                     string message = $"Error: {ex.Message}";
                     ChatMessages.Add(new ChatMessage()
                     {
-                        IP = serverIP,
-                        Port = serverPort,
                         Message = message,
                     });
                 }
             }
             finally
             {
-                ChatClient?.Dispose();
-                ChatClient = null;
+                Client?.Dispose();
+                Client = null;
+
+                ChatMessages.Add(new ChatMessage()
+                {
+                    Id = Id,
+                    Name = Name,
+                    Message = "종료 되었습니다.",
+                });
             }
         }
     }

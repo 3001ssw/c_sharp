@@ -1,15 +1,13 @@
-﻿using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
+﻿using Chat;
 using System.Collections.ObjectModel;
-using System.Linq;
+using System.Diagnostics;
+using System.IO;
 using System.Net;
-using System.Net.Mail;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
 using System.Windows.Data;
-using WpfTcpServer.Chat;
 
 namespace WpfTcpServer
 {
@@ -21,18 +19,28 @@ namespace WpfTcpServer
         private TcpListener? chatServer = null;
         public TcpListener? ChatServer { get => chatServer; set => SetProperty(ref chatServer, value); }
 
+
+        private string serverIP = "127.0.0.1";
+        public string ServerIP { get => serverIP; set => SetProperty(ref serverIP, value); }
+
         private int serverPort = 7000;
         public int ServerPort { get => serverPort; set => SetProperty(ref serverPort, value); }
 
 
-        private ObservableCollection<ClientModel> clients = new ObservableCollection<ClientModel>();
-        public ObservableCollection<ClientModel> Clients { get => clients; set => SetProperty(ref clients, value); }
         private object clientLock = new object();
+        private ObservableCollection<UserInfo> users = new ObservableCollection<UserInfo>();
+        public ObservableCollection<UserInfo> Users { get => users; set => SetProperty(ref users, value); }
 
+        private UserInfo? selectedUser = null;
+        public UserInfo? SelectedUser { get => selectedUser; set => SetProperty(ref selectedUser, value); }
+
+        private Dictionary<Guid, TcpClient> _dicIdNUser = new Dictionary<Guid, TcpClient>();
+
+
+        private object chatMessageLock = new object();
         private ObservableCollection<ChatMessage> chatMessages = new ObservableCollection<ChatMessage>();
         public ObservableCollection<ChatMessage> ChatMessages { get => chatMessages; set => SetProperty(ref chatMessages, value); }
 
-        private object chatMessageLock = new object();
 
         private string sendMessage = "";
         public string SendMessage { get => sendMessage; set => SetProperty(ref sendMessage, value); }
@@ -42,7 +50,10 @@ namespace WpfTcpServer
 
         public DelegateCommand OpenServerCommand { get; private set; }
         public DelegateCommand CloseServerCommand { get; private set; }
+        public DelegateCommand CloseClientCommand { get; private set; }
         public DelegateCommand SendMessageCommand { get; private set; }
+
+        public DelegateCommand OkCommand { get; private set; }
 
 
         #region constructor
@@ -50,9 +61,11 @@ namespace WpfTcpServer
         {
             OpenServerCommand = new DelegateCommand(OnOpenServer, CanOpenServer).ObservesProperty(() => ChatServer);
             CloseServerCommand = new DelegateCommand(OnCloseServer, CanCloseServer).ObservesProperty(() => ChatServer);
+            CloseClientCommand = new DelegateCommand(OnCloseClient, CanCloseClient).ObservesProperty(() => ChatServer).ObservesProperty(() => SelectedUser);
             SendMessageCommand = new DelegateCommand(OnSendMessage, CanSendMessage).ObservesProperty(() => ChatServer).ObservesProperty(() => SendMessage);
+            OkCommand = new DelegateCommand(OnOk, CanOk);
 
-            BindingOperations.EnableCollectionSynchronization(Clients, clientLock);
+            BindingOperations.EnableCollectionSynchronization(Users, clientLock);
             BindingOperations.EnableCollectionSynchronization(ChatMessages, chatMessageLock);
         }
         #endregion
@@ -85,25 +98,64 @@ namespace WpfTcpServer
             return true;
         }
 
+        private void OnCloseClient()
+        {
+            if (SelectedUser == null)
+                return;
+
+            if (_dicIdNUser.TryGetValue(SelectedUser.Id, out TcpClient? tcpClient))
+                tcpClient?.Close();
+            _dicIdNUser.Remove(SelectedUser.Id);
+            UserInfo? user = Users.FirstOrDefault(x => x.Id == SelectedUser.Id);
+            if (user != null)
+                Users.Remove(user);
+           SelectedUser = null;
+        }
+
+        private bool CanCloseClient()
+        {
+            if (ChatServer == null)
+                return false;
+
+            if (SelectedUser == null)
+                return false;
+
+            return true;
+        }
+
         private void OnSendMessage()
         {
-            lock (Clients)
+            lock (Users)
             {
-                foreach (ClientModel client in Clients)
+                JsonPacket data = new JsonPacket()
                 {
-                    TcpClient clientSocket = client.ClientSocket;
+                    Message = new ChatMessage()
+                    {
+                        Name = "Server",
+                        Message = SendMessage,
+                    }
+                };
+                string jsonString = JsonSerializer.Serialize(data);
 
-                    NetworkStream stream = clientSocket.GetStream();
-
-                    byte[] data = Encoding.UTF8.GetBytes(SendMessage);
-                    stream.Write(data, 0, data.Length);
+                foreach (UserInfo user in Users)
+                {
+                    if (_dicIdNUser.TryGetValue(user.Id, out TcpClient? tcpClient))
+                    {
+                        if (tcpClient != null)
+                        {
+                            using (StreamWriter writer = new StreamWriter(stream: tcpClient.GetStream(), encoding: new UTF8Encoding(false), leaveOpen: true))
+                            {
+                                writer.AutoFlush = true;
+                                writer.WriteLine(jsonString);
+                            }
+                        }
+                    }
                 }
-                ChatMessages.Add(new ChatMessage()
-                {
-                    IP = "All",
-                    Message = SendMessage,
-                });
+
+                lock (ChatMessages)
+                    ChatMessages.Add(data.Message);
             }
+            SendMessage = "";
         }
 
         private bool CanSendMessage()
@@ -111,13 +163,22 @@ namespace WpfTcpServer
             if (ChatServer == null)
                 return false;
 
-            if (Clients.Count <= 0)
+            if (Users.Count <= 0)
                 return false;
 
             if (string.IsNullOrEmpty(SendMessage))
                 return false;
 
             return true;
+        }
+        private void OnOk()
+        {
+            SendMessageCommand.Execute();
+        }
+
+        private bool CanOk()
+        {
+            return SendMessageCommand.CanExecute();
         }
 
         #endregion
@@ -127,20 +188,17 @@ namespace WpfTcpServer
         {
             try
             {
-                ChatServer = new TcpListener(IPAddress.Any, ServerPort); // 7000번 포트 열기
+                IPAddress localIp = IPAddress.Parse(ServerIP);
+                ChatServer = new TcpListener(localIp, ServerPort); // 7000번 포트 열기
                 ChatServer.Start();
 
                 while (!token.IsCancellationRequested)
                 {
                     if (ChatServer != null && ChatServer.Pending())
                     {
-                        TcpClient newClient = ChatServer.AcceptTcpClient();
-                        ClientModel newClientModel = new ClientModel()
-                        {
-                            ClientSocket = newClient
-                        };
+                        TcpClient client = ChatServer.AcceptTcpClient();
 
-                        Task.Run(() => ClientTask(newClientModel, token));
+                        Task.Run(() => UserTask(client, token));
 
                         token.WaitHandle.WaitOne(100);
                     }
@@ -162,46 +220,64 @@ namespace WpfTcpServer
             }
         }
 
-        private void ClientTask(ClientModel clientModel, CancellationToken token)
+        private void UserTask(TcpClient client, CancellationToken token)
         {
-            lock (Clients)
-                Clients.Add(clientModel);
-
-            TcpClient clientSocket = clientModel.ClientSocket;
-
             try
             {
-                NetworkStream stream = clientSocket.GetStream();
-
                 while (token.IsCancellationRequested == false)
                 {
-                    if (clientSocket == null || !clientSocket.Connected)
+                    if (client == null || !client.Connected)
                         break;
 
-                    if (0 < clientSocket.Available)
+                    if (0 < client.Available)
                     {
-                        byte[] buffer = new byte[4096];
-                        int bytesRead = stream.Read(buffer, 0, buffer.Length);
-
-                        if (bytesRead == 0)
-                            break;
-
-                        string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                        ChatMessages.Add(new ChatMessage()
+                        using (StreamReader reader = new StreamReader(stream: client.GetStream(), encoding: new UTF8Encoding(false), detectEncodingFromByteOrderMarks: true, leaveOpen: true))
                         {
-                            IP = clientModel.IP,
-                            Port = clientModel.Port,
-                            Message = message,
-                        });
+                            string? jsonString = reader.ReadLine();
+                            if (string.IsNullOrEmpty(jsonString) == false)
+                            {
+                                JsonPacket? data = JsonSerializer.Deserialize<JsonPacket>(jsonString);
+                                if (data?.Type == nameof(ChatMessage) && data.Message != null)
+                                {
+                                    ChatMessages.Add(data.Message);
+                                }
+                                if (data?.Type == nameof(UserInfo) && data.User != null)
+                                {
+                                    lock (Users)
+                                    {
+                                        Users.Add(data.User);
+                                        _dicIdNUser.Add(data.User.Id, client);
+                                    }
+                                }
+
+
+                                lock (Users)
+                                {
+                                    foreach (UserInfo c in Users)
+                                    {
+                                        if (_dicIdNUser.TryGetValue(c.Id, out TcpClient? tcpClient))
+                                        {
+                                            if (tcpClient != null)
+                                            {
+                                                using (StreamWriter writer = new StreamWriter(stream: tcpClient.GetStream(), encoding: new UTF8Encoding(false), leaveOpen: true))
+                                                {
+                                                    writer.AutoFlush = true;
+                                                    writer.WriteLine(jsonString);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                     else
                     {
-                        if (clientSocket.Client.Poll(1000, SelectMode.SelectRead))
+                        if (client.Client.Poll(1000000, SelectMode.SelectRead))
                         {
-                            if (clientSocket.Client.Available == 0)
+                            if (client.Client.Available == 0)
                             {
                                 break;
-
                             }
                         }
 
@@ -211,15 +287,45 @@ namespace WpfTcpServer
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex);
             }
             finally
             {
-
-                lock (Clients)
+                lock (Users)
                 {
-                    clientSocket?.Close();
-                    Clients.Remove(clientModel);
+                    Guid id = _dicIdNUser.FirstOrDefault(x => x.Value == client).Key;
+                    UserInfo? user = Users.FirstOrDefault(x => x.Id == id);
+                    if (user != null)
+                    {
+                        Users.Remove(user);
+                        JsonPacket data = new JsonPacket()
+                        {
+                            Message = new ChatMessage()
+                            {
+                                Name = user.Name,
+                                Message = $"사용자가 나갔습니다.",
+                            }
+                        };
+                        string jsonString = JsonSerializer.Serialize(data);
+                        foreach (UserInfo c in Users)
+                        {
+                            if (_dicIdNUser.TryGetValue(c.Id, out TcpClient? tcpClient))
+                            {
+                                if (tcpClient != null)
+                                {
+                                    using (StreamWriter writer = new StreamWriter(stream: tcpClient.GetStream(), encoding: new UTF8Encoding(false), leaveOpen: true))
+                                    {
+                                        writer.AutoFlush = true;
+                                        writer.WriteLine(jsonString);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    _dicIdNUser.Remove(id);
+
                 }
+                client?.Close();
             }
         }
     }
