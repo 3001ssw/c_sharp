@@ -215,6 +215,7 @@ namespace WpfTcpServer
             }
             finally
             {
+                ChatServer?.Stop();
                 ChatServer?.Dispose();
                 ChatServer = null;
             }
