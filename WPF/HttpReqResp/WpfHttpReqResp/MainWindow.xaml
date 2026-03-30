@@ -17,12 +17,32 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
-        <Button Grid.Row="0"
-                Content="Post"
-                Command="{Binding PostCommand}"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"
+                    Margin="5"
+                    Content="Get"
+                    Command="{Binding GetCommand}"/>
+            <Button Grid.Column="1"
+                    Margin="5"
+                    Content="Post"
+                    Command="{Binding PostCommand}"/>
+            <Button Grid.Column="2"
+                    Margin="5"
+                    Content="Put"
+                    Command="{Binding PutCommand}"/>
+            <Button Grid.Column="3"
+                    Margin="5"
+                    Content="Delete"
+                    Command="{Binding DeleteCommand}"/>
+        </Grid>
 
         <TextBox Grid.Row="1"
                  Text="{Binding ResponeText}"/>
-
     </Grid>
 </Window>
