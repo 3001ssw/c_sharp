@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
-        Width="800">
+        Width="1000">
     <Window.DataContext>
         <local:MainViewModel/>
     </Window.DataContext>
@@ -25,10 +25,12 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="1*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
@@ -39,13 +41,22 @@
                 <TextBlock Grid.Row="0"
                            Grid.Column="0"
                            Margin="5"
-                           Text="Port"/>
+                           Text="IP"/>
                 <TextBox Grid.Row="0"
+                         Grid.Column="1"
+                         Margin="5"
+                         Text="{Binding ServerIP}"/>
+
+                <TextBlock Grid.Row="1"
+                           Grid.Column="0"
+                           Margin="5"
+                           Text="Port"/>
+                <TextBox Grid.Row="1"
                          Grid.Column="1"
                          Margin="5"
                          Text="{Binding ServerPort}"/>
 
-                <StackPanel Grid.Row="1"
+                <StackPanel Grid.Row="2"
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
                             Orientation="Horizontal"
@@ -66,7 +77,8 @@
 
             <DataGrid Grid.Row="1"
                       Margin="5"
-                      ItemsSource="{Binding Clients}"
+                      ItemsSource="{Binding Users}"
+                      SelectedItem="{Binding SelectedUser}"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       CanUserDeleteRows="False"
@@ -76,16 +88,17 @@
                       VirtualizingStackPanel.ScrollUnit="Pixel"
                       VirtualizingStackPanel.VirtualizationMode="Recycling">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="IP"
-                                        Width="100"
+                    <DataGridTextColumn Header="Name"
+                                        Width="1*"
                                         IsReadOnly="True"
-                                        Binding="{Binding IP}"/>
-                    <DataGridTextColumn Header="Port"
-                                        Width="100"
-                                        IsReadOnly="True"
-                                        Binding="{Binding Port}"/>
+                                        Binding="{Binding Name}"/>
                 </DataGrid.Columns>
             </DataGrid>
+
+            <Button Grid.Row="2"
+                    Margin="5"
+                    Content="Close Client"
+                    Command="{Binding CloseClientCommand}"/>
         </Grid>
 
         <Grid Grid.Row="0"
@@ -110,17 +123,13 @@
                       VirtualizingStackPanel.VirtualizationMode="Recycling">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Time"
-                                        Width="200"
+                                        Width="150"
                                         IsReadOnly="True"
                                         Binding="{Binding Time, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}"/>
-                    <DataGridTextColumn Header="IP"
+                    <DataGridTextColumn Header="Name"
                                         Width="100"
                                         IsReadOnly="True"
-                                        Binding="{Binding IP}"/>
-                    <DataGridTextColumn Header="Port"
-                                        Width="100"
-                                        IsReadOnly="True"
-                                        Binding="{Binding Port}"/>
+                                        Binding="{Binding Name}"/>
                     <DataGridTextColumn Header="Message"
                                         Width="1*"
                                         IsReadOnly="True"
@@ -138,7 +147,12 @@
 
                 <TextBox Grid.Row="0"
                          Grid.Column="0"
-                         Text="{Binding SendMessage, UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{Binding SendMessage, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Return"
+                                    Command="{Binding OkCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
 
                 <Button Grid.Row="0"
                         Grid.Column="1"

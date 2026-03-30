@@ -9,12 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\include\ChatMessage.cs" Link="ChatMessage.cs" />
-    <Compile Include="..\include\JsonPacket.cs" Link="JsonPacket.cs" />
-    <Compile Include="..\include\UserInfo.cs" Link="UserInfo.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Prism.Core" Version="9.0.537" />
   </ItemGroup>
 

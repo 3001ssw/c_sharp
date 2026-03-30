@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36915.13 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfHttpReqResp", "WpfHttpReqResp\WpfHttpReqResp.csproj", "{5736651A-00DA-494D-9B47-120B420593AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5736651A-00DA-494D-9B47-120B420593AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5736651A-00DA-494D-9B47-120B420593AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5736651A-00DA-494D-9B47-120B420593AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5736651A-00DA-494D-9B47-120B420593AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DFAC717B-66F0-4EBE-8A0E-9538E2E64573}
+	EndGlobalSection
+EndGlobal
