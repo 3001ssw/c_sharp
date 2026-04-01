@@ -18,14 +18,49 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                    Margin="5"
+                   Text="Input 1"/>
         <TextBox Grid.Row="0"
+                 Grid.Column="1"
+                    Margin="5"
                  Text="{Binding InputText1, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <TextBlock Grid.Row="1"
+                   Grid.Column="0"
+                    Margin="5"
+                   Text="Input 2"/>
         <TextBox Grid.Row="1"
+                 Grid.Column="1"
+                    Margin="5"
                  Text="{Binding InputText2, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Grid.Row="2"
-                Content="Button"
-                Command="{Binding ShowInputTextCommand}"/>
+
+        <TextBlock Grid.Row="2"
+                   Grid.Column="0"
+                    Margin="5"
+                   Text="Buttons"/>
+        <StackPanel Grid.Row="2"
+                    Grid.Column="1"
+                    Orientation="Horizontal">
+            <Button Content="Sum"
+                    Width="100"
+                    Margin="5"
+                    Command="{Binding SumCommand}"/>
+            <Button Content="Div"
+                    Width="100"
+                    Margin="5"
+                    Command="{Binding DivCommand}"/>
+
+        </StackPanel>
         <TextBlock Grid.Row="3"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                    Margin="5"
                    Text="{Binding OutputText}"/>
     </Grid>
 </Window>
