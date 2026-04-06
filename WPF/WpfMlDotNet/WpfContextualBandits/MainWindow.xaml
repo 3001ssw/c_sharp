@@ -14,37 +14,98 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
+        <!--  예측할 메뉴  -->
         <DataGrid Grid.Row="0"
                   Grid.Column="0"
-                  Grid.ColumnSpan="2"
-                  Margin="5">
-
+                  Margin="5"
+                  ItemsSource="{Binding Menus}"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="Column"
+                  CanUserAddRows="True"
+                  CanUserDeleteRows="True"
+                  SelectionUnit="FullRow"
+                  VirtualizingStackPanel.ScrollUnit="Pixel"
+                  VirtualizingStackPanel.VirtualizationMode="Recycling"
+                  ScrollViewer.CanContentScroll="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="메뉴"
+                                    Binding="{Binding .}"
+                                    Width="1*"/>
+            </DataGrid.Columns>
         </DataGrid>
+        <!--    -->
 
-        <TextBox Grid.Row="1"
-                 Grid.Column="0"
-                 Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}">
-            <TextBox.InputBindings>
-                <KeyBinding Key="Enter"
-                            Command="{Binding InputTextCommand}"/>
-            </TextBox.InputBindings>
-        </TextBox>
+        <!--  트레이닝 이력  -->
+        <DataGrid Grid.Row="0"
+                  Grid.Column="1"
+                  Margin="5"
+                  ItemsSource="{Binding TrainingHistories}"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="Column"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  SelectionUnit="FullRow"
+                  VirtualizingStackPanel.ScrollUnit="Pixel"
+                  VirtualizingStackPanel.VirtualizationMode="Recycling"
+                  ScrollViewer.CanContentScroll="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="입력한 텍스트"
+                                    Binding="{Binding Context}"
+                                    Width="1*"/>
+                <DataGridTextColumn Header="예측"
+                                    Binding="{Binding Prediction}"
+                                    Width="1*"/>
+                <DataGridTextColumn Header="보상"
+                                    Binding="{Binding Label}"
+                                    Width="1*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <!--    -->
 
-        <TextBox Grid.Row="1"
-                 Grid.Column="1"
-                 Text="{Binding PredictText, UpdateSourceTrigger=PropertyChanged}"/>
+        <Grid Grid.Row="0"
+              Grid.Column="2"
+              Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="1"
-                Grid.Column="2"
-                Content="Click"
-                Command="{Binding InputTextCommand}"/>
+            <TextBox Grid.Row="0"
+                     Grid.Column="0"
+                     Margin="5"
+                     Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}"/>
+            <DataGrid Grid.Row="1"
+                      Grid.Column="0"
+                      Margin="5"
+                      ItemsSource="{Binding PredictMenus}"
+                      SelectedItem="{Binding SelectedPredictMenu}"
+                      IsReadOnly="True"
+                      HeadersVisibility="Column"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      SelectionUnit="FullRow"
+                      VirtualizingStackPanel.ScrollUnit="Pixel"
+                      VirtualizingStackPanel.VirtualizationMode="Recycling"
+                      ScrollViewer.CanContentScroll="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="예측 메뉴"
+                                        Binding="{Binding .}"
+                                        Width="1*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </Window>

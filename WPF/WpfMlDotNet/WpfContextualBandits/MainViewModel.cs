@@ -3,127 +3,143 @@ using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WpfContextualBandits
 {
-    public class TextData
-    {
-        [LoadColumn(0)] public string Context { get; set; }   // 현재 입력 중인 텍스트
-        [LoadColumn(1)] public string Prediction { get; set; } // AI가 제안하는 후보
-        [LoadColumn(2)] public bool Label { get; set; }        // 보상 여부 (맞으면 true)
-    }
-
-    public class TextPrediction
-    {
-        [ColumnName("Score")] public float Score { get; set; } // 추천 강도
-    }
-
     public class MainViewModel : BindableBase
     {
         private MLContext _mlContext = new MLContext();
         private ITransformer _model = null;
 
-        // AI가 추천할 후보군 리스트 (사용자가 한 번이라도 입력한 단어들이 여기 추가됨)
-        private HashSet<string> _actionPool = new HashSet<string> { "안녕하세요", "반갑습니다", "감사합니다" };
-        private List<TextData> _trainingHistory = new List<TextData>();
+        // 1. 왼쪽 DataGrid: 사용 가능한 전체 메뉴 리스트
+        public ObservableCollection<string> Menus { get; set; } = new ObservableCollection<string>();
 
-        private string inputText = "";
+        // 2. 중앙 DataGrid: 학습 이력 (로그)
+        public ObservableCollection<MenuData> TrainingHistories { get; set; } = new ObservableCollection<MenuData>();
+
+        // 3. 우측 하단 DataGrid: AI가 추천한 Top 3 메뉴
+        public ObservableCollection<string> PredictMenus { get; set; } = new ObservableCollection<string>();
+
+        // 4. 입력 텍스트 (Context)
+        private string _inputText = "";
         public string InputText
         {
-            get => inputText;
+            get => _inputText;
             set
             {
-                SetProperty(ref inputText, value);
-                PredictNextText();
+                SetProperty(ref _inputText, value);
+                UpdatePredictions(); // 텍스트 입력 시 실시간 예측
             }
         }
 
-        private string predictText = "";
-        public string PredictText { get => predictText; set => SetProperty(ref predictText, value); }
-
-        public DelegateCommand InputTextCommand { get; private set; }
+        // 5. 예측 메뉴 선택 시 학습 발생 (Reward)
+        private string _selectedPredictMenu;
+        public string SelectedPredictMenu
+        {
+            get => _selectedPredictMenu;
+            set
+            {
+                if (value != null)
+                {
+                    OnMenuSelected(value); // 선택하는 순간 보상 시스템 작동
+                }
+                _selectedPredictMenu = null; // 선택 후 해제 (다시 클릭 가능하게)
+                RaisePropertyChanged();
+            }
+        }
 
         public MainViewModel()
         {
-            InputTextCommand = new DelegateCommand(OnInputText, CanInputText);
+            // --- 10개의 고정 메뉴 설정 ---
+            Menus.Add("환경설정");
+            Menus.Add("로그아웃");
+            Menus.Add("장바구니");
+            Menus.Add("공지사항");
+            Menus.Add("고객센터");
+            Menus.Add("내 정보 관리");
+            Menus.Add("결제내역");
+            Menus.Add("비밀번호 변경");
+            Menus.Add("이벤트/쿠폰");
+            Menus.Add("자주 묻는 질문");
 
-            _trainingHistory.Add(new TextData { Context = "안녕", Prediction = "안녕하세요", Label = true });
+            // 모델 초기화를 위한 더미 데이터
+            TrainingHistories.Add(new MenuData { Context = "초기화", Prediction = "환경설정", Label = true });
+
             UpdateModel();
         }
 
-        private void OnInputText()
+        // --- 핵심 로직 1: 실시간 예측 ---
+        private void UpdatePredictions()
         {
-            if (string.IsNullOrEmpty(InputText) || string.IsNullOrEmpty(PredictText))
-                return;
-
-            // 1. 새로운 단어라면 후보군에 추가
-            _actionPool.Add(InputText);
-
-            // 2. 보상 데이터 생성 (현재 입력값과 추천값이 같으면 긍정 보상)
-            bool isCorrect = (InputText == PredictText);
-
-            _trainingHistory.Add(new TextData
+            if (string.IsNullOrWhiteSpace(InputText) || _model == null || Menus.Count == 0)
             {
-                Context = InputText,
-                Prediction = PredictText,
-                Label = isCorrect // 같으면 true(1.0점), 다르면 false(0.0점)
-            });
+                PredictMenus.Clear();
+                return;
+            }
 
-            // 3. 재학습 (AI의 뇌 업데이트)
+            try
+            {
+                var predEngine = _mlContext.Model.CreatePredictionEngine<MenuData, MenuPrediction>(_model);
+
+                // 현재 Menus 리스트에 있는 모든 항목에 대해 점수 계산
+                var top3 = Menus
+                    .Select(m => new
+                    {
+                        Name = m,
+                        Score = predEngine.Predict(new MenuData { Context = InputText, Prediction = m }).Score
+                    })
+                    .OrderByDescending(x => x.Score)
+                    .ToList();
+
+                PredictMenus.Clear();
+                foreach (var item in top3) PredictMenus.Add(item.Name);
+            }
+            catch { /* 모델 업데이트 중 예측 엔진 충돌 방지 */ }
+        }
+
+        // --- 핵심 로직 2: 보상 시스템 (선택 시 학습) ---
+        private void OnMenuSelected(string selected)
+        {
+            var currentBatch = PredictMenus.ToList();
+            if (!currentBatch.Contains(selected)) return;
+
+            // 1. 선택된 메뉴는 + 보상(True), 나머지 추천되었던 메뉴는 - 보상(False)
+            foreach (var menu in currentBatch)
+            {
+                var newData = new MenuData
+                {
+                    Context = InputText,
+                    Prediction = menu,
+                    Label = (menu == selected)
+                };
+                TrainingHistories.Add(newData);
+            }
+
+            // 2. 모델 재학습
             UpdateModel();
 
-            System.Diagnostics.Debug.WriteLine($"학습 완료: {InputText} == {PredictText} ({isCorrect})");
-
-            InputText = "";
-            //PredictText = "";
+            // 3. 학습 후 예측 결과 갱신
+            UpdatePredictions();
         }
 
-        private bool CanInputText()
-        {
-            return true;
-        }
-
-        private void PredictNextText()
-        {
-            if (string.IsNullOrEmpty(InputText) || _model == null) return;
-
-            var predictionEngine = _mlContext.Model.CreatePredictionEngine<TextData, TextPrediction>(_model);
-
-            // 후보군(_actionPool) 중에서 현재 InputText와 결합했을 때 점수가 가장 높은 놈을 찾음
-            var bestMatch = _actionPool
-                .Select(candidate => new
-                {
-                    Text = candidate,
-                    Score = predictionEngine.Predict(new TextData { Context = InputText, Prediction = candidate }).Score
-                })
-                .OrderByDescending(x => x.Score)
-                .FirstOrDefault();
-
-            if (bestMatch != null && bestMatch.Score > 0)
-                PredictText = bestMatch.Text;
-            else
-                PredictText = "추천 없음";
-        }
-
+        // --- 핵심 로직 3: ML.NET 파이프라인 ---
         private void UpdateModel()
         {
-            var dataView = _mlContext.Data.LoadFromEnumerable(_trainingHistory);
+            if (TrainingHistories.Count == 0) return;
 
-            // 파이프라인 수정
+            var dataView = _mlContext.Data.LoadFromEnumerable(TrainingHistories);
+
             var pipeline = _mlContext.Transforms.Conversion.MapValueToKey("Context")
                 .Append(_mlContext.Transforms.Conversion.MapValueToKey("Prediction"))
-                // 1. Key 데이터를 원-핫 인코딩(벡터)으로 변환합니다. (이 과정이 추가되어야 함!)
-                .Append(_mlContext.Transforms.Categorical.OneHotEncoding(
-                    new[] {
-                new InputOutputColumnPair("ContextVector", "Context"),
-                new InputOutputColumnPair("PredictionVector", "Prediction")
-                    }))
-                // 2. 변환된 벡터 데이터들을 합칩니다.
-                .Append(_mlContext.Transforms.Concatenate("Features", "ContextVector", "PredictionVector"))
-                // 3. 마지막으로 알고리즘 적용
+                .Append(_mlContext.Transforms.Categorical.OneHotEncoding(new[] {
+                    new InputOutputColumnPair("ContextVec", "Context"),
+                    new InputOutputColumnPair("PredictVec", "Prediction")
+                }))
+                .Append(_mlContext.Transforms.Concatenate("Features", "ContextVec", "PredictVec"))
                 .Append(_mlContext.BinaryClassification.Trainers.FieldAwareFactorizationMachine(new[] { "Features" }));
 
             _model = pipeline.Fit(dataView);
