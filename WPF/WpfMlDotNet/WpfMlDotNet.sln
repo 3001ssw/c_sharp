@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfClustering", "WpfCluster
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfML", "WpfML\WpfML.csproj", "{F647B3D3-C1E9-4D48-B9F2-256345698A0A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfContextualBandits", "WpfContextualBandits\WpfContextualBandits.csproj", "{724AAA32-5A94-44CA-8780-76CDCB885C3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{F647B3D3-C1E9-4D48-B9F2-256345698A0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F647B3D3-C1E9-4D48-B9F2-256345698A0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F647B3D3-C1E9-4D48-B9F2-256345698A0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{724AAA32-5A94-44CA-8780-76CDCB885C3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{724AAA32-5A94-44CA-8780-76CDCB885C3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{724AAA32-5A94-44CA-8780-76CDCB885C3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{724AAA32-5A94-44CA-8780-76CDCB885C3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
