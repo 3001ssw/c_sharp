@@ -18,23 +18,53 @@ namespace WpfApp1
         private string outputText = "";
         public string OutputText { get => outputText; set => SetProperty(ref outputText, value); }
 
-        public DelegateCommand ShowInputTextCommand { get; private set; }
+        public DelegateCommand SumCommand { get; private set; }
+        public DelegateCommand DivCommand { get; private set; }
 
         public MainViewModel()
         {
-            ShowInputTextCommand = new DelegateCommand(OnShowInputText, CanShowInputText).ObservesProperty(() => InputText1).ObservesProperty(() => InputText2);
+            SumCommand = new DelegateCommand(OnSum, CanSum).ObservesProperty(() => InputText1).ObservesProperty(() => InputText2);
+            DivCommand = new DelegateCommand(OnDiv, CanDiv).ObservesProperty(() => InputText1).ObservesProperty(() => InputText2);
         }
-        private void OnShowInputText()
+
+        private void OnSum()
         {
-            int.TryParse(InputText1, out int res1);
-            int.TryParse(InputText2, out int res2);
-            int res = res1 + res2;
+            int.TryParse(InputText1, out int input1);
+            int.TryParse(InputText2, out int input2);
+
+            int res = MathClass.Sum(input1, input2);
+
             OutputText = res.ToString();
+
             InputText1 = "";
             InputText2 = "";
         }
 
-        private bool CanShowInputText()
+        private bool CanSum()
+        {
+            if (string.IsNullOrEmpty(InputText1) || string.IsNullOrEmpty(InputText2))
+                return false;
+
+            if (int.TryParse(InputText1, out int res1) == false || int.TryParse(InputText2, out int res2) == false)
+                return false;
+
+            return true;
+        }
+
+        private void OnDiv()
+        {
+            int.TryParse(InputText1, out int input1);
+            int.TryParse(InputText2, out int input2);
+
+            int res = MathClass.Division(input1, input2);
+
+            OutputText = res.ToString();
+
+            InputText1 = "";
+            InputText2 = "";
+        }
+
+        private bool CanDiv()
         {
             if (string.IsNullOrEmpty(InputText1) || string.IsNullOrEmpty(InputText2))
                 return false;

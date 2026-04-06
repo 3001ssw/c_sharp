@@ -63,7 +63,7 @@ namespace WpfClassification
                 var pipeline = mlContext.Transforms.Conversion.MapValueToKey(inputColumnName: "Genre", outputColumnName: "Label")
                     .Append(mlContext.Transforms.Text.FeaturizeText(inputColumnName: "Synopsis", outputColumnName: "Features"))
                     .Append(mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy("Label", "Features"))
-                    .Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName: "PredictedGenre", inputColumnName: "PredictedLabel"));
+                    .Append(mlContext.Transforms.Conversion.MapKeyToValue(inputColumnName: "PredictedLabel", outputColumnName: "PredictedGenre"));
 
                 //var pipeline = mlContext.Transforms.Conversion.MapValueToKey(inputColumnName: "Genre", outputColumnName: "Label")
                 //  .Append(mlContext.Transforms.Text.FeaturizeText(inputColumnName: "Synopsis", outputColumnName: "Features"))
