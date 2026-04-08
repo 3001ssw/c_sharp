@@ -24,15 +24,29 @@ namespace WpfContextualBandits
         // 3. 우측 하단 DataGrid: AI가 추천한 Top 3 메뉴
         public ObservableCollection<string> PredictMenus { get; set; } = new ObservableCollection<string>();
 
+        public DelegateCommand InputTextCommand { get; private set; }
+        private void OnInputText()
+        {
+            UpdatePredictions(); // 텍스트 입력 시 실시간 예측
+        }
+
+        private bool CanInputText()
+        {
+            if (string.IsNullOrEmpty(InputText))
+                return false;
+
+            return true;
+        }
+
         // 4. 입력 텍스트 (Context)
-        private string _inputText = "";
+        private string inputText = "";
         public string InputText
         {
-            get => _inputText;
+            get => inputText;
             set
             {
-                SetProperty(ref _inputText, value);
-                UpdatePredictions(); // 텍스트 입력 시 실시간 예측
+                SetProperty(ref inputText, value);
+                UpdatePredictions();
             }
         }
 
@@ -54,20 +68,40 @@ namespace WpfContextualBandits
 
         public MainViewModel()
         {
-            // --- 10개의 고정 메뉴 설정 ---
-            Menus.Add("환경설정");
-            Menus.Add("로그아웃");
-            Menus.Add("장바구니");
-            Menus.Add("공지사항");
-            Menus.Add("고객센터");
-            Menus.Add("내 정보 관리");
-            Menus.Add("결제내역");
-            Menus.Add("비밀번호 변경");
-            Menus.Add("이벤트/쿠폰");
-            Menus.Add("자주 묻는 질문");
+            InputTextCommand = new DelegateCommand(OnInputText, CanInputText);
+
+            // [1. 사용자 및 계정 관련]
+            Menus.Add("내 프로필 설정");      // 검색어 예: "이름", "사진", "내정보"
+            Menus.Add("비밀번호 변경");      // 검색어 예: "암호", "보안", "비번"
+            Menus.Add("로그아웃");          // 검색어 예: "종료", "나가기", "계정"
+            Menus.Add("계정 권한 관리");     // 검색어 예: "등급", "권한", "관리자"
+
+            // [2. 시스템 및 환경 설정]
+            Menus.Add("일반 환경 설정");     // 검색어 예: "셋팅", "언어", "기본"
+            Menus.Add("알림 및 푸시 설정");   // 검색어 예: "소리", "메시지", "팝업"
+            Menus.Add("테마 및 디자인");     // 검색어 예: "다크모드", "UI", "색상"
+            Menus.Add("네트워크/연결 설정");  // 검색어 예: "서버", "IP", "연결"
+
+            // [3. 데이터 및 파일 관리]
+            Menus.Add("데이터 백업/복구");    // 검색어 예: "저장", "복원", "백업"
+            Menus.Add("파일 업로드");        // 검색어 예: "가져오기", "등록", "첨부"
+            Menus.Add("엑셀 데이터 내보내기"); // 검색어 예: "출력", "저장", "다운로드"
+            Menus.Add("히스토리 및 로그");    // 검색어 예: "기록", "로그", "활동"
+
+            // [4. 조회 및 통계]
+            Menus.Add("대시보드 보기");      // 검색어 예: "현황", "메인", "요약"
+            Menus.Add("실시간 매출 통계");    // 검색어 예: "돈", "정산", "그래프"
+            Menus.Add("사용자 활동 분석");    // 검색어 예: "트래픽", "방문자", "인기"
+            Menus.Add("상세 보고서 생성");    // 검색어 예: "리포트", "PDF", "결과"
+
+            // [5. 고객 지원 및 매뉴얼]
+            Menus.Add("사용자 설명서(F1)");   // 검색어 예: "도움말", "매뉴얼", "방법"
+            Menus.Add("공지사항 게시판");     // 검색어 예: "소식", "알림", "뉴스"
+            Menus.Add("1:1 고객 문의");      // 검색어 예: "상담", "질문", "센터"
+            Menus.Add("프로그램 정보/업데이트"); // 검색어 예: "버전", "패치", "최신"
 
             // 모델 초기화를 위한 더미 데이터
-            TrainingHistories.Add(new MenuData { Context = "초기화", Prediction = "환경설정", Label = true });
+            TrainingHistories.Add(new MenuData { Context = "비밀번호", Prediction = "비밀번호 변경", Label = true });
 
             UpdateModel();
         }
@@ -83,14 +117,12 @@ namespace WpfContextualBandits
 
             try
             {
-                var predEngine = _mlContext.Model.CreatePredictionEngine<MenuData, MenuPrediction>(_model);
+                PredictionEngine<MenuData, MenuPrediction> predEngine = _mlContext.Model.CreatePredictionEngine<MenuData, MenuPrediction>(_model);
 
                 // 현재 Menus 리스트에 있는 모든 항목에 대해 점수 계산
-                var top3 = Menus
-                    .Select(m => new
-                    {
-                        Name = m,
-                        Score = predEngine.Predict(new MenuData { Context = InputText, Prediction = m }).Score
+                var top3 = Menus.Select(m => new {
+                    Name = m,
+                    Score = predEngine.Predict(new MenuData { Context = InputText, Prediction = m }).Score
                     })
                     .OrderByDescending(x => x.Score)
                     .ToList();

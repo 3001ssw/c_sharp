@@ -27,6 +27,7 @@
                   Margin="5"
                   ItemsSource="{Binding Menus}"
                   AutoGenerateColumns="False"
+                  IsReadOnly="True"
                   HeadersVisibility="Column"
                   CanUserAddRows="True"
                   CanUserDeleteRows="True"
@@ -81,31 +82,29 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-
             <TextBox Grid.Row="0"
-                     Grid.Column="0"
                      Margin="5"
-                     Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}"/>
-            <DataGrid Grid.Row="1"
-                      Grid.Column="0"
-                      Margin="5"
-                      ItemsSource="{Binding PredictMenus}"
-                      SelectedItem="{Binding SelectedPredictMenu}"
-                      IsReadOnly="True"
-                      HeadersVisibility="Column"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      CanUserDeleteRows="False"
-                      SelectionUnit="FullRow"
-                      VirtualizingStackPanel.ScrollUnit="Pixel"
-                      VirtualizingStackPanel.VirtualizationMode="Recycling"
-                      ScrollViewer.CanContentScroll="True">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="예측 메뉴"
-                                        Binding="{Binding .}"
-                                        Width="1*"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                     Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}"
+                     Tag="메뉴를 검색하세요..."/>
+
+            <ListBox Grid.Row="1"
+                     Margin="5"
+                     ItemsSource="{Binding PredictMenus}"
+                     SelectedItem="{Binding SelectedPredictMenu}"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     HorizontalContentAlignment="Stretch">
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="#EEE"
+                                BorderThickness="0,0,0,1"
+                                Padding="8,5">
+                            <TextBlock Text="{Binding .}"
+                                       FontSize="13"/>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Grid>
     </Grid>
 </Window>
