@@ -1,0 +1,104 @@
+﻿<Window x:Class="WpfSrCnn.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfSrCnn"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="450"
+        Width="800">
+
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!--  버튼 영역  -->
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    Margin="0,0,0,8">
+            <Button Content="▶ 이상 탐지 실행"
+                    Command="{Binding RunDetectionCommand}"
+                    Width="150"
+                    Height="35"
+                    Margin="0,0,8,0"/>
+            <Button Content="🗑 초기화"
+                    Command="{Binding ClearCommand}"
+                    Width="80"
+                    Height="35"/>
+        </StackPanel>
+
+        <!--  요약 영역  -->
+        <Border Grid.Row="1"
+                Background="#F0F0F0"
+                Padding="8"
+                Margin="0,0,0,8"
+                CornerRadius="4">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="총 데이터: "
+                           FontWeight="Bold"/>
+                <TextBlock Text="{Binding TotalCount}"
+                           Margin="0,0,20,0"/>
+                <TextBlock Text="이상 탐지: "
+                           FontWeight="Bold"
+                           Foreground="Red"/>
+                <TextBlock Text="{Binding AnomalyCount}"
+                           Foreground="Red"/>
+            </StackPanel>
+        </Border>
+
+        <!--  DataGrid  -->
+        <DataGrid Grid.Row="2"
+                  ItemsSource="{Binding CpuRecords}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  GridLinesVisibility="Horizontal"
+                  AlternatingRowBackground="#FAFAFA">
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsAnomaly}"
+                                     Value="True">
+                            <Setter Property="Background" Value="#FFCCCC"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="순번"
+                                    Binding="{Binding Index}"
+                                    Width="60"/>
+                <DataGridTextColumn Header="CPU 사용량 (%)"
+                                    Binding="{Binding CpuUsage, StringFormat=F1}"
+                                    Width="130"/>
+                <DataGridTextColumn Header="상태"
+                                    Binding="{Binding StatusText}"
+                                    Width="90"/>
+                <DataGridTextColumn Header="이상 점수"
+                                    Binding="{Binding AnomalyScore}"
+                                    Width="110"/>
+                <DataGridTextColumn Header="P-Value"
+                                    Binding="{Binding PValue}"
+                                    Width="110"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!--  상태바  -->
+        <StatusBar Grid.Row="3"
+                   Margin="0,4,0,0">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusMessage}"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>

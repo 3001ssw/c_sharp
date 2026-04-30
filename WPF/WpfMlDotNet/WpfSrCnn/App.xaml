@@ -1,7 +1,7 @@
-﻿<Application x:Class="WpfClustering.App"
+﻿<Application x:Class="WpfSrCnn.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:WpfClustering"
+             xmlns:local="clr-namespace:WpfSrCnn"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
