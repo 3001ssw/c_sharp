@@ -12,7 +12,6 @@ namespace WpfDevDockLayoutManager.Panel.ViewModels
 
         public MyPanel2ViewModel()
         {
-            TargetName = "RightGroup";
 
         }
 

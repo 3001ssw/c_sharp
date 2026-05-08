@@ -16,7 +16,6 @@ namespace WpfDevDockLayoutManager.Panel.ViewModels
 
         public MyPanel1ViewModel()
         {
-            TargetName = "LeftGroup";
         }
     }
 }

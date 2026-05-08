@@ -21,7 +21,10 @@
 
         <StackPanel Grid.Row="0"
                     Orientation="Horizontal">
-            <Button Content="Test"
+            <TextBox Margin="3"
+                     Width="100"
+                     Text="{Binding TextTargetName}"/>
+            <Button Content="Set Target Name"
                     Margin="3"
                     Command="{Binding TestCommand}"/>
             <Button Content="Left"
@@ -34,7 +37,25 @@
 
         <dxdo:DockLayoutManager Grid.Row="1"
                                 ItemsSource="{Binding Panels}"
-                                ActiveDockItem="{Binding ActivePanel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                ActiveDockItem="{Binding ActivePanel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                DestroyLastDocumentGroup="False">
+            <dxdo:DockLayoutManager.Resources>
+                <Style TargetType="dxdo:LayoutGroup">
+                    <Setter Property="DestroyOnClosingChildren" Value="False"/>
+                </Style>
+                <Style TargetType="dxdo:DocumentGroup">
+                    <Setter Property="DestroyOnClosingChildren" Value="False"/>
+                </Style>
+                <Style TargetType="dxdo:TabbedGroup">
+                    <Setter Property="DestroyOnClosingChildren" Value="False"/>
+                </Style>
+            </dxdo:DockLayoutManager.Resources>
+
+            <dxmvvm:Interaction.Behaviors>
+                <dxmvvm:EventToCommand EventName="DockOperationCompleted"
+                                       Command="{Binding DockOperationCompletedCommand}"
+                                       PassEventArgsToCommand="True"/>
+            </dxmvvm:Interaction.Behaviors>
 
             <dxdo:DockLayoutManager.ItemTemplate>
                 <DataTemplate>
@@ -46,11 +67,57 @@
                                       CloseCommand="{Binding PanelClosedCommand}"/>
                 </DataTemplate>
             </dxdo:DockLayoutManager.ItemTemplate>
-
             <dxdo:LayoutGroup Name="root"
-                              Orientation="Horizontal">
-                <dxdo:LayoutGroup Name="LeftGroup"/>
-                <dxdo:LayoutGroup Name="RightGroup"/>
+                              Orientation="Vertical">
+
+                <!--  상단 툴 영역  -->
+                <dxdo:LayoutGroup Name="root_top"
+                                  Orientation="Horizontal"
+                                  ItemHeight="150">
+                    <dxdo:LayoutGroup Name="top_left"
+                                      ItemWidth="1*"/>
+                    <dxdo:LayoutGroup Name="top_right"
+                                      ItemWidth="1*"/>
+                </dxdo:LayoutGroup>
+
+                <!--  중단 메인 영역  -->
+                <dxdo:LayoutGroup Name="root_mid"
+                                  Orientation="Horizontal"
+                                  ItemHeight="1*">
+
+                    <!--  왼쪽 사이드  -->
+                    <dxdo:LayoutGroup Name="mid_left"
+                                      Orientation="Vertical"
+                                      ItemWidth="200">
+                        <dxdo:LayoutGroup Name="mid_left_top"
+                                          ItemHeight="1*"/>
+                        <dxdo:LayoutGroup Name="mid_left_bottom"
+                                          ItemHeight="1*"/>
+                    </dxdo:LayoutGroup>
+
+                    <!--  가운데 메인 (문서 영역)  -->
+                    <dxdo:DocumentGroup Name="mid_center"
+                                        ItemWidth="1*"
+                                        ItemHeight="1*"
+                                        Background="Gray"/>
+
+                    <!--  오른쪽 사이드  -->
+                    <dxdo:LayoutGroup Name="mid_right"
+                                      Orientation="Vertical"
+                                      ItemWidth="200">
+                        <dxdo:LayoutGroup Name="mid_right_top"
+                                          ItemHeight="1*"/>
+                        <dxdo:LayoutGroup Name="mid_right_bottom"
+                                          ItemHeight="1*"/>
+                    </dxdo:LayoutGroup>
+
+                </dxdo:LayoutGroup>
+
+                <!--  하단 출력 영역  -->
+                <dxdo:TabbedGroup Name="root_bottom"
+                                  ItemHeight="150">
+                </dxdo:TabbedGroup>
+
             </dxdo:LayoutGroup>
         </dxdo:DockLayoutManager>
     </Grid>

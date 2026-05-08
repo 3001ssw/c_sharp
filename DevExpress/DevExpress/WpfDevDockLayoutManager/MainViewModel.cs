@@ -18,6 +18,9 @@ namespace WpfDevDockLayoutManager
     {
         #region fields, properties
 
+        private string textTargetName = "";
+        public string TextTargetName { get => textTargetName; set => SetValue(ref textTargetName, value); }
+
         private ObservableCollection<PanelBaseViewModel> panels = new ObservableCollection<PanelBaseViewModel>();
         public ObservableCollection<PanelBaseViewModel> Panels { get => panels; set => SetValue(ref panels, value); }
 
@@ -32,6 +35,7 @@ namespace WpfDevDockLayoutManager
         public DelegateCommand LeftCommand { get; private set; }
 
         public DelegateCommand RightCommand { get; private set; }
+        public DelegateCommand<DockOperationCompletedEventArgs> DockOperationCompletedCommand { get; private set; }
         #endregion
 
 
@@ -40,29 +44,87 @@ namespace WpfDevDockLayoutManager
             TestCommand = new DelegateCommand(OnTest, CanTest);
             LeftCommand = new DelegateCommand(OnLeft, CanLeft);
             RightCommand = new DelegateCommand(OnRight, CanRight);
+            DockOperationCompletedCommand = new DelegateCommand<DockOperationCompletedEventArgs>(OnDockOperationCompleted);
 
             MyPanel1ViewModel vm1 = new MyPanel1ViewModel()
             {
                 Caption = "View Model 1",
                 Display = "MyPanel1ViewModel",
+                TargetName = "top_left",
             };
+            Panels.Add(vm1);
+
             MyPanel2ViewModel vm2 = new MyPanel2ViewModel()
             {
                 Caption = "View Model 2",
+                TargetName = "top_right",
             };
+            Panels.Add(vm2);
+
             MyPanel1ViewModel vm3 = new MyPanel1ViewModel()
             {
                 Caption = "View Model 3",
                 Display = "MyPanel1ViewModel",
+                TargetName = "mid_left_top",
             };
-            Panels.Add(vm1);
-            Panels.Add(vm2);
             Panels.Add(vm3);
+
+            MyPanel1ViewModel vm4 = new MyPanel1ViewModel()
+            {
+                Caption = "View Model 4",
+                Display = "MyPanel1ViewModel",
+                TargetName = "mid_left_bottom",
+            };
+            Panels.Add(vm4);
+
+            MyPanel1ViewModel vm5 = new MyPanel1ViewModel()
+            {
+                Caption = "View Model 5",
+                TargetName = "mid_center",
+            };
+            Panels.Add(vm5);
+
+            MyPanel1ViewModel vm6 = new MyPanel1ViewModel()
+            {
+                Caption = "View Model 6",
+                TargetName = "mid_right_top",
+            };
+            Panels.Add(vm6);
+
+            MyPanel1ViewModel vm7 = new MyPanel1ViewModel()
+            {
+                Caption = "View Model 7",
+                TargetName = "mid_right_bottom",
+            };
+            Panels.Add(vm7);
+
+            MyPanel1ViewModel vm8 = new MyPanel1ViewModel()
+            {
+                Caption = "View Model 8",
+                TargetName = "root_bottom",
+            };
+            Panels.Add(vm8);
+
+            MyPanel1ViewModel vm9 = new MyPanel1ViewModel()
+            {
+                Caption = "View Model 9",
+                TargetName = "root_bottom",
+            };
+            Panels.Add(vm9);
         }
 
         private void OnTest()
         {
+            if (string.IsNullOrEmpty(TextTargetName))
+                return;
+
+            BaseLayoutItem current = ActivePanel as BaseLayoutItem;
+            PanelBaseViewModel vm = current?.DataContext as PanelBaseViewModel;
             Debug.WriteLine("test");
+            if (vm != null)
+            {
+                vm.TargetName = TextTargetName;
+            }
             //foreach (PanelBaseViewModel vm in Panels)
             //{
             //    vm.IsVisibility = (vm.IsVisibility == Visibility.Collapsed) ? Visibility.Visible : Visibility.Collapsed;
@@ -72,7 +134,7 @@ namespace WpfDevDockLayoutManager
             //        vm.IsVisibility = Visibility.Visible;
             //    }
             //}
-            Panels[0].IsActive = (Panels[0].IsActive == true) ? Panels[0].IsActive = false : Panels[0].IsActive = true;
+            //Panels[0].IsActive = (Panels[0].IsActive == true) ? Panels[0].IsActive = false : Panels[0].IsActive = true;
         }
 
         private bool CanTest()
@@ -104,6 +166,33 @@ namespace WpfDevDockLayoutManager
         private bool CanRight()
         {
             return true;
+        }
+        private void OnDockOperationCompleted(DockOperationCompletedEventArgs e)
+        {
+            if (e.DockOperation != DockOperation.Dock && e.DockOperation != DockOperation.Move)
+                return;
+
+            LayoutPanel panel = e.Item as LayoutPanel;
+            PanelBaseViewModel vm = panel?.DataContext as PanelBaseViewModel;
+
+            if (panel == null || vm == null)
+                return;
+
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                BaseLayoutItem current = panel.Parent as BaseLayoutItem;
+                while (current != null)
+                {
+                    Debug.WriteLine($"Parent: {current.GetType().Name}, Name='{current.Name}'");
+                    if (!string.IsNullOrEmpty(current.Name))
+                    {
+                        Debug.WriteLine($"{vm.TargetName} => {current.Name}");
+                        vm.TargetName = current.Name;
+                        break;
+                    }
+                    current = current.Parent as BaseLayoutItem;
+                }
+            }), System.Windows.Threading.DispatcherPriority.Loaded);
         }
     }
 }
