@@ -9,9 +9,6 @@ namespace WpfDevDockLayoutManager.Panel.ViewModels
     public class MyPanel1ViewModel : PanelBaseViewModel
     {
         #region fields, properties
-
-        private string display = "";
-        public string Display { get => display; set => SetValue(ref display, value); }
         #endregion
 
         public MyPanel1ViewModel()

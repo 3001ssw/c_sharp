@@ -8,8 +8,9 @@
         xmlns:local="clr-namespace:WpfDevDockLayoutManager"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="450"
-        Width="800">
+        Height="600"
+        Width="800"
+        WindowState="Maximized">
     <Window.DataContext>
         <local:MainViewModel/>
     </Window.DataContext>
@@ -33,12 +34,18 @@
             <Button Content="Right"
                     Margin="3"
                     Command="{Binding RightCommand}"/>
+            <Button Content="Save Layout"
+                    Margin="3"
+                    Command="{Binding SaveLayoutCommand}"/>
+            <Button Content="Load Layout"
+                    Margin="3"
+                    Command="{Binding LoadLayoutCommand}"/>
         </StackPanel>
 
-        <dxdo:DockLayoutManager Grid.Row="1"
+        <dxdo:DockLayoutManager x:Name="dockManager"
+                                Grid.Row="1"
                                 ItemsSource="{Binding Panels}"
-                                ActiveDockItem="{Binding ActivePanel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                DestroyLastDocumentGroup="False">
+                                ActiveDockItem="{Binding ActivePanel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <dxdo:DockLayoutManager.Resources>
                 <Style TargetType="dxdo:LayoutGroup">
                     <Setter Property="DestroyOnClosingChildren" Value="False"/>
@@ -71,14 +78,9 @@
                               Orientation="Vertical">
 
                 <!--  상단 툴 영역  -->
-                <dxdo:LayoutGroup Name="root_top"
-                                  Orientation="Horizontal"
+                <dxdo:TabbedGroup Name="root_top"
                                   ItemHeight="150">
-                    <dxdo:LayoutGroup Name="top_left"
-                                      ItemWidth="1*"/>
-                    <dxdo:LayoutGroup Name="top_right"
-                                      ItemWidth="1*"/>
-                </dxdo:LayoutGroup>
+                </dxdo:TabbedGroup>
 
                 <!--  중단 메인 영역  -->
                 <dxdo:LayoutGroup Name="root_mid"
@@ -86,30 +88,21 @@
                                   ItemHeight="1*">
 
                     <!--  왼쪽 사이드  -->
-                    <dxdo:LayoutGroup Name="mid_left"
-                                      Orientation="Vertical"
+                    <dxdo:TabbedGroup Name="mid_left"
                                       ItemWidth="200">
-                        <dxdo:LayoutGroup Name="mid_left_top"
-                                          ItemHeight="1*"/>
-                        <dxdo:LayoutGroup Name="mid_left_bottom"
-                                          ItemHeight="1*"/>
-                    </dxdo:LayoutGroup>
+                    </dxdo:TabbedGroup>
 
                     <!--  가운데 메인 (문서 영역)  -->
                     <dxdo:DocumentGroup Name="mid_center"
-                                        ItemWidth="1*"
+                                        ItemWidth="200"
                                         ItemHeight="1*"
                                         Background="Gray"/>
 
                     <!--  오른쪽 사이드  -->
-                    <dxdo:LayoutGroup Name="mid_right"
+                    <dxdo:TabbedGroup Name="mid_right"
                                       Orientation="Vertical"
                                       ItemWidth="200">
-                        <dxdo:LayoutGroup Name="mid_right_top"
-                                          ItemHeight="1*"/>
-                        <dxdo:LayoutGroup Name="mid_right_bottom"
-                                          ItemHeight="1*"/>
-                    </dxdo:LayoutGroup>
+                    </dxdo:TabbedGroup>
 
                 </dxdo:LayoutGroup>
 

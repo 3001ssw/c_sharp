@@ -20,9 +20,22 @@ namespace WpfDevDockLayoutManager
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static readonly string LayoutFilePath =
+            System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "layout.xml");
+
         public MainWindow()
         {
             InitializeComponent();
+
+            if (DataContext is MainViewModel vm)
+            {
+                vm.SaveLayoutAction = () => dockManager.SaveLayoutToXml(LayoutFilePath);
+                vm.LoadLayoutAction = () =>
+                {
+                    if (System.IO.File.Exists(LayoutFilePath))
+                        dockManager.RestoreLayoutFromXml(LayoutFilePath);
+                };
+            }
         }
     }
 }

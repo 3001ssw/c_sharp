@@ -29,12 +29,23 @@ namespace WpfDevDockLayoutManager
 
         #endregion
 
+        #region layout save / load
+
+        public Action SaveLayoutAction { get; set; }
+        public Action LoadLayoutAction { get; set; }
+
+        #endregion
+
+
         #region commands
 
         public DelegateCommand TestCommand { get; private set; }
         public DelegateCommand LeftCommand { get; private set; }
 
         public DelegateCommand RightCommand { get; private set; }
+        public DelegateCommand SaveLayoutCommand { get; private set; }
+        public DelegateCommand LoadLayoutCommand { get; private set; }
+
         public DelegateCommand<DockOperationCompletedEventArgs> DockOperationCompletedCommand { get; private set; }
         #endregion
 
@@ -44,36 +55,36 @@ namespace WpfDevDockLayoutManager
             TestCommand = new DelegateCommand(OnTest, CanTest);
             LeftCommand = new DelegateCommand(OnLeft, CanLeft);
             RightCommand = new DelegateCommand(OnRight, CanRight);
+            SaveLayoutCommand = new DelegateCommand(OnSaveLayout);
+            LoadLayoutCommand = new DelegateCommand(OnLoadLayout);
+
             DockOperationCompletedCommand = new DelegateCommand<DockOperationCompletedEventArgs>(OnDockOperationCompleted);
 
             MyPanel1ViewModel vm1 = new MyPanel1ViewModel()
             {
                 Caption = "View Model 1",
-                Display = "MyPanel1ViewModel",
-                TargetName = "top_left",
+                TargetName = "root_top",
             };
             Panels.Add(vm1);
 
             MyPanel2ViewModel vm2 = new MyPanel2ViewModel()
             {
                 Caption = "View Model 2",
-                TargetName = "top_right",
+                TargetName = "root_top",
             };
             Panels.Add(vm2);
 
             MyPanel1ViewModel vm3 = new MyPanel1ViewModel()
             {
                 Caption = "View Model 3",
-                Display = "MyPanel1ViewModel",
-                TargetName = "mid_left_top",
+                TargetName = "mid_left",
             };
             Panels.Add(vm3);
 
             MyPanel1ViewModel vm4 = new MyPanel1ViewModel()
             {
                 Caption = "View Model 4",
-                Display = "MyPanel1ViewModel",
-                TargetName = "mid_left_bottom",
+                TargetName = "mid_left",
             };
             Panels.Add(vm4);
 
@@ -87,14 +98,14 @@ namespace WpfDevDockLayoutManager
             MyPanel1ViewModel vm6 = new MyPanel1ViewModel()
             {
                 Caption = "View Model 6",
-                TargetName = "mid_right_top",
+                TargetName = "mid_right",
             };
             Panels.Add(vm6);
 
             MyPanel1ViewModel vm7 = new MyPanel1ViewModel()
             {
                 Caption = "View Model 7",
-                TargetName = "mid_right_bottom",
+                TargetName = "mid_right",
             };
             Panels.Add(vm7);
 
@@ -167,6 +178,17 @@ namespace WpfDevDockLayoutManager
         {
             return true;
         }
+
+        private void OnSaveLayout()
+        {
+            SaveLayoutAction?.Invoke();
+        }
+
+        private void OnLoadLayout()
+        {
+            LoadLayoutAction?.Invoke();
+        }
+
         private void OnDockOperationCompleted(DockOperationCompletedEventArgs e)
         {
             if (e.DockOperation != DockOperation.Dock && e.DockOperation != DockOperation.Move)
@@ -186,8 +208,8 @@ namespace WpfDevDockLayoutManager
                     Debug.WriteLine($"Parent: {current.GetType().Name}, Name='{current.Name}'");
                     if (!string.IsNullOrEmpty(current.Name))
                     {
-                        Debug.WriteLine($"{vm.TargetName} => {current.Name}");
-                        vm.TargetName = current.Name;
+                        Debug.WriteLine($"{vm.Display} => {current.Name}");
+                        vm.Display = current.Name;
                         break;
                     }
                     current = current.Parent as BaseLayoutItem;

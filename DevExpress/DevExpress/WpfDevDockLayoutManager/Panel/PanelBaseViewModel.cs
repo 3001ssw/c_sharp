@@ -41,6 +41,9 @@ namespace WpfDevDockLayoutManager.Panel
         private bool autoHidden = false;
         public bool AutoHidden { get => autoHidden; set => SetValue(ref autoHidden, value); }
 
+        private string display = "";
+        public string Display { get => display; set => SetValue(ref display, value); }
+
         #endregion
 
         #region command properties
