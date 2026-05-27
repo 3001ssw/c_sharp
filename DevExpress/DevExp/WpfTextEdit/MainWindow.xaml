@@ -1,0 +1,77 @@
+﻿<Window x:Class="WpfTextEdit.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfTextEdit"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="600"
+        Width="800"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
+
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+
+    <StackPanel Margin="20"
+                Orientation="Vertical">
+
+
+        <!--  TextEdit  -->
+        <TextBlock Text="TextEdit"
+                   Margin="0,0,0,4"/>
+        <dxe:TextEdit Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"
+                      NullText="이름을 입력하세요"
+                      Margin="0,0,0,12"/>
+
+        <!--  MemoEdit  -->
+        <TextBlock Text="MemoEdit"
+                   Margin="0,0,0,4"/>
+        <dxe:MemoEdit Text="{Binding Memo, UpdateSourceTrigger=PropertyChanged}"
+                      NullText="메모를 입력하세요"
+                      ShowIcon="False"
+                      Margin="0,0,0,12"/>
+
+        <!--  PasswordBoxEdit  -->
+        <TextBlock Text="PasswordBoxEdit"
+                   Margin="0,0,0,4"/>
+        <dxe:PasswordBoxEdit Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                             NullText="비밀번호를 입력하세요"
+                             Margin="0,0,0,12">
+
+            <dxmvvm:Interaction.Behaviors>
+                <dxmvvm:EventToCommand EventName="EditValueChanged"
+                                       Command="{Binding PasswordChangedCommand}"
+                                       PassEventArgsToCommand="True"/>
+            </dxmvvm:Interaction.Behaviors>
+        </dxe:PasswordBoxEdit>
+
+        <!--  ButtonEdit  -->
+        <TextBlock Text="ButtonEdit"
+                   Margin="0,0,0,4"/>
+        <dxe:ButtonEdit Text="{Binding ButtonEditText, UpdateSourceTrigger=PropertyChanged}"
+                        NullText="버튼을 클릭해보세요"
+                        Margin="0,0,0,12">
+            <dxmvvm:Interaction.Behaviors>
+                <dxmvvm:EventToCommand EventName="DefaultButtonClick"
+                                       Command="{Binding DefaultButtonClickCommand}"/>
+            </dxmvvm:Interaction.Behaviors>
+            <dxe:ButtonEdit.Buttons>
+                <dxe:ButtonInfo Content="클릭"
+                                Command="{Binding ButtonClickCommand}"/>
+                <dxe:ButtonInfo Content="초기화"
+                                Command="{Binding ButtonClickInitCommand}"/>
+            </dxe:ButtonEdit.Buttons>
+        </dxe:ButtonEdit>
+
+        <!--  결과 확인  -->
+        <TextBlock Text="--- 입력 결과 ---"
+                   Margin="0,16,0,4"
+                   FontWeight="Bold"/>
+        <TextBlock Text="{Binding ResultText}"
+                   TextWrapping="Wrap"/>
+
+    </StackPanel>
+</Window>
