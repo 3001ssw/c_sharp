@@ -73,6 +73,7 @@ namespace WpfTextEdit
             DefaultButtonClickCommand = new DelegateCommand(DefaultButtonClick);
             ButtonClickCommand = new DelegateCommand(OnButtonClick);
             ButtonClickInitCommand = new DelegateCommand(OnButtonClickInit, CanButtonClickInit);
+
             ResultText = "입력하면 여기에 표시돼요";
         }
 
@@ -80,7 +81,7 @@ namespace WpfTextEdit
         {
             if (args != null)
             {
-                Password = e.NewValue?.ToString();
+                Password = args.NewValue?.ToString();
                 UpdateResult();
             }
         }
