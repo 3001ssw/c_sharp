@@ -60,8 +60,10 @@
             </dxmvvm:Interaction.Behaviors>
             <dxe:ButtonEdit.Buttons>
                 <dxe:ButtonInfo Content="클릭"
+                                GlyphKind="Apply"
                                 Command="{Binding ButtonClickCommand}"/>
                 <dxe:ButtonInfo Content="초기화"
+                                GlyphKind="None"
                                 Command="{Binding ButtonClickInitCommand}"/>
             </dxe:ButtonEdit.Buttons>
         </dxe:ButtonEdit>
