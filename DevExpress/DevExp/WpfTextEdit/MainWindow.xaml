@@ -20,26 +20,23 @@
 
 
         <!--  TextEdit  -->
-        <TextBlock Text="TextEdit"
-                   Margin="0,0,0,4"/>
+        <TextBlock Text="TextEdit"/>
         <dxe:TextEdit Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"
                       NullText="이름을 입력하세요"
-                      Margin="0,0,0,12"/>
+                      Margin="5"/>
 
         <!--  MemoEdit  -->
-        <TextBlock Text="MemoEdit"
-                   Margin="0,0,0,4"/>
+        <TextBlock Text="MemoEdit"/>
         <dxe:MemoEdit Text="{Binding Memo, UpdateSourceTrigger=PropertyChanged}"
                       NullText="메모를 입력하세요"
                       ShowIcon="False"
-                      Margin="0,0,0,12"/>
+                      Margin="5"/>
 
         <!--  PasswordBoxEdit  -->
-        <TextBlock Text="PasswordBoxEdit"
-                   Margin="0,0,0,4"/>
+        <TextBlock Text="PasswordBoxEdit"/>
         <dxe:PasswordBoxEdit Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
                              NullText="비밀번호를 입력하세요"
-                             Margin="0,0,0,12">
+                             Margin="5">
 
             <dxmvvm:Interaction.Behaviors>
                 <dxmvvm:EventToCommand EventName="EditValueChanged"
@@ -49,11 +46,10 @@
         </dxe:PasswordBoxEdit>
 
         <!--  ButtonEdit  -->
-        <TextBlock Text="ButtonEdit"
-                   Margin="0,0,0,4"/>
+        <TextBlock Text="ButtonEdit"/>
         <dxe:ButtonEdit Text="{Binding ButtonEditText, UpdateSourceTrigger=PropertyChanged}"
                         NullText="버튼을 클릭해보세요"
-                        Margin="0,0,0,12">
+                        Margin="5">
             <dxmvvm:Interaction.Behaviors>
                 <dxmvvm:EventToCommand EventName="DefaultButtonClick"
                                        Command="{Binding DefaultButtonClickCommand}"/>
@@ -68,12 +64,30 @@
             </dxe:ButtonEdit.Buttons>
         </dxe:ButtonEdit>
 
-        <!--  결과 확인  -->
-        <TextBlock Text="--- 입력 결과 ---"
-                   Margin="0,16,0,4"
-                   FontWeight="Bold"/>
-        <TextBlock Text="{Binding ResultText}"
-                   TextWrapping="Wrap"/>
+        <!--  BrowsePathEdit  -->
+        <TextBlock Text="BrowsePathEdit"/>
+        <dxe:BrowsePathEdit Text="{Binding BrowsePath, UpdateSourceTrigger=PropertyChanged}"
+                            NullText="경로를 선택하세요"
+                            Margin="5"/>
 
+        <!--  DateEdit  -->
+        <TextBlock Text="DateEdit"/>
+        <dxe:DateEdit EditValue="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged}"
+                      NullText="날짜를 선택하세요"
+                      Margin="5"/>
+
+        <!--  FontEdit  -->
+        <TextBlock Text="FontEdit"/>
+        <dxe:FontEdit EditValue="{Binding SelectedFont, UpdateSourceTrigger=PropertyChanged}"
+                      NullText="폰트를 선택하세요"
+                      Margin="5"/>
+
+        <!--  SpinEdit  -->
+        <TextBlock Text="SpinEdit"/>
+        <dxe:SpinEdit EditValue="{Binding SpinValue, UpdateSourceTrigger=PropertyChanged}"
+                      MinValue="0"
+                      MaxValue="100"
+                      Increment="1"
+                      Margin="5"/>
     </StackPanel>
 </Window>

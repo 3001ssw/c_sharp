@@ -14,67 +14,78 @@ namespace WpfTextEdit
         public string UserName
         {
             get { return GetValue<string>(); }
-            set
-            {
-                SetValue(value);
-                UpdateResult();
-            }
+            set { SetValue(value); }
         }
 
         // MemoEdit
         public string Memo
         {
             get { return GetValue<string>(); }
-            set
-            {
-                SetValue(value);
-                UpdateResult();
-            }
+            set { SetValue(value); }
         }
 
         // PasswordBoxEdit
         public string Password
         {
             get { return GetValue<string>(); }
-            set
-            {
-                SetValue(value);
-                UpdateResult();
-            }
+            set { SetValue(value); }
         }
-        public DelegateCommand<EditValueChangedEventArgs> PasswordChangedCommand { get; private set; }
 
         // ButtonEdit
         public string ButtonEditText
         {
             get { return GetValue<string>(); }
-            set
-            {
-                SetValue(value);
-                UpdateResult();
-            }
+            set { SetValue(value); }
         }
 
-        // 결과 표시
-        public string ResultText
+        // BrowsePathEdit
+        public string BrowsePath
         {
             get { return GetValue<string>(); }
             set { SetValue(value); }
         }
+
+
+        // DateEdit
+        public DateTime? SelectedDate
+        {
+            get { return GetValue<DateTime>(); }
+            set { SetValue(value); }
+        }
+
+        // FontEdit
+        public string SelectedFont
+        {
+            get { return GetValue<string>(); }
+            set { SetValue(value); }
+        }
+
+        // SpinEdit
+        public decimal SpinValue
+        {
+            get { return GetValue<decimal>(); }
+            set { SetValue(value); }
+        }
+
+        // PasswordBoxEdit 커맨드
+        public DelegateCommand<EditValueChangedEventArgs> PasswordChangedCommand { get; private set; }
 
         // ButtonEdit 커맨드
         public DelegateCommand DefaultButtonClickCommand { get; private set; }
         public DelegateCommand ButtonClickCommand { get; private set; }
         public DelegateCommand ButtonClickInitCommand { get; private set; }
 
+
         public MainViewModel()
         {
             PasswordChangedCommand = new DelegateCommand<EditValueChangedEventArgs>(PasswordChanged);
+
             DefaultButtonClickCommand = new DelegateCommand(DefaultButtonClick);
             ButtonClickCommand = new DelegateCommand(OnButtonClick);
             ButtonClickInitCommand = new DelegateCommand(OnButtonClickInit, CanButtonClickInit);
 
-            ResultText = "입력하면 여기에 표시돼요";
+            SelectedDate = DateTime.Today;
+            SpinValue = 0;
         }
 
         private void PasswordChanged(EditValueChangedEventArgs args)
@@ -82,7 +93,6 @@ namespace WpfTextEdit
             if (args != null)
             {
                 Password = args.NewValue?.ToString();
-                UpdateResult();
             }
         }
 
@@ -103,11 +113,6 @@ namespace WpfTextEdit
         private bool CanButtonClickInit()
         {
             return true;
-        }
-
-        private void UpdateResult()
-        {
-            ResultText = $"이름: {UserName}\n메모: {Memo}\n비밀번호 길이: {Password?.Length ?? 0}자리";
         }
     }
 }
