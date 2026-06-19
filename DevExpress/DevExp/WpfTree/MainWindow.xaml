@@ -1,0 +1,38 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfTree"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:dxtm="http://schemas.devexpress.com/winfx/2008/xaml/treemap"
+        x:Class="WpfTree.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="450"
+        Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <dxg:TreeListControl Grid.Row="0"
+                             AutoGenerateColumns="AddNew"
+                             EnableSmartColumnsGeneration="True">
+            <dxg:TreeListControl.View>
+                <dxg:TreeListView ShowTotalSummary="True"/>
+            </dxg:TreeListControl.View>
+        </dxg:TreeListControl>
+
+        <dxg:TreeViewControl Grid.Row="1"/>
+
+        <dxtm:TreeMapControl Grid.Row="2"
+                             HorizontalAlignment="Left">
+            <dxtm:TreeMapControl.Colorizer>
+                <dxtm:TreeMapPaletteColorizer/>
+            </dxtm:TreeMapControl.Colorizer>
+        </dxtm:TreeMapControl>
+
+    </Grid>
+</Window>

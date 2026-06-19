@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTextEdit", "WpfTextEdit\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfButton", "WpfButton\WpfButton.csproj", "{A9DE59C1-A1D7-4BAD-80B2-2C1C8009932D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTree", "WpfTree\WpfTree.csproj", "{976C730D-07F9-48B0-B57F-BDDA0738D0C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfGrid", "WpfGrid\WpfGrid.csproj", "{F2F852A3-45BA-468B-A0C5-E971CA278463}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{A9DE59C1-A1D7-4BAD-80B2-2C1C8009932D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9DE59C1-A1D7-4BAD-80B2-2C1C8009932D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9DE59C1-A1D7-4BAD-80B2-2C1C8009932D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{976C730D-07F9-48B0-B57F-BDDA0738D0C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{976C730D-07F9-48B0-B57F-BDDA0738D0C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{976C730D-07F9-48B0-B57F-BDDA0738D0C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{976C730D-07F9-48B0-B57F-BDDA0738D0C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2F852A3-45BA-468B-A0C5-E971CA278463}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2F852A3-45BA-468B-A0C5-E971CA278463}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2F852A3-45BA-468B-A0C5-E971CA278463}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2F852A3-45BA-468B-A0C5-E971CA278463}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
